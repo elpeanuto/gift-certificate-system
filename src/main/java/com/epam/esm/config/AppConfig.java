@@ -1,5 +1,7 @@
 package com.epam.esm.config;
 
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -57,14 +59,19 @@ public class AppConfig implements WebMvcConfigurer {
 
     @Bean
     public DataSource dataSource() {
-        DriverManagerDataSource dataSource = new DriverManagerDataSource();
+        HikariConfig config = new HikariConfig();
 
-        dataSource.setDriverClassName("org.postgresql.Driver");
-        dataSource.setUrl("jdbc:postgresql://localhost:5432/postgres");
-        dataSource.setUsername("postgres");
-        dataSource.setPassword("postgres");
+        config.setDriverClassName("org.postgresql.Driver");
+        config.setJdbcUrl("jdbc:postgresql://localhost:5432/postgres");
+        config.setUsername("postgres");
+        config.setPassword("postgres");
+        config.setConnectionTimeout(30_000);
+        config.setIdleTimeout(600_000);
+        config.setMaxLifetime(1_800_000);
+        config.setMaximumPoolSize(10);
+        config.setMinimumIdle(5);
 
-        return dataSource;
+        return new HikariDataSource(config);
     }
 
     @Bean
