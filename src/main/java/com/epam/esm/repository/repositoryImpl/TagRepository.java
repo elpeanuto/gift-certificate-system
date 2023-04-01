@@ -1,7 +1,7 @@
-package com.epam.esm.repository;
+package com.epam.esm.repository.repositoryImpl;
 
-import com.epam.esm.model.Tag;
-import com.epam.esm.model.Tag;
+import com.epam.esm.model.modelImpl.Tag;
+import com.epam.esm.repository.CRDRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -11,7 +11,7 @@ import java.sql.PreparedStatement;
 import java.util.List;
 
 @Repository
-public class TagRepository {
+public class TagRepository implements CRDRepository<Tag> {
 
     private final JdbcTemplate jdbcTemplate;
 

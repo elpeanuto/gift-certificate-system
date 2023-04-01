@@ -1,16 +1,18 @@
-package com.epam.esm.service;
+package com.epam.esm.service.serviceImpl;
 
-import com.epam.esm.model.GiftCertificate;
-import com.epam.esm.repository.GiftCertificateRepository;
+import com.epam.esm.model.modelImpl.GiftCertificate;
+import com.epam.esm.repository.CRUDRepository;
+import com.epam.esm.repository.repositoryImpl.GiftCertificateRepository;
+import com.epam.esm.service.CRUDService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class GiftCertificateService {
+public class GiftCertificateService implements CRUDService<GiftCertificate> {
 
-    private final GiftCertificateRepository giftCertificateRepository;
+    private final CRUDRepository<GiftCertificate> giftCertificateRepository;
 
     @Autowired
     public GiftCertificateService(GiftCertificateRepository giftCertificateRepository) {

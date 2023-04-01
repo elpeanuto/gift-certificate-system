@@ -1,8 +1,10 @@
-package com.epam.esm.model;
+package com.epam.esm.model.modelImpl;
+
+import com.epam.esm.model.Entity;
 
 import java.time.LocalDateTime;
 
-public class GiftCertificate {
+public class GiftCertificate implements Entity {
     private long id;
     private String name;
     private String description;

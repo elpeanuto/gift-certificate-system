@@ -1,7 +1,8 @@
 package com.epam.esm.controller;
 
-import com.epam.esm.model.GiftCertificate;
-import com.epam.esm.service.GiftCertificateService;
+import com.epam.esm.model.modelImpl.GiftCertificate;
+import com.epam.esm.service.CRUDService;
+import com.epam.esm.service.serviceImpl.GiftCertificateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -10,7 +11,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/giftCertificates")
 public class GiftCertificateController {
-    private final GiftCertificateService service;
+    private final CRUDService<GiftCertificate> service;
 
     @Autowired
     public GiftCertificateController(GiftCertificateService service) {
@@ -43,5 +44,4 @@ public class GiftCertificateController {
     public void delete(@PathVariable("id") int id) {
         service.delete(id);
     }
-
 }

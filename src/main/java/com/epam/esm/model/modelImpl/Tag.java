@@ -1,6 +1,8 @@
-package com.epam.esm.model;
+package com.epam.esm.model.modelImpl;
 
-public class Tag {
+import com.epam.esm.model.Entity;
+
+public class Tag implements Entity {
     private long id;
     private String name;
 

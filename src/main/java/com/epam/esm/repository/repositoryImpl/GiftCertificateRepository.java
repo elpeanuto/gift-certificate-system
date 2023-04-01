@@ -1,6 +1,7 @@
-package com.epam.esm.repository;
+package com.epam.esm.repository.repositoryImpl;
 
-import com.epam.esm.model.GiftCertificate;
+import com.epam.esm.model.modelImpl.GiftCertificate;
+import com.epam.esm.repository.CRUDRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -13,7 +14,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 @Repository
-public class GiftCertificateRepository {
+public class GiftCertificateRepository implements CRUDRepository<GiftCertificate> {
 
     private final JdbcTemplate jdbcTemplate;
 
