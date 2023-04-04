@@ -1,6 +1,7 @@
 package com.epam.esm.model.modelImpl;
 
 import com.epam.esm.model.Entity;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.time.LocalDateTime;
 
@@ -10,7 +11,13 @@ public class GiftCertificate implements Entity {
     private String description;
     private double price;
     private int duration;
+
+    private final String DATE_TIME_PATTERN = "yyyy-MM-dd'T'HH:mm:ss.SSS";
+
+    @JsonFormat(pattern = DATE_TIME_PATTERN)
     private LocalDateTime createDate;
+
+    @JsonFormat(pattern = DATE_TIME_PATTERN)
     private LocalDateTime lastUpdateDate;
 
     public GiftCertificate() {
@@ -82,5 +89,18 @@ public class GiftCertificate implements Entity {
 
     public void setLastUpdateDate(LocalDateTime lastUpdateDate) {
         this.lastUpdateDate = lastUpdateDate;
+    }
+
+    @Override
+    public String toString() {
+        return "GiftCertificate{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", price=" + price +
+                ", duration=" + duration +
+                ", createDate=" + createDate +
+                ", lastUpdateDate=" + lastUpdateDate +
+                '}';
     }
 }

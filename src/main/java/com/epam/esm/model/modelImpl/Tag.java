@@ -1,9 +1,12 @@
 package com.epam.esm.model.modelImpl;
 
 import com.epam.esm.model.Entity;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
 
 public class Tag implements Entity {
     private long id;
+
     private String name;
 
     public Tag() {
@@ -28,5 +31,13 @@ public class Tag implements Entity {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        return "Tag{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                '}';
     }
 }
