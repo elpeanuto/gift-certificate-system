@@ -34,7 +34,7 @@ public class GiftCertificateController {
         return giftCertificate;
     }
 
-    @PutMapping("/{id}")
+    @PatchMapping("/{id}")
     public GiftCertificate update(@PathVariable("id") int id, @RequestBody GiftCertificate giftCertificate) {
         service.update(id, giftCertificate);
         return giftCertificate;

@@ -48,10 +48,10 @@ public class GiftCertificateRepository implements CRUDRepository<GiftCertificate
     }
 
     public int update(int id, GiftCertificate updatedGiftCertificate) {
-        String sql = "UPDATE gift_certificate SET name=?, description=?, price=?, duration=? WHERE id=?";
+        String sql = "UPDATE gift_certificate SET name=?, description=?, price=?, duration=?, last_update_date=? WHERE id=?";
 
         return jdbcTemplate.update(sql, updatedGiftCertificate.getName(), updatedGiftCertificate.getDescription(),
-                updatedGiftCertificate.getPrice(), updatedGiftCertificate.getDuration(), id);
+                updatedGiftCertificate.getPrice(), updatedGiftCertificate.getDuration(), updatedGiftCertificate.getLastUpdateDate(), id);
     }
 
     public int delete(int id) {

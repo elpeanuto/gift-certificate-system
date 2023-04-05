@@ -8,8 +8,10 @@ import com.epam.esm.repository.repositoryImpl.GiftCertificateRepository;
 import com.epam.esm.service.CRUDService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.format.datetime.DateFormatter;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 
@@ -64,12 +66,29 @@ public class GiftCertificateService implements CRUDService<GiftCertificate> {
     }
 
     public int update(int id, GiftCertificate updatedGiftCertificate) {
-
         int result;
 
         try {
-            result = giftCertificateRepository.update(id, updatedGiftCertificate);
+            GiftCertificate certificateToUpdate = giftCertificateRepository.getById(id);
+
+            System.out.println(certificateToUpdate);
+
+            if(updatedGiftCertificate.getName() != null)
+                certificateToUpdate.setName(updatedGiftCertificate.getName());
+            if(updatedGiftCertificate.getDescription() != null)
+                certificateToUpdate.setDescription(updatedGiftCertificate.getDescription());
+            if(updatedGiftCertificate.getPrice() != 0.0)
+                certificateToUpdate.setPrice(updatedGiftCertificate.getPrice());
+            if(updatedGiftCertificate.getDuration() != 0)
+                certificateToUpdate.setDuration(updatedGiftCertificate.getDuration());
+
+            certificateToUpdate.setLastUpdateDate(LocalDateTime.now());
+
+            System.out.println(certificateToUpdate);
+
+            result = giftCertificateRepository.update(id, certificateToUpdate);
         } catch (DataAccessException e) {
+            System.out.println(e.getMessage());
             throw new RepositoryException(RepositoryException.standardMessage(this.getClass().getSimpleName(), "update(int id)", e));
         }
 
