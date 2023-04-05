@@ -1,10 +1,13 @@
 package com.epam.esm.service.serviceImpl;
 
+import com.epam.esm.exception.exceptions.RepositoryException;
+import com.epam.esm.exception.exceptions.ResourceNotFoundException;
 import com.epam.esm.model.modelImpl.Tag;
 import com.epam.esm.repository.CRDRepository;
 import com.epam.esm.repository.repositoryImpl.TagRepository;
 import com.epam.esm.service.CRDService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,18 +23,57 @@ public class TagService implements CRDService<Tag> {
     }
 
     public List<Tag> getAll() {
-        return tagRepository.getAll();
+        try {
+            return tagRepository.getAll();
+        } catch (DataAccessException e) {
+            throw new RepositoryException(RepositoryException.standardMessage(this.getClass().getSimpleName(), "getAll()", e));
+        }
     }
 
     public Tag getById(int id) {
-        return tagRepository.getById(id);
+        Tag tag;
+
+        try {
+            tag = tagRepository.getById(id);
+        } catch (DataAccessException e) {
+            throw new RepositoryException(RepositoryException.standardMessage(this.getClass().getSimpleName(), "getById(int id)", e));
+        }
+
+        if (tag == null)
+            throw new ResourceNotFoundException(Integer.toString(id));
+
+        return tag;
     }
 
     public int create(Tag tag) {
-        return tagRepository.create(tag);
+        int result;
+
+        try {
+            result = tagRepository.create(tag);
+        } catch (DataAccessException e) {
+            throw new RepositoryException(RepositoryException.standardMessage(this.getClass().getSimpleName(), "create(Tag tag)", e));
+        }
+
+        if (result < 1) {
+            throw new RepositoryException("Failed to create tag.");
+        }
+
+        return result;
     }
 
     public int delete(int id) {
-        return tagRepository.delete(id);
+        int result;
+
+        try {
+            result = tagRepository.delete(id);
+        } catch (DataAccessException e) {
+            throw new RepositoryException(RepositoryException.standardMessage(this.getClass().getSimpleName(), "delete(int id)", e));
+        }
+
+        if (result < 1) {
+            throw new RepositoryException("Failed to delete tag.");
+        }
+
+        return result;
     }
 }

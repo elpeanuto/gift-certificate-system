@@ -44,7 +44,7 @@ public class TagRepository implements CRDRepository<Tag> {
     }
 
     public int delete(int id) {
-        String sql = "DELETE FROM gift_certificate WHERE id=?";
+        String sql = "DELETE FROM tag WHERE id=?";
 
         return jdbcTemplate.update(sql, id);
     }
