@@ -43,57 +43,51 @@ public class GiftCertificateService implements CRUDService<GiftCertificate> {
         }
 
         if (giftCertificate == null)
-            throw new ResourceNotFoundException(Integer.toString(id));
+            throw new ResourceNotFoundException(id);
 
 
         return giftCertificate;
     }
 
-    public int create(GiftCertificate giftCertificate) {
-        int result;
+    public GiftCertificate create(GiftCertificate giftCertificate) {
+        GiftCertificate result;
 
         try {
             result = giftCertificateRepository.create(giftCertificate);
         } catch (DataAccessException e) {
-            throw new RepositoryException(RepositoryException.standardMessage(this.getClass().getSimpleName(), "create(Tag tag)", e));
-        }
-
-        if (result < 1) {
-            throw new RepositoryException("Failed to create giftCertificate.");
+            System.out.println(e.getMessage());
+            throw new RepositoryException(RepositoryException.standardMessage(this.getClass().getSimpleName(),
+                    "create(GiftCertificate giftCertificate)", e));
         }
 
         return result;
     }
 
-    public int update(int id, GiftCertificate updatedGiftCertificate) {
-        int result;
+    public GiftCertificate update(int id, GiftCertificate updatedGiftCertificate) {
+        GiftCertificate result;
 
         try {
             GiftCertificate certificateToUpdate = giftCertificateRepository.getById(id);
 
-            System.out.println(certificateToUpdate);
+            if (certificateToUpdate == null){
+                throw new ResourceNotFoundException(id);
+            }
 
-            if(updatedGiftCertificate.getName() != null)
+            if (updatedGiftCertificate.getName() != null)
                 certificateToUpdate.setName(updatedGiftCertificate.getName());
-            if(updatedGiftCertificate.getDescription() != null)
+            if (updatedGiftCertificate.getDescription() != null)
                 certificateToUpdate.setDescription(updatedGiftCertificate.getDescription());
-            if(updatedGiftCertificate.getPrice() != 0.0)
+            if (updatedGiftCertificate.getPrice() != 0.0)
                 certificateToUpdate.setPrice(updatedGiftCertificate.getPrice());
-            if(updatedGiftCertificate.getDuration() != 0)
+            if (updatedGiftCertificate.getDuration() != 0)
                 certificateToUpdate.setDuration(updatedGiftCertificate.getDuration());
 
             certificateToUpdate.setLastUpdateDate(LocalDateTime.now());
-
-            System.out.println(certificateToUpdate);
 
             result = giftCertificateRepository.update(id, certificateToUpdate);
         } catch (DataAccessException e) {
             System.out.println(e.getMessage());
             throw new RepositoryException(RepositoryException.standardMessage(this.getClass().getSimpleName(), "update(int id)", e));
-        }
-
-        if (result < 1) {
-            throw new RepositoryException("Failed to update giftCertificate.");
         }
 
         return result;
@@ -109,7 +103,7 @@ public class GiftCertificateService implements CRUDService<GiftCertificate> {
         }
 
         if (result < 1) {
-            throw new RepositoryException("Failed to delete giftCertificate.");
+            throw new ResourceNotFoundException(id);
         }
 
         return result;

@@ -6,7 +6,8 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDateTime;
 
 public class GiftCertificate implements Entity {
-    private long id;
+
+    private int id;
     private String name;
     private String description;
     private double price;
@@ -24,7 +25,7 @@ public class GiftCertificate implements Entity {
 
     }
 
-    public GiftCertificate(long id, String name, String description, double price, int duration,
+    public GiftCertificate(int id, String name, String description, double price, int duration,
                            LocalDateTime createDate, LocalDateTime lastUpdateDate) {
         this.id = id;
         this.name = name;
@@ -33,9 +34,11 @@ public class GiftCertificate implements Entity {
         this.duration = duration;
         this.createDate = createDate;
         this.lastUpdateDate = lastUpdateDate;
+
+
     }
 
-    public long getId() {
+    public int getId() {
         return id;
     }
 

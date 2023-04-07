@@ -40,22 +40,18 @@ public class TagService implements CRDService<Tag> {
         }
 
         if (tag == null)
-            throw new ResourceNotFoundException(Integer.toString(id));
+            throw new ResourceNotFoundException(id);
 
         return tag;
     }
 
-    public int create(Tag tag) {
-        int result;
+    public Tag create(Tag tag) {
+        Tag result;
 
         try {
             result = tagRepository.create(tag);
         } catch (DataAccessException e) {
             throw new RepositoryException(RepositoryException.standardMessage(this.getClass().getSimpleName(), "create(Tag tag)", e));
-        }
-
-        if (result < 1) {
-            throw new RepositoryException("Failed to create tag.");
         }
 
         return result;
@@ -71,7 +67,7 @@ public class TagService implements CRDService<Tag> {
         }
 
         if (result < 1) {
-            throw new RepositoryException("Failed to delete tag.");
+            throw new ResourceNotFoundException(id);
         }
 
         return result;

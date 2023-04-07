@@ -1,14 +1,19 @@
 package com.epam.esm.repository.repositoryImpl;
 
+import com.epam.esm.exception.exceptions.RepositoryException;
 import com.epam.esm.model.modelImpl.Tag;
 import com.epam.esm.repository.CRDRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import java.sql.PreparedStatement;
+import java.sql.Statement;
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public class TagRepository implements CRDRepository<Tag> {
@@ -37,10 +42,30 @@ public class TagRepository implements CRDRepository<Tag> {
         }, new BeanPropertyRowMapper<>(Tag.class)).stream().findFirst().orElse(null);
     }
 
-    public int create(Tag tag) {
+    public Tag create(Tag tag) {
         String sql = "INSERT INTO tag(name) VALUES(?)";
 
-        return jdbcTemplate.update(sql, tag.getName());
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+
+        int rows = jdbcTemplate.update(connection -> {
+            PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            ps.setString(1, tag.getName());
+            return ps;
+        }, keyHolder);
+
+        if (rows < 1) {
+            throw new RepositoryException("Failed to create giftCertificate.");
+        }
+
+        Map<String, Object> key = keyHolder.getKeys();
+
+        if (key == null) {
+            throw new RepositoryException("Failed to get id.");
+        }
+
+        tag.setId((int) key.get("id"));
+
+        return tag;
     }
 
     public int delete(int id) {

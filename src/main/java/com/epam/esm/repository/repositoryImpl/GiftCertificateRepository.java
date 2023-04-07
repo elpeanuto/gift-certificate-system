@@ -1,17 +1,20 @@
 package com.epam.esm.repository.repositoryImpl;
 
+import com.epam.esm.exception.exceptions.RepositoryException;
 import com.epam.esm.model.modelImpl.GiftCertificate;
 import com.epam.esm.repository.CRUDRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.Timestamp;
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public class GiftCertificateRepository implements CRUDRepository<GiftCertificate> {
@@ -40,36 +43,73 @@ public class GiftCertificateRepository implements CRUDRepository<GiftCertificate
         }, new BeanPropertyRowMapper<>(GiftCertificate.class)).stream().findFirst().orElse(null);
     }
 
-    public int create(GiftCertificate giftCertificate) {
-        String sql = "INSERT INTO gift_certificate(name, description, price, duration) VALUES(?, ?, ?, ?)";
+    public GiftCertificate create(GiftCertificate giftCertificate) {
+        String sql = "INSERT INTO gift_certificate(name, description, price, duration) " +
+                "VALUES(?, ?, ?, ?)";
 
-        return jdbcTemplate.update(sql, giftCertificate.getName(), giftCertificate.getDescription(),
-                giftCertificate.getPrice(), giftCertificate.getDuration());
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+
+        int rows = jdbcTemplate.update(connection -> {
+            PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            ps.setString(1, giftCertificate.getName());
+            ps.setString(2, giftCertificate.getDescription());
+            ps.setDouble(3, giftCertificate.getPrice());
+            ps.setInt(4, giftCertificate.getDuration());
+            return ps;
+        }, keyHolder);
+
+        if (rows < 1) {
+            throw new RepositoryException("Failed to create giftCertificate.");
+        }
+
+        Map<String, Object> key = keyHolder.getKeys();
+
+        if (key == null) {
+            throw new RepositoryException("Failed to get id.");
+        }
+
+        giftCertificate.setId((int) key.get("id"));
+        giftCertificate.setCreateDate(((Timestamp) key.get("create_date")).toLocalDateTime());
+        giftCertificate.setLastUpdateDate(((Timestamp) key.get("last_update_date")).toLocalDateTime());
+
+        return giftCertificate;
     }
 
-    public int update(int id, GiftCertificate updatedGiftCertificate) {
+    public GiftCertificate update(int id, GiftCertificate updatedGiftCertificate) {
         String sql = "UPDATE gift_certificate SET name=?, description=?, price=?, duration=?, last_update_date=? WHERE id=?";
 
-        return jdbcTemplate.update(sql, updatedGiftCertificate.getName(), updatedGiftCertificate.getDescription(),
-                updatedGiftCertificate.getPrice(), updatedGiftCertificate.getDuration(), updatedGiftCertificate.getLastUpdateDate(), id);
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+
+        int rows = jdbcTemplate.update(connection -> {
+            PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            ps.setString(1, updatedGiftCertificate.getName());
+            ps.setString(2, updatedGiftCertificate.getDescription());
+            ps.setDouble(3, updatedGiftCertificate.getPrice());
+            ps.setInt(4, updatedGiftCertificate.getDuration());
+            ps.setObject(5, updatedGiftCertificate.getLastUpdateDate());
+            ps.setInt(6, id);
+            return ps;
+        }, keyHolder);
+
+        if (rows < 1) {
+            throw new RepositoryException("Failed to create giftCertificate.");
+        }
+
+        Map<String, Object> key = keyHolder.getKeys();
+
+        if (key == null) {
+            throw new RepositoryException("Failed to get id.");
+        }
+
+        updatedGiftCertificate.setId((int) key.get("id"));
+        updatedGiftCertificate.setCreateDate(((Timestamp) key.get("create_date")).toLocalDateTime());
+
+        return updatedGiftCertificate;
     }
 
     public int delete(int id) {
         String sql = "DELETE FROM gift_certificate WHERE id=?";
 
         return jdbcTemplate.update(sql, id);
-    }
-
-    private static class GiftCertificateRowMapper implements RowMapper<GiftCertificate> {
-        @Override
-        public GiftCertificate mapRow(ResultSet rs, int rowNum) throws SQLException {
-            return new GiftCertificate(rs.getLong("id"),
-                    rs.getString("name"),
-                    rs.getString("description"),
-                    rs.getDouble("price"),
-                    rs.getInt("duration"),
-                    rs.getTimestamp("create_date").toLocalDateTime(),
-                    rs.getTimestamp("last_update_date").toLocalDateTime());
-        }
     }
 }
