@@ -4,7 +4,8 @@ import com.epam.esm.exception.exceptions.RepositoryException;
 import com.epam.esm.exception.exceptions.ResourceNotFoundException;
 import com.epam.esm.model.modelImpl.Tag;
 import com.epam.esm.repository.CRDRepository;
-import com.epam.esm.repository.repositoryImpl.TagRepository;
+import com.epam.esm.repository.TagRepository;
+import com.epam.esm.repository.repositoryImpl.TagRepositoryImpl;
 import com.epam.esm.service.CRDService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -13,12 +14,12 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class TagService implements CRDService<Tag> {
+public class TagServiceImpl implements CRDService<Tag> {
 
     private final CRDRepository<Tag> tagRepository;
 
     @Autowired
-    public TagService(TagRepository tagRepository) {
+    public TagServiceImpl(TagRepositoryImpl tagRepository) {
         this.tagRepository = tagRepository;
     }
 

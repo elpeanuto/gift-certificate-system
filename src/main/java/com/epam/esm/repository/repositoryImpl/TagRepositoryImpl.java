@@ -3,6 +3,7 @@ package com.epam.esm.repository.repositoryImpl;
 import com.epam.esm.exception.exceptions.RepositoryException;
 import com.epam.esm.model.modelImpl.Tag;
 import com.epam.esm.repository.CRDRepository;
+import com.epam.esm.repository.TagRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -12,16 +13,18 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.PreparedStatement;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Repository
-public class TagRepository implements CRDRepository<Tag> {
+public class TagRepositoryImpl implements TagRepository<Tag> {
 
     private final JdbcTemplate jdbcTemplate;
 
     @Autowired
-    public TagRepository(JdbcTemplate jdbcTemplate) {
+    public TagRepositoryImpl(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
@@ -40,6 +43,23 @@ public class TagRepository implements CRDRepository<Tag> {
 
             return ps;
         }, new BeanPropertyRowMapper<>(Tag.class)).stream().findFirst().orElse(null);
+    }
+
+    public Tag getByName(String name) {
+        String sql = "SELECT * FROM tag WHERE name = ?";
+
+        return jdbcTemplate.query(con -> {
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setString(1, name);
+
+            return ps;
+        }, new BeanPropertyRowMapper<>(Tag.class)).stream().findFirst().orElse(null);
+    }
+
+    public List<Tag> getByIdList(List<Integer> idList) {
+        return idList.stream()
+                .map(this::getById)
+                .toList();
     }
 
     public Tag create(Tag tag) {
@@ -73,5 +93,4 @@ public class TagRepository implements CRDRepository<Tag> {
 
         return jdbcTemplate.update(sql, id);
     }
-
 }

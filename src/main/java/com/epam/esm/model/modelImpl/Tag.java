@@ -2,24 +2,26 @@ package com.epam.esm.model.modelImpl;
 
 import com.epam.esm.model.Entity;
 
+import java.util.Objects;
+
 public class Tag implements Entity {
 
-    private int id;
+    private Integer id;
     private String name;
 
     public Tag() {
     }
 
-    public Tag(int id, String name) {
+    public Tag(Integer id, String name) {
         this.id = id;
         this.name = name;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -37,5 +39,20 @@ public class Tag implements Entity {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Tag tag = (Tag) o;
+
+        return Objects.equals(name, tag.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return name != null ? name.hashCode() : 0;
     }
 }

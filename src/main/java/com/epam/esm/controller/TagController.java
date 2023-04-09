@@ -2,7 +2,7 @@ package com.epam.esm.controller;
 
 import com.epam.esm.model.modelImpl.Tag;
 import com.epam.esm.service.CRDService;
-import com.epam.esm.service.serviceImpl.TagService;
+import com.epam.esm.service.serviceImpl.TagServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -16,7 +16,7 @@ public class TagController {
     private final CRDService<Tag> service;
 
     @Autowired
-    public TagController(TagService service) {
+    public TagController(TagServiceImpl service) {
         this.service = service;
     }
 
