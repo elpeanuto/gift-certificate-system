@@ -1,12 +1,18 @@
 package com.epam.esm.model.modelImpl;
 
 import com.epam.esm.model.Entity;
+import com.epam.esm.util.CreateValidationGroup;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 import java.util.Objects;
 
 public class Tag implements Entity {
 
     private Integer id;
+
+    @NotNull(message = "Name is missing")
+    @Size(min = 2, max = 30, message = "Name should be between 2 and 30 characters")
     private String name;
 
     public Tag() {

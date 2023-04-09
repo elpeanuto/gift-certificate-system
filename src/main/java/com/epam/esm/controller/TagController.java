@@ -1,12 +1,17 @@
 package com.epam.esm.controller;
 
+import com.epam.esm.exception.exceptions.InvalidRequestBodyException;
 import com.epam.esm.model.modelImpl.Tag;
 import com.epam.esm.service.CRDService;
 import com.epam.esm.service.serviceImpl.TagServiceImpl;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -32,7 +37,15 @@ public class TagController {
 
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
-    public Tag create(@RequestBody Tag tag) {
+    public Tag create(@RequestBody @Valid Tag tag, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            List<String> errorMessages = new ArrayList<>();
+            for (ObjectError error : bindingResult.getAllErrors()) {
+                errorMessages.add(error.getDefaultMessage());
+            }
+            throw new InvalidRequestBodyException(String.join(", ", errorMessages));
+        }
+
         service.create(tag);
         return tag;
     }
