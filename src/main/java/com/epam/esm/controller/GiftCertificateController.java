@@ -1,9 +1,9 @@
 package com.epam.esm.controller;
 
 import com.epam.esm.exception.exceptions.InvalidRequestBodyException;
-import com.epam.esm.model.modelImpl.GiftCertificate;
+import com.epam.esm.model.impl.GiftCertificate;
 import com.epam.esm.service.CRUDService;
-import com.epam.esm.service.serviceImpl.GiftCertificateServiceImpl;
+import com.epam.esm.service.impl.GiftCertificateServiceImpl;
 import com.epam.esm.util.CreateValidationGroup;
 import com.epam.esm.util.UpdateValidationGroup;
 import org.springframework.beans.factory.annotation.Autowired;

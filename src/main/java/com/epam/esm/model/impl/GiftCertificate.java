@@ -1,4 +1,4 @@
-package com.epam.esm.model.modelImpl;
+package com.epam.esm.model.impl;
 
 import com.epam.esm.model.Entity;
 import com.epam.esm.util.CreateValidationGroup;
@@ -15,7 +15,7 @@ import java.util.List;
 
 public class GiftCertificate implements Entity {
 
-    private final String DATE_TIME_PATTERN = "yyyy-MM-dd'T'HH:mm:ss.SSS";
+    private static final String DATE_TIME_PATTERN = "yyyy-MM-dd'T'HH:mm:ss.SSS";
 
     private Integer id;
 
@@ -59,17 +59,6 @@ public class GiftCertificate implements Entity {
         this.duration = duration;
         this.createDate = createDate;
         this.lastUpdateDate = lastUpdateDate;
-    }
-
-    public GiftCertificate(Integer id, String name, String description, Double price, Integer duration, LocalDateTime createDate, LocalDateTime lastUpdateDate, List<Tag> tags) {
-        this.id = id;
-        this.name = name;
-        this.description = description;
-        this.price = price;
-        this.duration = duration;
-        this.createDate = createDate;
-        this.lastUpdateDate = lastUpdateDate;
-        this.tags = tags;
     }
 
     public Integer getId() {

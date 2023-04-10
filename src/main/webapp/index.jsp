@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="aa">
 <head>
     <title>Hello | Gift Certificate Site</title>
     <style>

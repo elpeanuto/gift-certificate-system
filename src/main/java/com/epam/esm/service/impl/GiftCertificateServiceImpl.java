@@ -1,22 +1,18 @@
-package com.epam.esm.service.serviceImpl;
+package com.epam.esm.service.impl;
 
 import com.epam.esm.exception.exceptions.RepositoryException;
 import com.epam.esm.exception.exceptions.ResourceNotFoundException;
-import com.epam.esm.model.modelImpl.GiftCertificate;
-import com.epam.esm.model.modelImpl.Tag;
+import com.epam.esm.model.impl.GiftCertificate;
+import com.epam.esm.model.impl.Tag;
 import com.epam.esm.repository.CRUDRepository;
-import com.epam.esm.repository.repositoryImpl.GiftCertificateRepositoryImpl;
-import com.epam.esm.repository.repositoryImpl.TagGiftCertificateRepository;
+import com.epam.esm.repository.impl.GiftCertificateRepositoryImpl;
 import com.epam.esm.service.CRUDService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 
 @Service
@@ -78,12 +74,12 @@ public class GiftCertificateServiceImpl implements CRUDService<GiftCertificate> 
                 throw new ResourceNotFoundException(id);
             }
 
-            List<Tag> DBTags = certificateFromDB.getTags();
+            List<Tag> dbTags = certificateFromDB.getTags();
             List<Tag> requestTags = giftCertificate.getTags();
 
             List<Tag> temp = requestTags.stream()
                     .distinct()
-                    .filter(tag -> !DBTags.contains(tag))
+                    .filter(tag -> !dbTags.contains(tag))
                     .toList();
 
             if (giftCertificate.getName() != null) {

@@ -1,11 +1,10 @@
-package com.epam.esm.service.serviceImpl;
+package com.epam.esm.service.impl;
 
 import com.epam.esm.exception.exceptions.RepositoryException;
 import com.epam.esm.exception.exceptions.ResourceNotFoundException;
-import com.epam.esm.model.modelImpl.Tag;
+import com.epam.esm.model.impl.Tag;
 import com.epam.esm.repository.CRDRepository;
-import com.epam.esm.repository.TagRepository;
-import com.epam.esm.repository.repositoryImpl.TagRepositoryImpl;
+import com.epam.esm.repository.impl.TagRepositoryImpl;
 import com.epam.esm.service.CRDService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;

@@ -1,8 +1,7 @@
-package com.epam.esm.repository.repositoryImpl;
+package com.epam.esm.repository.impl;
 
 import com.epam.esm.exception.exceptions.RepositoryException;
-import com.epam.esm.model.modelImpl.Tag;
-import com.epam.esm.repository.CRDRepository;
+import com.epam.esm.model.impl.Tag;
 import com.epam.esm.repository.TagRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -13,10 +12,8 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.PreparedStatement;
 import java.sql.Statement;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Repository
 public class TagRepositoryImpl implements TagRepository<Tag> {

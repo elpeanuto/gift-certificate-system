@@ -1,9 +1,9 @@
-package com.epam.esm.repository.repositoryImpl;
+package com.epam.esm.repository.impl;
 
 import com.epam.esm.exception.exceptions.RepositoryException;
 import com.epam.esm.exception.exceptions.ResourceNotFoundException;
-import com.epam.esm.model.modelImpl.GiftCertificate;
-import com.epam.esm.model.modelImpl.Tag;
+import com.epam.esm.model.impl.GiftCertificate;
+import com.epam.esm.model.impl.Tag;
 import com.epam.esm.repository.CRUDRepository;
 import com.epam.esm.repository.TagRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +14,6 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.support.TransactionTemplate;
-
 import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.sql.Timestamp;
@@ -26,7 +25,7 @@ public class GiftCertificateRepositoryImpl implements CRUDRepository<GiftCertifi
 
     private final JdbcTemplate jdbcTemplate;
     private final TagRepository<Tag> tagRepository;
-    private TagGiftCertificateRepository tagGiftCertificateRepository;
+    private TagGiftCertificateRepositoryImpl tagGiftCertificateRepositoryImpl;
     private final PlatformTransactionManager transactionManager;
 
     @Autowired
@@ -37,8 +36,8 @@ public class GiftCertificateRepositoryImpl implements CRUDRepository<GiftCertifi
     }
 
     @Autowired
-    public void setTagGiftCertificateRepository(TagGiftCertificateRepository tagGiftCertificateRepository) {
-        this.tagGiftCertificateRepository = tagGiftCertificateRepository;
+    public void setTagGiftCertificateRepository(TagGiftCertificateRepositoryImpl tagGiftCertificateRepositoryImpl) {
+        this.tagGiftCertificateRepositoryImpl = tagGiftCertificateRepositoryImpl;
     }
 
     @Override
@@ -48,7 +47,7 @@ public class GiftCertificateRepositoryImpl implements CRUDRepository<GiftCertifi
         List<GiftCertificate> list = jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(GiftCertificate.class));
 
         for (GiftCertificate giftCertificate : list) {
-            List<Integer> tagIdList = tagGiftCertificateRepository.getAllTagsIdByGiftCertificate(giftCertificate.getId());
+            List<Integer> tagIdList = tagGiftCertificateRepositoryImpl.getAllTagsIdByGiftCertificate(giftCertificate.getId());
             giftCertificate.setTags(tagRepository.getByIdList(tagIdList));
         }
 
@@ -69,7 +68,7 @@ public class GiftCertificateRepositoryImpl implements CRUDRepository<GiftCertifi
         if (giftCertificate == null)
             throw new ResourceNotFoundException(id);
 
-        List<Integer> tagIdList = tagGiftCertificateRepository.getAllTagsIdByGiftCertificate(id);
+        List<Integer> tagIdList = tagGiftCertificateRepositoryImpl.getAllTagsIdByGiftCertificate(id);
         giftCertificate.setTags(tagRepository.getByIdList(tagIdList));
 
         return giftCertificate;
@@ -126,19 +125,24 @@ public class GiftCertificateRepositoryImpl implements CRUDRepository<GiftCertifi
         List<Tag> tagsToBind = tags.stream()
                 .distinct()
                 .filter(tag -> tagRepository.getByName(tag.getName()) != null)
-                .peek(tag -> tag.setId(tagRepository.getByName(tag.getName()).getId()))
                 .toList();
 
+        tagsToBind.forEach(tag -> tag.setId(tagRepository.getByName(tag.getName()).getId()));
+
+
         return transactionTemplate.execute(status -> {
+
             GiftCertificate certificate = createGiftCertificate(giftCertificate);
 
             tagsToCreate.stream()
                     .map(tagRepository::create)
-                    .peek(tag -> tagGiftCertificateRepository.createTagGiftCertificate(certificate.getId(), tag.getId()))
-                    .forEach(tag -> tag.setId(tag.getId()));
+                    .forEach(tag -> {
+                        tagGiftCertificateRepositoryImpl.createTagGiftCertificate(certificate.getId(), tag.getId());
+                        tag.setId(tag.getId());
+                    });
 
             tagsToBind
-                    .forEach(tag -> tagGiftCertificateRepository.createTagGiftCertificate(certificate.getId(), tag.getId()));
+                    .forEach(tag -> tagGiftCertificateRepositoryImpl.createTagGiftCertificate(certificate.getId(), tag.getId()));
 
             return certificate;
         });
@@ -195,21 +199,25 @@ public class GiftCertificateRepositoryImpl implements CRUDRepository<GiftCertifi
         List<Tag> tagsToBind = tags.stream()
                 .filter(tag -> tagRepository.getByName(tag.getName()) != null)
                 .distinct()
-                .peek(tag -> tag.setId(tagRepository.getByName(tag.getName()).getId()))
                 .toList();
+
+        tagsToBind.forEach(tag -> tag.setId(tagRepository.getByName(tag.getName()).getId()));
+
 
         return transactionTemplate.execute(status -> {
             GiftCertificate certificate = updateGiftCertificate(id, giftCertificate);
 
             tagsToCreate.stream()
                     .map(tagRepository::create)
-                    .peek(tag -> tagGiftCertificateRepository.createTagGiftCertificate(certificate.getId(), tag.getId()))
-                    .forEach(tag -> tag.setId(tag.getId()));
+                    .forEach(tag -> {
+                        tagGiftCertificateRepositoryImpl.createTagGiftCertificate(certificate.getId(), tag.getId());
+                        tag.setId(tag.getId());
+                    });
 
             tagsToBind
-                    .forEach(tag -> tagGiftCertificateRepository.createTagGiftCertificate(certificate.getId(), tag.getId()));
+                    .forEach(tag -> tagGiftCertificateRepositoryImpl.createTagGiftCertificate(certificate.getId(), tag.getId()));
 
-            certificate.setTags(tagRepository.getByIdList(tagGiftCertificateRepository.getAllTagsIdByGiftCertificate(certificate.getId())));
+            certificate.setTags(tagRepository.getByIdList(tagGiftCertificateRepositoryImpl.getAllTagsIdByGiftCertificate(certificate.getId())));
 
             return certificate;
         });

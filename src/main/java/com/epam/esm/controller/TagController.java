@@ -1,9 +1,9 @@
 package com.epam.esm.controller;
 
 import com.epam.esm.exception.exceptions.InvalidRequestBodyException;
-import com.epam.esm.model.modelImpl.Tag;
+import com.epam.esm.model.impl.Tag;
 import com.epam.esm.service.CRDService;
-import com.epam.esm.service.serviceImpl.TagServiceImpl;
+import com.epam.esm.service.impl.TagServiceImpl;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

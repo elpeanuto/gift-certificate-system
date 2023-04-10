@@ -1,7 +1,6 @@
-package com.epam.esm.model.modelImpl;
+package com.epam.esm.model.impl;
 
 import com.epam.esm.model.Entity;
-import com.epam.esm.util.CreateValidationGroup;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
