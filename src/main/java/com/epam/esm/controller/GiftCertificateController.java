@@ -3,7 +3,6 @@ package com.epam.esm.controller;
 import com.epam.esm.exception.exceptions.InvalidRequestBodyException;
 import com.epam.esm.model.impl.GiftCertificate;
 import com.epam.esm.service.CRUDService;
-import com.epam.esm.service.impl.GiftCertificateServiceImpl;
 import com.epam.esm.util.CreateValidationGroup;
 import com.epam.esm.util.UpdateValidationGroup;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +25,7 @@ public class GiftCertificateController {
     private final CRUDService<GiftCertificate> service;
 
     @Autowired
-    public GiftCertificateController(Validator validator, GiftCertificateServiceImpl service) {
+    public GiftCertificateController(Validator validator, CRUDService<GiftCertificate>  service) {
         this.validator = validator;
         this.service = service;
     }
@@ -43,18 +42,18 @@ public class GiftCertificateController {
 
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
-    public GiftCertificate create(@RequestBody @Validated(CreateValidationGroup.class) GiftCertificate giftCertificate,
+    public GiftCertificate create(@RequestBody @Validated(CreateValidationGroup.class) GiftCertificate certificate,
                                   BindingResult bindingResult) {
-        validateGiftCertificate(giftCertificate, bindingResult);
-        return service.create(giftCertificate);
+        validateGiftCertificate(certificate, bindingResult);
+        return service.create(certificate);
     }
 
     @PatchMapping("/{id}")
     public GiftCertificate update(@PathVariable("id") int id,
-                                  @RequestBody @Validated(UpdateValidationGroup.class) GiftCertificate giftCertificate,
+                                  @RequestBody @Validated(UpdateValidationGroup.class) GiftCertificate certificate,
                                   BindingResult bindingResult) {
-        validateGiftCertificate(giftCertificate, bindingResult);
-        return service.update(id, giftCertificate);
+        validateGiftCertificate(certificate, bindingResult);
+        return service.update(id, certificate);
     }
 
     @DeleteMapping("/{id}")
@@ -63,7 +62,7 @@ public class GiftCertificateController {
         service.delete(id);
     }
 
-    private void validateGiftCertificate(GiftCertificate giftCertificate, BindingResult bindingResult) {
+    private void validateGiftCertificate(GiftCertificate certificate, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             List<String> errorMessages = new ArrayList<>();
             for (ObjectError error : bindingResult.getAllErrors()) {
@@ -72,9 +71,9 @@ public class GiftCertificateController {
             throw new InvalidRequestBodyException(String.join(", ", errorMessages));
         }
 
-        for (int i = 0; i < giftCertificate.getTags().size(); i++) {
-            BindingResult tagBindingResult = new BeanPropertyBindingResult(giftCertificate.getTags().get(i), "tag" + i);
-            validator.validate(giftCertificate.getTags().get(i), tagBindingResult);
+        for (int i = 0; i < certificate.getTags().size(); i++) {
+            BindingResult tagBindingResult = new BeanPropertyBindingResult(certificate.getTags().get(i), "tag" + i);
+            validator.validate(certificate.getTags().get(i), tagBindingResult);
             if (tagBindingResult.hasErrors()) {
                 List<String> errorMessages = new ArrayList<>();
                 for (ObjectError error : tagBindingResult.getAllErrors()) {
