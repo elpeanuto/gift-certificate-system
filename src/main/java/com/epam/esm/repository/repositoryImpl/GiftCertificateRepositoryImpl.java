@@ -66,7 +66,7 @@ public class GiftCertificateRepositoryImpl implements CRUDRepository<GiftCertifi
             return ps;
         }, new BeanPropertyRowMapper<>(GiftCertificate.class)).stream().findFirst().orElse(null);
 
-        if(giftCertificate == null)
+        if (giftCertificate == null)
             throw new ResourceNotFoundException(id);
 
         List<Integer> tagIdList = tagGiftCertificateRepository.getAllTagsIdByGiftCertificate(id);

@@ -34,14 +34,18 @@ public class RestExceptionHandler {
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<ErrorResponse> handleHttpMessageNotReadableException(HttpMessageNotReadableException ex) {
         HttpStatus status = HttpStatus.BAD_REQUEST;
+
         ErrorResponse errorResponse = new ErrorResponse("Bad Request", Integer.toString(status.value()));
+
         return new ResponseEntity<>(errorResponse, status);
     }
 
     @ExceptionHandler(InvalidRequestBodyException.class)
     public ResponseEntity<ErrorResponse> handleHttpMessageNotReadableException(InvalidRequestBodyException ex) {
         HttpStatus status = HttpStatus.BAD_REQUEST;
+
         ErrorResponse errorResponse = new ErrorResponse("Bad Request: " + ex.getMessage(), Integer.toString(status.value()));
+
         return new ResponseEntity<>(errorResponse, status);
     }
 }
