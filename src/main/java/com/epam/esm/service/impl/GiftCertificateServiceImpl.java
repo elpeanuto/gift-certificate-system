@@ -209,17 +209,18 @@ public class GiftCertificateServiceImpl implements CRUDService<GiftCertificate> 
 
     }
 
-    public int delete(int id) {
-        int result;
+    public GiftCertificate delete(int id) {
+        GiftCertificate result;
 
         try {
-            result = certificateRepo.delete(id);
+            result = getById(id);
+
+            if (certificateRepo.delete(id) < 1) {
+                throw new RepositoryException("Failed to delete gift certificate");
+            }
+
         } catch (DataAccessException e) {
             throw new RepositoryException(RepositoryException.standardMessage(this.getClass().getSimpleName(), "delete(int id)", e));
-        }
-
-        if (result < 1) {
-            throw new ResourceNotFoundException(id);
         }
 
         return result;

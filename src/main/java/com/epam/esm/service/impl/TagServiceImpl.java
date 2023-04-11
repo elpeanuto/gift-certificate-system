@@ -16,16 +16,16 @@ import java.util.List;
 @Service
 public class TagServiceImpl implements CRDService<Tag> {
 
-    private final CRDRepository<Tag> tagRepository;
+    private final CRDRepository<Tag> tagRepo;
 
     @Autowired
     public TagServiceImpl(TagRepositoryImpl tagRepository) {
-        this.tagRepository = tagRepository;
+        this.tagRepo = tagRepository;
     }
 
     public List<Tag> getAll() {
         try {
-            return tagRepository.getAll();
+            return tagRepo.getAll();
         } catch (DataAccessException e) {
             throw new RepositoryException(RepositoryException.standardMessage(this.getClass().getSimpleName(), "getAll()", e));
         }
@@ -35,7 +35,7 @@ public class TagServiceImpl implements CRDService<Tag> {
         Tag tag;
 
         try {
-            tag = tagRepository.getById(id);
+            tag = tagRepo.getById(id);
         } catch (DataAccessException e) {
             throw new RepositoryException(RepositoryException.standardMessage(this.getClass().getSimpleName(), "getById(int id)", e));
         }
@@ -50,7 +50,7 @@ public class TagServiceImpl implements CRDService<Tag> {
         Tag result;
 
         try {
-            result = tagRepository.create(tag);
+            result = tagRepo.create(tag);
         } catch (DuplicateKeyException e) {
             throw new RepositoryException("Tag with this name already exists");
         } catch (DataAccessException e) {
@@ -60,17 +60,18 @@ public class TagServiceImpl implements CRDService<Tag> {
         return result;
     }
 
-    public int delete(int id) {
-        int result;
+    public Tag delete(int id) {
+        Tag result;
 
         try {
-            result = tagRepository.delete(id);
+            result = getById(id);
+
+            if (tagRepo.delete(id) < 1) {
+                throw new RepositoryException("Failed to delete tag");
+            }
+
         } catch (DataAccessException e) {
             throw new RepositoryException(RepositoryException.standardMessage(this.getClass().getSimpleName(), "delete(int id)", e));
-        }
-
-        if (result < 1) {
-            throw new ResourceNotFoundException(id);
         }
 
         return result;

@@ -57,9 +57,8 @@ public class GiftCertificateController {
     }
 
     @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable("id") int id) {
-        service.delete(id);
+    public GiftCertificate delete(@PathVariable("id") int id) {
+        return service.delete(id);
     }
 
     private void validateGiftCertificate(GiftCertificate certificate, BindingResult bindingResult) {

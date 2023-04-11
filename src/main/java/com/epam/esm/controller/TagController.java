@@ -51,8 +51,7 @@ public class TagController {
     }
 
     @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable("id") int id) {
-        service.delete(id);
+    public Tag delete(@PathVariable("id") int id) {
+        return service.delete(id);
     }
 }

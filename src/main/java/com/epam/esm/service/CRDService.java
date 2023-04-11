@@ -12,5 +12,5 @@ public interface CRDService<T extends Entity> {
 
     T create(T t);
 
-    int delete(int id);
+    T delete(int id);
 }
