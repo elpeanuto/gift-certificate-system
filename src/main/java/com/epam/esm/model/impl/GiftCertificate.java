@@ -11,9 +11,10 @@ import jakarta.validation.constraints.Size;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
-public class GiftCertificate implements Entity {
+public class GiftCertificate implements Entity, Comparator<GiftCertificate> {
 
     private static final String DATE_TIME_PATTERN = "yyyy-MM-dd'T'HH:mm:ss.SSS";
 
@@ -137,5 +138,12 @@ public class GiftCertificate implements Entity {
                 ", lastUpdateDate=" + lastUpdateDate +
                 ", tags=" + tags.toString() +
                 '}';
+    }
+
+    @Override
+    public int compare(GiftCertificate o1, GiftCertificate o2) {
+        LocalDateTime date1 = o1.getLastUpdateDate();
+        LocalDateTime date2 = o2.getLastUpdateDate();
+        return date1.compareTo(date2);
     }
 }

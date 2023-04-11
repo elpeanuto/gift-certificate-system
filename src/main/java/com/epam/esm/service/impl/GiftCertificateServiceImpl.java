@@ -4,11 +4,9 @@ import com.epam.esm.exception.exceptions.RepositoryException;
 import com.epam.esm.exception.exceptions.ResourceNotFoundException;
 import com.epam.esm.model.impl.GiftCertificate;
 import com.epam.esm.model.impl.Tag;
-import com.epam.esm.repository.CRUDRepository;
 import com.epam.esm.repository.GiftCertificateRepository;
 import com.epam.esm.repository.TagGiftCertificateRepository;
 import com.epam.esm.repository.TagRepository;
-import com.epam.esm.service.CRUDService;
 import com.epam.esm.service.GiftCertificateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -16,8 +14,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -72,22 +72,72 @@ public class GiftCertificateServiceImpl implements GiftCertificateService<GiftCe
     }
 
     @Override
-    public List<GiftCertificate> getByParams(String name) {
+    public List<GiftCertificate> getByParams(String tagName, String part, String sort) {
+        List<GiftCertificate> responseList = new ArrayList<>();
+
+        if (tagName != null) {
+            responseList.addAll(getByTagNameParam(tagName));
+        }
+
+        if (part != null) {
+            String partLowerCase = part.toLowerCase();
+
+            if (tagName != null)
+                responseList = responseList.stream()
+                        .filter(certificate -> certificate.getName().toLowerCase().contains(partLowerCase)
+                                || certificate.getDescription().toLowerCase().contains(partLowerCase))
+                        .collect(Collectors.toList());
+            else
+                responseList.addAll(getByPartParam(part));
+        }
+
+        if (sort != null) {
+            if (part == null && tagName == null)
+                responseList = getAll();
+            sortByParam(responseList, sort);
+        }
+
+        return responseList;
+    }
+
+    private List<GiftCertificate> getByTagNameParam(String name) {
         List<GiftCertificate> responseList;
 
         Tag tag = tagRepo.getByName(name);
 
-        if(tag == null)
+        if (tag == null) {
             return Collections.emptyList();
+        }
 
         List<Integer> certificateIds = tagCertificateRepo.getAllCertificateIdByTag(tag.getId());
 
-        if(certificateIds == null)
+        if (certificateIds == null) {
             return Collections.emptyList();
+        }
 
         responseList = certificateRepo.getByIdList(certificateIds);
 
+        responseList
+                .forEach(certificate -> certificate.setTags(tagRepo.getByIdList(tagCertificateRepo.getAllTagsIdByGiftCertificate(certificate.getId()))));
+
         return responseList;
+    }
+
+    private List<GiftCertificate> getByPartParam(String part) {
+        List<GiftCertificate> responseList;
+
+        responseList = certificateRepo.getByPartOfNameDescription(part);
+        responseList
+                .forEach(certificate -> certificate.setTags(tagRepo.getByIdList(tagCertificateRepo.getAllTagsIdByGiftCertificate(certificate.getId()))));
+
+        return responseList;
+    }
+
+    private void sortByParam(List<GiftCertificate> list, String sort) {
+        if (sort.equals("DESC"))
+            list.sort(Collections.reverseOrder(new GiftCertificate()));
+        else if (sort.equals("ASC"))
+            list.sort(new GiftCertificate());
     }
 
     @Transactional

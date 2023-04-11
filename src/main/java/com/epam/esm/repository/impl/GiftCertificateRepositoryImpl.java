@@ -2,7 +2,6 @@ package com.epam.esm.repository.impl;
 
 import com.epam.esm.exception.exceptions.RepositoryException;
 import com.epam.esm.model.impl.GiftCertificate;
-import com.epam.esm.repository.CRUDRepository;
 import com.epam.esm.repository.GiftCertificateRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -17,6 +16,7 @@ import javax.sql.DataSource;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.sql.Timestamp;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -55,10 +55,26 @@ public class GiftCertificateRepositoryImpl implements GiftCertificateRepository<
     public List<GiftCertificate> getByIdList(List<Integer> idList) {
         String sql = "SELECT * FROM gift_certificate WHERE id IN (:idList)";
 
+        if(idList.isEmpty())
+            return Collections.emptyList();
+
         MapSqlParameterSource params = new MapSqlParameterSource();
         params.addValue("idList", idList);
 
         return namedParameterJdbcTemplate.query(sql, params, new BeanPropertyRowMapper<>(GiftCertificate.class));
+    }
+
+    @Override
+    public List<GiftCertificate> getByPartOfNameDescription(String pattern) {
+        String sql = "SELECT * FROM gift_certificate WHERE name ILIKE ? OR description ILIKE ?";
+
+        return jdbcTemplate.query(con -> {
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setString(1, "%" + pattern + "%");
+            ps.setString(2, "%" + pattern + "%");
+
+            return ps;
+        }, new BeanPropertyRowMapper<>(GiftCertificate.class));
     }
 
     @Override

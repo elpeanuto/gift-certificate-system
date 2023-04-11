@@ -1,7 +1,6 @@
 package com.epam.esm.repository.impl;
 
 import com.epam.esm.exception.exceptions.RepositoryException;
-import com.epam.esm.model.impl.GiftCertificate;
 import com.epam.esm.model.impl.Tag;
 import com.epam.esm.repository.TagRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +15,7 @@ import org.springframework.stereotype.Repository;
 import javax.sql.DataSource;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -65,6 +65,9 @@ public class TagRepositoryImpl implements TagRepository<Tag> {
     @Override
     public List<Tag> getByIdList(List<Integer> idList) {
         String sql = "SELECT * FROM tag WHERE id IN (:idList)";
+
+        if(idList.isEmpty())
+            return Collections.emptyList();
 
         MapSqlParameterSource params = new MapSqlParameterSource();
         params.addValue("idList", idList);
