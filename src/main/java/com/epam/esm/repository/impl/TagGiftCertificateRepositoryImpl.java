@@ -17,15 +17,24 @@ public class TagGiftCertificateRepositoryImpl implements TagGiftCertificateRepos
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public int createTagGiftCertificate(int giftCertificateId, int tagId) {
+    @Override
+    public int createTagGiftCertificate(int certificateId, int tagId) {
         String sql = "INSERT INTO gift_certificate_tag(gift_certificate_id, tag_id) VALUES (?, ?)";
 
-        return jdbcTemplate.update(sql, giftCertificateId, tagId);
+        return jdbcTemplate.update(sql, certificateId, tagId);
     }
 
-    public List<Integer> getAllTagsIdByGiftCertificate(int giftCertificateId) {
+    @Override
+    public List<Integer> getAllTagsIdByGiftCertificate(int certificateId) {
         String sql = "SELECT tag_id FROM gift_certificate_tag WHERE gift_certificate_id=?";
 
-        return jdbcTemplate.queryForList(sql, Integer.class, giftCertificateId);
+        return jdbcTemplate.queryForList(sql, Integer.class, certificateId);
+    }
+
+    @Override
+    public List<Integer> getAllCertificateIdByTag(int tagId) {
+        String sql = "SELECT gift_certificate_id FROM gift_certificate_tag WHERE tag_id=?";
+
+        return jdbcTemplate.queryForList(sql, Integer.class, tagId);
     }
 }

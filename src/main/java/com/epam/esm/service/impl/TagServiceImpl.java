@@ -23,6 +23,7 @@ public class TagServiceImpl implements CRDService<Tag> {
         this.tagRepo = tagRepository;
     }
 
+    @Override
     public List<Tag> getAll() {
         try {
             return tagRepo.getAll();
@@ -31,6 +32,7 @@ public class TagServiceImpl implements CRDService<Tag> {
         }
     }
 
+    @Override
     public Tag getById(int id) {
         Tag tag;
 
@@ -46,6 +48,7 @@ public class TagServiceImpl implements CRDService<Tag> {
         return tag;
     }
 
+    @Override
     public Tag create(Tag tag) {
         Tag result;
 
@@ -60,6 +63,7 @@ public class TagServiceImpl implements CRDService<Tag> {
         return result;
     }
 
+    @Override
     public Tag delete(int id) {
         Tag result;
 

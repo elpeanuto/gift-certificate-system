@@ -4,7 +4,9 @@ import java.util.List;
 
 public interface TagGiftCertificateRepository {
 
-    int createTagGiftCertificate(int giftCertificateId, int tagId);
+    int createTagGiftCertificate(int certificateId, int tagId);
 
-    List<Integer> getAllTagsIdByGiftCertificate(int giftCertificateId);
+    List<Integer> getAllTagsIdByGiftCertificate(int certificateId);
+
+    List<Integer> getAllCertificateIdByTag(int tagId);
 }

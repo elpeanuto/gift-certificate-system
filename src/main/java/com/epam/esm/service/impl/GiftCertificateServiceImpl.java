@@ -5,33 +5,37 @@ import com.epam.esm.exception.exceptions.ResourceNotFoundException;
 import com.epam.esm.model.impl.GiftCertificate;
 import com.epam.esm.model.impl.Tag;
 import com.epam.esm.repository.CRUDRepository;
+import com.epam.esm.repository.GiftCertificateRepository;
 import com.epam.esm.repository.TagGiftCertificateRepository;
 import com.epam.esm.repository.TagRepository;
 import com.epam.esm.service.CRUDService;
+import com.epam.esm.service.GiftCertificateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 
 
 @Service
-public class GiftCertificateServiceImpl implements CRUDService<GiftCertificate> {
+public class GiftCertificateServiceImpl implements GiftCertificateService<GiftCertificate> {
+    private final GiftCertificateRepository<GiftCertificate> certificateRepo;
 
-    private final CRUDRepository<GiftCertificate> certificateRepo;
     private final TagRepository<Tag> tagRepo;
     private final TagGiftCertificateRepository tagCertificateRepo;
 
     @Autowired
-    public GiftCertificateServiceImpl(CRUDRepository<GiftCertificate> certificateRepo,
+    public GiftCertificateServiceImpl(GiftCertificateRepository<GiftCertificate> certificateRepo,
                                       TagRepository<Tag> tagRepo, TagGiftCertificateRepository tagCertificateRepo) {
         this.certificateRepo = certificateRepo;
         this.tagRepo = tagRepo;
         this.tagCertificateRepo = tagCertificateRepo;
     }
 
+    @Override
     public List<GiftCertificate> getAll() {
         try {
             List<GiftCertificate> certificateList = certificateRepo.getAll();
@@ -48,6 +52,7 @@ public class GiftCertificateServiceImpl implements CRUDService<GiftCertificate> 
         }
     }
 
+    @Override
     public GiftCertificate getById(int id) {
         try {
             GiftCertificate certificate;
@@ -64,6 +69,25 @@ public class GiftCertificateServiceImpl implements CRUDService<GiftCertificate> 
         } catch (DataAccessException e) {
             throw new RepositoryException(RepositoryException.standardMessage(this.getClass().getSimpleName(), "getById(int id)", e));
         }
+    }
+
+    @Override
+    public List<GiftCertificate> getByParams(String name) {
+        List<GiftCertificate> responseList;
+
+        Tag tag = tagRepo.getByName(name);
+
+        if(tag == null)
+            return Collections.emptyList();
+
+        List<Integer> certificateIds = tagCertificateRepo.getAllCertificateIdByTag(tag.getId());
+
+        if(certificateIds == null)
+            return Collections.emptyList();
+
+        responseList = certificateRepo.getByIdList(certificateIds);
+
+        return responseList;
     }
 
     @Transactional
@@ -209,6 +233,7 @@ public class GiftCertificateServiceImpl implements CRUDService<GiftCertificate> 
 
     }
 
+    @Override
     public GiftCertificate delete(int id) {
         GiftCertificate result;
 

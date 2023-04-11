@@ -3,13 +3,17 @@ package com.epam.esm.repository.impl;
 import com.epam.esm.exception.exceptions.RepositoryException;
 import com.epam.esm.model.impl.GiftCertificate;
 import com.epam.esm.repository.CRUDRepository;
+import com.epam.esm.repository.GiftCertificateRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
+import javax.sql.DataSource;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.sql.Timestamp;
@@ -17,13 +21,15 @@ import java.util.List;
 import java.util.Map;
 
 @Repository
-public class GiftCertificateRepositoryImpl implements CRUDRepository<GiftCertificate> {
+public class GiftCertificateRepositoryImpl implements GiftCertificateRepository<GiftCertificate> {
 
     private final JdbcTemplate jdbcTemplate;
+    private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     @Autowired
-    public GiftCertificateRepositoryImpl(JdbcTemplate jdbcTemplate) {
+    public GiftCertificateRepositoryImpl(JdbcTemplate jdbcTemplate, DataSource dataSource) {
         this.jdbcTemplate = jdbcTemplate;
+        this.namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
     }
 
     @Override
@@ -45,7 +51,17 @@ public class GiftCertificateRepositoryImpl implements CRUDRepository<GiftCertifi
         }, new BeanPropertyRowMapper<>(GiftCertificate.class)).stream().findFirst().orElse(null);
     }
 
+    @Override
+    public List<GiftCertificate> getByIdList(List<Integer> idList) {
+        String sql = "SELECT * FROM gift_certificate WHERE id IN (:idList)";
 
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("idList", idList);
+
+        return namedParameterJdbcTemplate.query(sql, params, new BeanPropertyRowMapper<>(GiftCertificate.class));
+    }
+
+    @Override
     public GiftCertificate create(GiftCertificate certificate) {
         String sql = "INSERT INTO gift_certificate(name, description, price, duration) " +
                 "VALUES(?, ?, ?, ?)";
