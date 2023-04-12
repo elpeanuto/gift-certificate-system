@@ -1,6 +1,6 @@
 package com.epam.esm.repository.impl;
 
-import com.epam.esm.repository.TagGiftCertificateRepository;
+import com.epam.esm.repository.api.TagGiftCertificateRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;

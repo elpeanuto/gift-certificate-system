@@ -2,7 +2,7 @@ package com.epam.esm.repository.impl;
 
 import com.epam.esm.exception.exceptions.RepositoryException;
 import com.epam.esm.model.impl.GiftCertificate;
-import com.epam.esm.repository.GiftCertificateRepository;
+import com.epam.esm.repository.api.GiftCertificateRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;

@@ -4,10 +4,10 @@ import com.epam.esm.exception.exceptions.RepositoryException;
 import com.epam.esm.exception.exceptions.ResourceNotFoundException;
 import com.epam.esm.model.impl.GiftCertificate;
 import com.epam.esm.model.impl.Tag;
-import com.epam.esm.repository.GiftCertificateRepository;
-import com.epam.esm.repository.TagGiftCertificateRepository;
-import com.epam.esm.repository.TagRepository;
-import com.epam.esm.service.GiftCertificateService;
+import com.epam.esm.repository.api.GiftCertificateRepository;
+import com.epam.esm.repository.api.TagGiftCertificateRepository;
+import com.epam.esm.repository.api.TagRepository;
+import com.epam.esm.service.api.GiftCertificateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
@@ -162,15 +162,17 @@ public class GiftCertificateServiceImpl implements GiftCertificateService<GiftCe
     }
 
     private GiftCertificate createGiftCertificateWithTags(GiftCertificate certificate) {
-        List<Tag> tags = certificate.getTags();
+        List<Tag> tags = certificate.getTags().stream()
+                .distinct()
+                .toList();
+
+        certificate.setTags(tags);
 
         List<Tag> tagsToCreate = tags.stream()
-                .distinct()
                 .filter(tag -> tagRepo.getByName(tag.getName()) == null)
                 .toList();
 
         List<Tag> tagsToBind = tags.stream()
-                .distinct()
                 .filter(tag -> tagRepo.getByName(tag.getName()) != null)
                 .toList();
 
