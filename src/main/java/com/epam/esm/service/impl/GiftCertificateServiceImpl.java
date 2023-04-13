@@ -19,13 +19,16 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-
 @Service
 public class GiftCertificateServiceImpl implements GiftCertificateService<GiftCertificate> {
-    private final GiftCertificateRepository<GiftCertificate> certificateRepo;
 
-    private final TagRepository<Tag> tagRepo;
-    private final TagGiftCertificateRepository tagCertificateRepo;
+    private GiftCertificateRepository<GiftCertificate> certificateRepo;
+    private TagRepository<Tag> tagRepo;
+    private TagGiftCertificateRepository tagCertificateRepo;
+
+    public GiftCertificateServiceImpl() {
+
+    }
 
     @Autowired
     public GiftCertificateServiceImpl(GiftCertificateRepository<GiftCertificate> certificateRepo,
@@ -282,7 +285,6 @@ public class GiftCertificateServiceImpl implements GiftCertificateService<GiftCe
         updateCertificate.setTags(tagRepo.getByIdList(tagCertificateRepo.getAllTagsIdByGiftCertificate(updateCertificate.getId())));
 
         return updateCertificate;
-
     }
 
     @Override

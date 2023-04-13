@@ -19,7 +19,7 @@ public class TagServiceImpl implements CRDService<Tag> {
     private final CRDRepository<Tag> tagRepo;
 
     @Autowired
-    public TagServiceImpl(TagRepositoryImpl tagRepository) {
+    public TagServiceImpl(CRDRepository<Tag> tagRepository) {
         this.tagRepo = tagRepository;
     }
 

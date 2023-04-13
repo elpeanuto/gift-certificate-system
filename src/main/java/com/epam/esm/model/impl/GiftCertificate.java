@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 
 public class GiftCertificate implements Entity, Comparator<GiftCertificate> {
 
@@ -145,5 +146,27 @@ public class GiftCertificate implements Entity, Comparator<GiftCertificate> {
         LocalDateTime date1 = o1.getLastUpdateDate();
         LocalDateTime date2 = o2.getLastUpdateDate();
         return date1.compareTo(date2);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        GiftCertificate that = (GiftCertificate) o;
+
+        if (!Objects.equals(name, that.name)) return false;
+        if (!Objects.equals(description, that.description)) return false;
+        if (!Objects.equals(price, that.price)) return false;
+        return Objects.equals(duration, that.duration);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = name != null ? name.hashCode() : 0;
+        result = 31 * result + (description != null ? description.hashCode() : 0);
+        result = 31 * result + (price != null ? price.hashCode() : 0);
+        result = 31 * result + (duration != null ? duration.hashCode() : 0);
+        return result;
     }
 }
