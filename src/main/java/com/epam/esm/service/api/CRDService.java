@@ -1,0 +1,16 @@
+package com.epam.esm.service.api;
+
+import com.epam.esm.model.Entity;
+
+import java.util.List;
+
+public interface CRDService<T extends Entity> {
+
+    List<T> getAll();
+
+    T getById(int id);
+
+    T create(T t);
+
+    T delete(int id);
+}
