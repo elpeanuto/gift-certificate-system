@@ -6,7 +6,6 @@ import com.epam.esm.repository.api.GiftCertificateRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
@@ -21,6 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = TestAppConfig.class)
 @Sql(scripts = "/sql/setup.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+@ActiveProfiles("test")
 class GiftCertificateRepositoryImplTest {
 
     @Autowired
