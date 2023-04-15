@@ -5,6 +5,7 @@ import com.zaxxer.hikari.HikariDataSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -12,6 +13,8 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import javax.sql.DataSource;
+import java.io.IOException;
+import java.util.Properties;
 
 @Configuration
 @ComponentScan("com.epam.esm")
@@ -21,20 +24,26 @@ public class AppConfig {
 
     @Bean
     public DataSource dataSource() {
+        Properties props = new Properties();
+
+        try {
+            props.load(getClass().getClassLoader().getResourceAsStream("testDatabase.properties"));
+        } catch (IOException e) {
+            throw new IllegalStateException("Failed to load database properties", e);
+        }
+
         HikariConfig config = new HikariConfig();
+        config.setDriverClassName(props.getProperty("jdbc.driverClassName"));
+        config.setJdbcUrl(props.getProperty("jdbc.url"));
+        config.setUsername(props.getProperty("jdbc.username"));
+        config.setPassword(props.getProperty("jdbc.password"));
+        config.setConnectionTimeout(Integer.parseInt(props.getProperty("jdbc.connectionTimeout")));
+        config.setIdleTimeout(Integer.parseInt(props.getProperty("jdbc.idleTimeout")));
+        config.setMaxLifetime(Integer.parseInt(props.getProperty("jdbc.maxLifetime")));
+        config.setMaximumPoolSize(Integer.parseInt(props.getProperty("jdbc.maximumPoolSize")));
+        config.setMinimumIdle(Integer.parseInt(props.getProperty("jdbc.minimumIdle")));
 
-        config.setDriverClassName("org.postgresql.Driver");
-        config.setJdbcUrl("jdbc:postgresql://localhost:5432/postgres");
-        config.setUsername("postgres");
-        config.setPassword("postgres");
-        config.setConnectionTimeout(30_000);
-        config.setIdleTimeout(600_000);
-        config.setMaxLifetime(1_800_000);
-        config.setMaximumPoolSize(10);
-        config.setMinimumIdle(5);
-
-        return new HikariDataSource(config);
-    }
+        return new HikariDataSource(config);    }
 
     @Bean
     public JdbcTemplate jdbcTemplate() {

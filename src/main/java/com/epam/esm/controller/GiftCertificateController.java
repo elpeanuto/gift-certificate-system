@@ -5,6 +5,7 @@ import com.epam.esm.model.impl.GiftCertificate;
 import com.epam.esm.service.api.GiftCertificateService;
 import com.epam.esm.util.CreateValidationGroup;
 import com.epam.esm.util.UpdateValidationGroup;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BeanPropertyBindingResult;
@@ -23,6 +24,7 @@ public class GiftCertificateController {
 
     private final Validator validator;
     private final GiftCertificateService<GiftCertificate> service;
+    private final Logger logger = Logger.getLogger(this.getClass());
 
     @Autowired
     public GiftCertificateController(Validator validator, GiftCertificateService<GiftCertificate> service) {
@@ -73,7 +75,10 @@ public class GiftCertificateController {
             for (ObjectError error : bindingResult.getAllErrors()) {
                 errorMessages.add(error.getDefaultMessage());
             }
-            throw new InvalidRequestBodyException(String.join(", ", errorMessages));
+            String str = String.join(", ", errorMessages);
+
+            logger.warn(str);
+            throw new InvalidRequestBodyException(str);
         }
 
         for (int i = 0; i < certificate.getTags().size(); i++) {
@@ -84,7 +89,10 @@ public class GiftCertificateController {
                 for (ObjectError error : tagBindingResult.getAllErrors()) {
                     errorMessages.add(error.getDefaultMessage());
                 }
-                throw new InvalidRequestBodyException("Tag #" + (i + 1) + ": " + String.join(", ", errorMessages));
+                String str = "Tag #" + (i + 1) + ": " + String.join(", ", errorMessages);
+
+                logger.warn(str);
+                throw new InvalidRequestBodyException(str);
             }
         }
     }

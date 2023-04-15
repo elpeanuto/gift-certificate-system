@@ -13,6 +13,8 @@ import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.PlatformTransactionManager;
 
 import javax.sql.DataSource;
+import java.io.IOException;
+import java.util.Properties;
 
 @Configuration
 @Profile("test")
@@ -22,10 +24,18 @@ public class TestAppConfig {
     public DataSource testDataSource() {
         HikariConfig config = new HikariConfig();
 
-        config.setDriverClassName("org.h2.Driver");
-        config.setJdbcUrl("jdbc:h2:mem:testdb");
-        config.setUsername("sa");
-        config.setPassword("");
+        Properties props = new Properties();
+
+        try {
+            props.load(getClass().getClassLoader().getResourceAsStream("database.properties"));
+        } catch (IOException e) {
+            throw new IllegalStateException("Failed to load database properties", e);
+        }
+
+        config.setDriverClassName(props.getProperty("jdbc.driverClassName"));
+        config.setJdbcUrl(props.getProperty("jdbc.url"));
+        config.setUsername(props.getProperty("jdbc.username"));
+        config.setPassword(props.getProperty("jdbc.password"));
 
         return new HikariDataSource(config);
     }
