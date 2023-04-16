@@ -35,7 +35,6 @@ public class GiftCertificateRepositoryImpl implements GiftCertificateRepository<
      * Constructor for creating a new instance of the GiftCertificateRepositoryImpl class.
      *
      * @param jdbcTemplate JdbcTemplate object for accessing the database.
-     * @param dataSource   DataSource object for accessing the database.
      */
     @Autowired
     public GiftCertificateRepositoryImpl(JdbcTemplate jdbcTemplate) {
