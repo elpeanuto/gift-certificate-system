@@ -19,18 +19,34 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Implementation of the TagRepository interface that uses JdbcTemplate and NamedParameterJdbcTemplate to interact with the database.
+ *
+ * @see TagRepository
+ */
 @Repository
 public class TagRepositoryImpl implements TagRepository<Tag> {
 
     private final JdbcTemplate jdbcTemplate;
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
+    /**
+     * Constructs a new instance of the TagRepositoryImpl class.
+     *
+     * @param jdbcTemplate the JdbcTemplate to be used for database interaction.
+     * @param dataSource   the DataSource to be used for database interaction.
+     */
     @Autowired
     public TagRepositoryImpl(JdbcTemplate jdbcTemplate, DataSource dataSource) {
         this.jdbcTemplate = jdbcTemplate;
         this.namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
     }
 
+    /**
+     * Retrieves all tags from the database.
+     *
+     * @return a list of Tag objects.
+     */
     @Override
     public List<Tag> getAll() {
         String sql = "SELECT * FROM tag";
@@ -38,6 +54,12 @@ public class TagRepositoryImpl implements TagRepository<Tag> {
         return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Tag.class));
     }
 
+    /**
+     * Retrieves a tag from the database with the specified ID.
+     *
+     * @param id the ID of the tag to retrieve.
+     * @return the Tag object with the specified ID, or null if not found.
+     */
     @Override
     public Tag getById(int id) {
         String sql = "SELECT * FROM tag WHERE id = ?";
@@ -50,6 +72,12 @@ public class TagRepositoryImpl implements TagRepository<Tag> {
         }, new BeanPropertyRowMapper<>(Tag.class)).stream().findFirst().orElse(null);
     }
 
+    /**
+     * Retrieves a tag from the database with the specified name.
+     *
+     * @param name the name of the tag to retrieve.
+     * @return the Tag object with the specified name, or null if not found.
+     */
     @Override
     public Tag getByName(String name) {
         String sql = "SELECT * FROM tag WHERE name = ?";
@@ -62,11 +90,17 @@ public class TagRepositoryImpl implements TagRepository<Tag> {
         }, new BeanPropertyRowMapper<>(Tag.class)).stream().findFirst().orElse(null);
     }
 
+    /**
+     * Retrieves a list of tags from the database with the specified IDs.
+     *
+     * @param idList the list of IDs of the tags to retrieve.
+     * @return a list of Tag objects with the specified IDs.
+     */
     @Override
     public List<Tag> getByIdList(List<Integer> idList) {
         String sql = "SELECT * FROM tag WHERE id IN (:idList)";
 
-        if(idList.isEmpty())
+        if (idList.isEmpty())
             return Collections.emptyList();
 
         MapSqlParameterSource params = new MapSqlParameterSource();
@@ -75,6 +109,13 @@ public class TagRepositoryImpl implements TagRepository<Tag> {
         return namedParameterJdbcTemplate.query(sql, params, new BeanPropertyRowMapper<>(Tag.class));
     }
 
+    /**
+     * Creates a new tag in the database.
+     *
+     * @param tag the Tag object to be created.
+     * @return the Tag object with the ID field set.
+     * @throws RepositoryException if the operation fails.
+     */
     @Override
     public Tag create(Tag tag) {
         String sql = "INSERT INTO tag(name) VALUES(?)";
@@ -102,6 +143,12 @@ public class TagRepositoryImpl implements TagRepository<Tag> {
         return tag;
     }
 
+    /**
+     * Deletes a tag with the given ID from the database.
+     *
+     * @param id the ID of the tag to be deleted
+     * @return the number of rows affected by the deletion (should be 1 if successful)
+     */
     @Override
     public int delete(int id) {
         String sql = "DELETE FROM tag WHERE id=?";
