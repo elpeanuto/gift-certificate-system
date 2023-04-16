@@ -12,7 +12,6 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
-import javax.sql.DataSource;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.sql.Timestamp;
@@ -27,9 +26,9 @@ public class GiftCertificateRepositoryImpl implements GiftCertificateRepository<
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     @Autowired
-    public GiftCertificateRepositoryImpl(JdbcTemplate jdbcTemplate, DataSource dataSource) {
+    public GiftCertificateRepositoryImpl(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
-        this.namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
+        this.namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(jdbcTemplate);
     }
 
     @Override

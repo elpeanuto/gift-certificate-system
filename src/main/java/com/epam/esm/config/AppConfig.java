@@ -5,7 +5,6 @@ import com.zaxxer.hikari.HikariDataSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -27,7 +26,7 @@ public class AppConfig {
         Properties props = new Properties();
 
         try {
-            props.load(getClass().getClassLoader().getResourceAsStream("testDatabase.properties"));
+            props.load(getClass().getClassLoader().getResourceAsStream("database.properties"));
         } catch (IOException e) {
             throw new IllegalStateException("Failed to load database properties", e);
         }
