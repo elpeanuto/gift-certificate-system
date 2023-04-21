@@ -80,7 +80,7 @@ public class TagRepositoryImpl implements TagRepository<Tag> {
      */
     @Override
     public Tag getByName(String name) {
-        String sql = "SELECT * FROM tag WHERE name = ?";
+        String sql = "SELECT * FROM tag WHERE LOWER(name) = LOWER(?)";
 
         return jdbcTemplate.query(con -> {
             PreparedStatement ps = con.prepareStatement(sql);
