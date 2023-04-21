@@ -15,6 +15,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * A RestController class that handles API requests related to tags.
+ */
 @RestController
 @RequestMapping("/tags")
 public class TagController {
@@ -22,21 +25,45 @@ public class TagController {
     private final CRDService<Tag> service;
     private final Logger logger = Logger.getLogger(this.getClass());
 
+    /**
+     * Constructs an instance of TagController with the specified service.
+     *
+     * @param service the service used to perform CRUD operations on Tag objects
+     */
     @Autowired
     public TagController(TagServiceImpl service) {
         this.service = service;
     }
 
+    /**
+     * Returns a list of all Tag objects in the system.
+     *
+     * @return a list of all Tag objects
+     */
     @GetMapping()
     public List<Tag> getAll() {
         return service.getAll();
     }
 
+    /**
+     * Returns the Tag object with the specified id.
+     *
+     * @param id the id of the Tag object to retrieve
+     * @return the Tag object with the specified id
+     */
     @GetMapping("/{id}")
     public Tag getById(@PathVariable("id") int id) {
         return service.getById(id);
     }
 
+    /**
+     * Creates a new Tag object.
+     *
+     * @param tag           the Tag object to create
+     * @param bindingResult the BindingResult object used to check for errors in the request body
+     * @return the created Tag object
+     * @throws InvalidRequestBodyException if there are errors in the request body
+     */
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
     public Tag create(@RequestBody @Valid Tag tag, BindingResult bindingResult) {
@@ -55,6 +82,12 @@ public class TagController {
         return tag;
     }
 
+    /**
+     * Deletes the Tag object with the specified id.
+     *
+     * @param id the id of the Tag object to delete
+     * @return the deleted Tag object
+     */
     @DeleteMapping("/{id}")
     public Tag delete(@PathVariable("id") int id) {
         return service.delete(id);

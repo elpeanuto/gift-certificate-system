@@ -13,17 +13,34 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * Implementation of the CRDService interface for managing Tag objects.
+ * Provides methods for retrieving, creating, and deleting tags.
+ *
+ * @see CRDService
+ */
 @Service
 public class TagServiceImpl implements CRDService<Tag> {
 
     private final Logger logger = Logger.getLogger(this.getClass());
     private final CRDRepository<Tag> tagRepo;
 
+    /**
+     * Constructor for the TagServiceImpl class.
+     *
+     * @param tagRepository The repository used to access the underlying data store for Tag objects.
+     */
     @Autowired
     public TagServiceImpl(CRDRepository<Tag> tagRepository) {
         this.tagRepo = tagRepository;
     }
 
+    /**
+     * Retrieves all Tag objects from the data store.
+     *
+     * @return A list of all Tag objects in the data store.
+     * @throws RepositoryException If there is an error retrieving the Tag objects.
+     */
     @Override
     public List<Tag> getAll() {
         try {
@@ -34,6 +51,14 @@ public class TagServiceImpl implements CRDService<Tag> {
         }
     }
 
+    /**
+     * Retrieves a Tag object from the data store by its ID.
+     *
+     * @param id The ID of the Tag object to retrieve.
+     * @return The Tag object with the specified ID.
+     * @throws RepositoryException       If there is an error retrieving the Tag object.
+     * @throws ResourceNotFoundException If a Tag object with the specified ID does not exist in the data store.
+     */
     @Override
     public Tag getById(int id) {
         Tag tag;
@@ -51,6 +76,14 @@ public class TagServiceImpl implements CRDService<Tag> {
         return tag;
     }
 
+    /**
+     * Creates a new Tag object in the data store.
+     *
+     * @param tag The Tag object to create in the data store.
+     * @return The newly created Tag object.
+     * @throws RepositoryException If there is an error creating the Tag object.
+     * @throws RepositoryException If a Tag object with the same name already exists in the data store.
+     */
     @Override
     public Tag create(Tag tag) {
         Tag result;
@@ -68,6 +101,14 @@ public class TagServiceImpl implements CRDService<Tag> {
         return result;
     }
 
+    /**
+     * Deletes a Tag object from the data store by its ID.
+     *
+     * @param id The ID of the Tag object to delete.
+     * @return The deleted Tag object.
+     * @throws RepositoryException       If there is an error deleting the Tag object.
+     * @throws ResourceNotFoundException If a Tag object with the specified ID does not exist in the data store.
+     */
     @Override
     public Tag delete(int id) {
         Tag result;

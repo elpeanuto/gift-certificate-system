@@ -20,6 +20,13 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * This class provides implementation of GiftCertificateService interface.
+ * It performs operations related to GiftCertificate, using GiftCertificateRepository, TagRepository and TagGiftCertificateRepository.
+ * It also implements the methods of GiftCertificateService interface.
+ *
+ * @see GiftCertificateService
+ */
 @Service
 public class GiftCertificateServiceImpl implements GiftCertificateService<GiftCertificate> {
 
@@ -28,10 +35,20 @@ public class GiftCertificateServiceImpl implements GiftCertificateService<GiftCe
     private TagRepository<Tag> tagRepo;
     private TagGiftCertificateRepository tagCertificateRepo;
 
+    /**
+     * Creates a new instance of GiftCertificateServiceImpl.
+     */
     public GiftCertificateServiceImpl() {
 
     }
 
+    /**
+     * Creates a new instance of GiftCertificateServiceImpl.
+     *
+     * @param certificateRepo    the object that will be used to perform CRUD operations on GiftCertificates.
+     * @param tagRepo            the object that will be used to perform CRUD operations on Tags.
+     * @param tagCertificateRepo the object that will be used to perform CRUD operations on TagGiftCertificates.
+     */
     @Autowired
     public GiftCertificateServiceImpl(GiftCertificateRepository<GiftCertificate> certificateRepo,
                                       TagRepository<Tag> tagRepo, TagGiftCertificateRepository tagCertificateRepo) {
@@ -40,6 +57,12 @@ public class GiftCertificateServiceImpl implements GiftCertificateService<GiftCe
         this.tagCertificateRepo = tagCertificateRepo;
     }
 
+    /**
+     * Retrieves all the GiftCertificates from the database.
+     *
+     * @return a List containing all the GiftCertificates from the database.
+     * @throws RepositoryException if there was an error accessing the database.
+     */
     @Override
     public List<GiftCertificate> getAll() {
         try {
@@ -57,6 +80,14 @@ public class GiftCertificateServiceImpl implements GiftCertificateService<GiftCe
         }
     }
 
+    /**
+     * Retrieves a GiftCertificate by its id.
+     *
+     * @param id the id of the GiftCertificate to retrieve.
+     * @return the GiftCertificate with the specified id.
+     * @throws RepositoryException       if there was an error accessing the database.
+     * @throws ResourceNotFoundException if the GiftCertificate was not found in the database.
+     */
     @Override
     public GiftCertificate getById(int id) {
         try {
@@ -77,6 +108,14 @@ public class GiftCertificateServiceImpl implements GiftCertificateService<GiftCe
         }
     }
 
+    /**
+     * Returns a list of gift certificates that meet the specified parameters.
+     *
+     * @param tagName the name of the tag
+     * @param part    a substring of the gift certificate's name or description
+     * @param sort    the way to sort the list of gift certificates ("ASC" or "DESC")
+     * @return the list of gift certificates that meet the specified parameters
+     */
     @Override
     public List<GiftCertificate> getByParams(String tagName, String part, String sort) {
         List<GiftCertificate> responseList = new ArrayList<>();
@@ -146,6 +185,12 @@ public class GiftCertificateServiceImpl implements GiftCertificateService<GiftCe
             list.sort(new GiftCertificate());
     }
 
+    /**
+     * Creates a new gift certificate.
+     *
+     * @param certificate the gift certificate to be created
+     * @return the created gift certificate
+     */
     @Transactional
     @Override
     public GiftCertificate create(GiftCertificate certificate) {
@@ -199,6 +244,13 @@ public class GiftCertificateServiceImpl implements GiftCertificateService<GiftCe
         return certificateFromDB;
     }
 
+    /**
+     * Updates an existing gift certificate.
+     *
+     * @param id          the id of the gift certificate to be updated
+     * @param certificate the updated gift certificate
+     * @return the updated gift certificate
+     */
     @Override
     @Transactional
     public GiftCertificate update(int id, GiftCertificate certificate) {
@@ -290,6 +342,13 @@ public class GiftCertificateServiceImpl implements GiftCertificateService<GiftCe
         return updateCertificate;
     }
 
+    /**
+     * Deletes the gift certificate with the specified ID.
+     *
+     * @param id the ID of the gift certificate to delete
+     * @return the deleted gift certificate
+     * @throws RepositoryException if there was an error deleting the gift certificate from the repository
+     */
     @Override
     public GiftCertificate delete(int id) {
         GiftCertificate result;
