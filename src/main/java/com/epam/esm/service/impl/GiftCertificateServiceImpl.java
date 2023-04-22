@@ -8,7 +8,6 @@ import com.epam.esm.repository.api.GiftCertificateRepository;
 import com.epam.esm.repository.api.TagGiftCertificateRepository;
 import com.epam.esm.repository.api.TagRepository;
 import com.epam.esm.service.api.GiftCertificateService;
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
@@ -30,7 +29,6 @@ import java.util.stream.Collectors;
 @Service
 public class GiftCertificateServiceImpl implements GiftCertificateService<GiftCertificate> {
 
-    private final Logger logger = Logger.getLogger(this.getClass());
     private GiftCertificateRepository<GiftCertificate> certificateRepo;
     private TagRepository<Tag> tagRepo;
     private TagGiftCertificateRepository tagCertificateRepo;
@@ -75,7 +73,6 @@ public class GiftCertificateServiceImpl implements GiftCertificateService<GiftCe
 
             return certificateList;
         } catch (DataAccessException e) {
-            logger.error(e);
             throw new RepositoryException(RepositoryException.standardMessage(this.getClass().getSimpleName(), "getAll()", e));
         }
     }
@@ -103,7 +100,6 @@ public class GiftCertificateServiceImpl implements GiftCertificateService<GiftCe
 
             return certificate;
         } catch (DataAccessException e) {
-            logger.error(e);
             throw new RepositoryException(RepositoryException.standardMessage(this.getClass().getSimpleName(), "getById(int id)", e));
         }
     }
@@ -204,7 +200,6 @@ public class GiftCertificateServiceImpl implements GiftCertificateService<GiftCe
         try {
             result = certificateRepo.create(certificate);
         } catch (DataAccessException e) {
-            logger.error(e);
             throw new RepositoryException(RepositoryException.standardMessage(this.getClass().getSimpleName(),
                     "create(GiftCertificate giftCertificate)", e));
         }
@@ -259,7 +254,6 @@ public class GiftCertificateServiceImpl implements GiftCertificateService<GiftCe
         try {
             certificateFromDB = getById(id);
         } catch (DataAccessException e) {
-            logger.error(e);
             throw new RepositoryException(RepositoryException.standardMessage(this.getClass().getSimpleName(), "update(int id)", e));
         }
 
@@ -303,7 +297,6 @@ public class GiftCertificateServiceImpl implements GiftCertificateService<GiftCe
         try {
             result = certificateRepo.update(id, certificate);
         } catch (DataAccessException e) {
-            logger.error(e);
             throw new RepositoryException(RepositoryException.standardMessage(this.getClass().getSimpleName(), "update(int id)", e));
         }
 
@@ -361,7 +354,6 @@ public class GiftCertificateServiceImpl implements GiftCertificateService<GiftCe
             }
 
         } catch (DataAccessException e) {
-            logger.error(e);
             throw new RepositoryException(RepositoryException.standardMessage(this.getClass().getSimpleName(), "delete(int id)", e));
         }
 

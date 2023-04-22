@@ -5,7 +5,8 @@ import com.epam.esm.exception.exceptions.ResourceNotFoundException;
 import com.epam.esm.model.impl.Tag;
 import com.epam.esm.repository.api.CRDRepository;
 import com.epam.esm.service.api.CRDService;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DuplicateKeyException;
@@ -22,7 +23,7 @@ import java.util.List;
 @Service
 public class TagServiceImpl implements CRDService<Tag> {
 
-    private final Logger logger = Logger.getLogger(this.getClass());
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
     private final CRDRepository<Tag> tagRepo;
 
     /**
@@ -46,7 +47,6 @@ public class TagServiceImpl implements CRDService<Tag> {
         try {
             return tagRepo.getAll();
         } catch (DataAccessException e) {
-            logger.error(e);
             throw new RepositoryException(RepositoryException.standardMessage(this.getClass().getSimpleName(), "getAll()", e));
         }
     }
@@ -66,7 +66,6 @@ public class TagServiceImpl implements CRDService<Tag> {
         try {
             tag = tagRepo.getById(id);
         } catch (DataAccessException e) {
-            logger.error(e);
             throw new RepositoryException(RepositoryException.standardMessage(this.getClass().getSimpleName(), "getById(int id)", e));
         }
 
@@ -91,10 +90,9 @@ public class TagServiceImpl implements CRDService<Tag> {
         try {
             result = tagRepo.create(tag);
         } catch (DuplicateKeyException e) {
-            logger.error(e);
+            logger.error(e.getMessage());
             throw new RepositoryException("Tag with this name already exists");
         } catch (DataAccessException e) {
-            logger.error(e);
             throw new RepositoryException(RepositoryException.standardMessage(this.getClass().getSimpleName(), "create(Tag tag)", e));
         }
 
@@ -121,7 +119,6 @@ public class TagServiceImpl implements CRDService<Tag> {
             }
 
         } catch (DataAccessException e) {
-            logger.error(e);
             throw new RepositoryException(RepositoryException.standardMessage(this.getClass().getSimpleName(), "delete(int id)", e));
         }
 

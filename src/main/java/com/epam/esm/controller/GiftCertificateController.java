@@ -5,7 +5,8 @@ import com.epam.esm.model.impl.GiftCertificate;
 import com.epam.esm.service.api.GiftCertificateService;
 import com.epam.esm.util.CreateValidationGroup;
 import com.epam.esm.util.UpdateValidationGroup;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BeanPropertyBindingResult;
@@ -27,7 +28,7 @@ public class GiftCertificateController {
 
     private final Validator validator;
     private final GiftCertificateService<GiftCertificate> service;
-    private final Logger logger = Logger.getLogger(this.getClass());
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     /**
      * Constructor for GiftCertificateController class.
