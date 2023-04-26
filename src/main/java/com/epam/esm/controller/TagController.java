@@ -1,7 +1,7 @@
 package com.epam.esm.controller;
 
 import com.epam.esm.exception.exceptions.InvalidRequestBodyException;
-import com.epam.esm.model.impl.Tag;
+import com.epam.esm.model.dto.Tag;
 import com.epam.esm.service.api.CRDService;
 import com.epam.esm.service.impl.TagServiceImpl;
 import jakarta.validation.Valid;

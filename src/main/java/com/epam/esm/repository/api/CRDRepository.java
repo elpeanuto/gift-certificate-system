@@ -1,6 +1,6 @@
 package com.epam.esm.repository.api;
 
-import com.epam.esm.model.Entity;
+import com.epam.esm.model.dto.DTO;
 
 import java.util.List;
 
@@ -9,7 +9,7 @@ import java.util.List;
  *
  * @param <T> The entity type that this repository operates on.
  */
-public interface CRDRepository<T extends Entity> {
+public interface CRDRepository<T extends DTO> {
 
     /**
      * Retrieves a list of all entities of type T from the repository.

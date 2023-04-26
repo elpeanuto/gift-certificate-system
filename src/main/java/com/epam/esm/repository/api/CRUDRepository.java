@@ -1,6 +1,6 @@
 package com.epam.esm.repository.api;
 
-import com.epam.esm.model.Entity;
+import com.epam.esm.model.dto.DTO;
 
 /**
  * The CRUDRepository interface extends the CRDRepository interface, which provides CRUD (Create, Read, Update, Delete) operations for a specific entity type T.
@@ -9,7 +9,7 @@ import com.epam.esm.model.Entity;
  * @param <T> The entity type that this repository operates on.
  * @see CRDRepository
  */
-public interface CRUDRepository<T extends Entity> extends CRDRepository<T> {
+public interface CRUDRepository<T extends DTO> extends CRDRepository<T> {
 
     /**
      * Updates an existing entity of type T with the specified ID in the repository.

@@ -1,6 +1,5 @@
-package com.epam.esm.model.impl;
+package com.epam.esm.model.dto;
 
-import com.epam.esm.model.Entity;
 import com.epam.esm.util.CreateValidationGroup;
 import com.epam.esm.util.UpdateValidationGroup;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -15,7 +14,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
-public class GiftCertificate implements Entity, Comparator<GiftCertificate> {
+public class GiftCertificateDTO implements DTO, Comparator<GiftCertificateDTO> {
 
     private static final String DATE_TIME_PATTERN = "yyyy-MM-dd'T'HH:mm:ss.SSS";
 
@@ -49,11 +48,11 @@ public class GiftCertificate implements Entity, Comparator<GiftCertificate> {
     @Valid
     private List<Tag> tags = new ArrayList<>();
 
-    public GiftCertificate() {
+    public GiftCertificateDTO() {
 
     }
 
-    public GiftCertificate(Long id, String name, String description, Double price, Integer duration, LocalDateTime createDate, LocalDateTime lastUpdateDate) {
+    public GiftCertificateDTO(Long id, String name, String description, Double price, Integer duration, LocalDateTime createDate, LocalDateTime lastUpdateDate) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -142,7 +141,7 @@ public class GiftCertificate implements Entity, Comparator<GiftCertificate> {
     }
 
     @Override
-    public int compare(GiftCertificate o1, GiftCertificate o2) {
+    public int compare(GiftCertificateDTO o1, GiftCertificateDTO o2) {
         LocalDateTime date1 = o1.getLastUpdateDate();
         LocalDateTime date2 = o2.getLastUpdateDate();
         return date1.compareTo(date2);
@@ -153,7 +152,7 @@ public class GiftCertificate implements Entity, Comparator<GiftCertificate> {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        GiftCertificate that = (GiftCertificate) o;
+        GiftCertificateDTO that = (GiftCertificateDTO) o;
 
         if (!Objects.equals(name, that.name)) return false;
         if (!Objects.equals(description, that.description)) return false;

@@ -1,7 +1,7 @@
 package com.epam.esm.controller;
 
 import com.epam.esm.exception.exceptions.InvalidRequestBodyException;
-import com.epam.esm.model.impl.GiftCertificate;
+import com.epam.esm.model.dto.GiftCertificateDTO;
 import com.epam.esm.service.api.GiftCertificateService;
 import com.epam.esm.util.CreateValidationGroup;
 import com.epam.esm.util.UpdateValidationGroup;
@@ -27,7 +27,7 @@ import java.util.List;
 public class GiftCertificateController {
 
     private final Validator validator;
-    private final GiftCertificateService<GiftCertificate> service;
+    private final GiftCertificateService<GiftCertificateDTO> service;
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     /**
@@ -37,7 +37,7 @@ public class GiftCertificateController {
      * @param service   a GiftCertificateService object used to interact with gift certificate data in the database
      */
     @Autowired
-    public GiftCertificateController(Validator validator, GiftCertificateService<GiftCertificate> service) {
+    public GiftCertificateController(Validator validator, GiftCertificateService<GiftCertificateDTO> service) {
         this.validator = validator;
         this.service = service;
     }
@@ -51,9 +51,9 @@ public class GiftCertificateController {
      * @return a List of GiftCertificate objects that match the given parameters or all gift certificates if no parameters provided
      */
     @GetMapping()
-    public List<GiftCertificate> getAll(@RequestParam(required = false) String tagName,
-                                        @RequestParam(required = false) String part,
-                                        @RequestParam(required = false) String sort) {
+    public List<GiftCertificateDTO> getAll(@RequestParam(required = false) String tagName,
+                                           @RequestParam(required = false) String part,
+                                           @RequestParam(required = false) String sort) {
         if (tagName != null || part != null || sort != null)
             return service.getByParams(tagName, part, sort);
 
@@ -67,7 +67,7 @@ public class GiftCertificateController {
      * @return a GiftCertificate object that matches the given ID
      */
     @GetMapping("/{id}")
-    public GiftCertificate getById(@PathVariable("id") int id) {
+    public GiftCertificateDTO getById(@PathVariable("id") int id) {
         return service.getById(id);
     }
 
@@ -81,8 +81,8 @@ public class GiftCertificateController {
      */
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
-    public GiftCertificate create(@RequestBody @Validated(CreateValidationGroup.class) GiftCertificate certificate,
-                                  BindingResult bindingResult) {
+    public GiftCertificateDTO create(@RequestBody @Validated(CreateValidationGroup.class) GiftCertificateDTO certificate,
+                                     BindingResult bindingResult) {
         validateGiftCertificate(certificate, bindingResult);
         return service.create(certificate);
     }
@@ -97,9 +97,9 @@ public class GiftCertificateController {
      * @throws InvalidRequestBodyException if the provided data is not valid
      */
     @PatchMapping("/{id}")
-    public GiftCertificate update(@PathVariable("id") int id,
-                                  @RequestBody @Validated(UpdateValidationGroup.class) GiftCertificate certificate,
-                                  BindingResult bindingResult) {
+    public GiftCertificateDTO update(@PathVariable("id") int id,
+                                     @RequestBody @Validated(UpdateValidationGroup.class) GiftCertificateDTO certificate,
+                                     BindingResult bindingResult) {
         validateGiftCertificate(certificate, bindingResult);
         return service.update(id, certificate);
     }
@@ -111,11 +111,11 @@ public class GiftCertificateController {
      * @return a GiftCertificate object that represents the deleted gift certificate
      */
     @DeleteMapping("/{id}")
-    public GiftCertificate delete(@PathVariable("id") int id) {
+    public GiftCertificateDTO delete(@PathVariable("id") int id) {
         return service.delete(id);
     }
 
-    private void validateGiftCertificate(GiftCertificate certificate, BindingResult bindingResult) {
+    private void validateGiftCertificate(GiftCertificateDTO certificate, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             List<String> errorMessages = new ArrayList<>();
             for (ObjectError error : bindingResult.getAllErrors()) {

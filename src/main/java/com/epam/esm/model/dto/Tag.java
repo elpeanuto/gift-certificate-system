@@ -1,12 +1,11 @@
-package com.epam.esm.model.impl;
+package com.epam.esm.model.dto;
 
-import com.epam.esm.model.Entity;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 import java.util.Objects;
 
-public class Tag implements Entity {
+public class Tag implements DTO {
 
     private Long id;
 

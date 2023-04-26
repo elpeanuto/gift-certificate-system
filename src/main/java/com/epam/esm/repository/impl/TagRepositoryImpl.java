@@ -1,7 +1,7 @@
 package com.epam.esm.repository.impl;
 
 import com.epam.esm.exception.exceptions.RepositoryException;
-import com.epam.esm.model.impl.Tag;
+import com.epam.esm.model.dto.Tag;
 import com.epam.esm.repository.api.TagRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;

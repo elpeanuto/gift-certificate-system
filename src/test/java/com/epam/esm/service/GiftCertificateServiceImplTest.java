@@ -2,8 +2,8 @@ package com.epam.esm.service;
 
 import com.epam.esm.exception.exceptions.RepositoryException;
 import com.epam.esm.exception.exceptions.ResourceNotFoundException;
-import com.epam.esm.model.impl.GiftCertificate;
-import com.epam.esm.model.impl.Tag;
+import com.epam.esm.model.dto.GiftCertificateDTO;
+import com.epam.esm.model.dto.Tag;
 import com.epam.esm.repository.api.GiftCertificateRepository;
 import com.epam.esm.repository.api.TagGiftCertificateRepository;
 import com.epam.esm.repository.api.TagRepository;
@@ -31,7 +31,7 @@ import static org.mockito.Mockito.*;
 class GiftCertificateServiceImplTest {
 
     @Mock
-    private GiftCertificateRepository<GiftCertificate> certificateRepo;
+    private GiftCertificateRepository<GiftCertificateDTO> certificateRepo;
     @Mock
     private TagRepository<Tag> tagRepo;
     @Mock
@@ -46,25 +46,25 @@ class GiftCertificateServiceImplTest {
 
     @Test
     void testGetAllExistsCase() {
-        List<GiftCertificate> giftCertificateList = new ArrayList<>();
-        giftCertificateList.add(new GiftCertificate(1, "name", "description",
+        List<GiftCertificateDTO> giftCertificateDTOList = new ArrayList<>();
+        giftCertificateDTOList.add(new GiftCertificateDTO(1, "name", "description",
                 100d, 10, LocalDateTime.now(), LocalDateTime.now()));
-        giftCertificateList.add(new GiftCertificate(2, "name", "description",
+        giftCertificateDTOList.add(new GiftCertificateDTO(2, "name", "description",
                 100d, 10, LocalDateTime.now(), LocalDateTime.now()));
-        giftCertificateList.add(new GiftCertificate(3, "name", "description",
+        giftCertificateDTOList.add(new GiftCertificateDTO(3, "name", "description",
                 100d, 10, LocalDateTime.now(), LocalDateTime.now()));
 
-        when(certificateRepo.getAll()).thenReturn(giftCertificateList);
+        when(certificateRepo.getAll()).thenReturn(giftCertificateDTOList);
         when(tagCertificateRepo.getAllTagsIdByGiftCertificate(anyInt())).thenReturn(null);
         when(tagRepo.getByIdList(null)).thenReturn(null);
 
-        List<GiftCertificate> response = service.getAll();
+        List<GiftCertificateDTO> response = service.getAll();
 
-        assertEquals(giftCertificateList, response);
+        assertEquals(giftCertificateDTOList, response);
 
         verify(certificateRepo, times(1)).getAll();
 
-        for (GiftCertificate certificate : giftCertificateList) {
+        for (GiftCertificateDTO certificate : giftCertificateDTOList) {
             verify(tagCertificateRepo, times(1)).getAllTagsIdByGiftCertificate(certificate.getId());
         }
 
@@ -83,12 +83,12 @@ class GiftCertificateServiceImplTest {
 
     @Test
     void testGetByIdCertificateExistsCase() {
-        GiftCertificate certificate = new GiftCertificate(1, "Test", "Test Description",
+        GiftCertificateDTO certificate = new GiftCertificateDTO(1, "Test", "Test Description",
                 1.0, 1, null, null);
         when(certificateRepo.getById(1)).thenReturn(certificate);
         when(tagCertificateRepo.getAllTagsIdByGiftCertificate(1)).thenReturn(Collections.emptyList());
 
-        GiftCertificate result = service.getById(1);
+        GiftCertificateDTO result = service.getById(1);
 
         assertNotNull(result);
         assertEquals(certificate, result);
@@ -117,14 +117,14 @@ class GiftCertificateServiceImplTest {
 
     @Test
     void testGetByParamsAllNullCase() {
-        List<GiftCertificate> list = service.getByParams(null, null, null);
+        List<GiftCertificateDTO> list = service.getByParams(null, null, null);
 
         assertEquals(Collections.emptyList(), list);
     }
 
     @Test
     void testGetByParamsAllTagNameNotNullCase() {
-        GiftCertificate certificate = new GiftCertificate(1, "Test", "Test Description",
+        GiftCertificateDTO certificate = new GiftCertificateDTO(1, "Test", "Test Description",
                 1.0, 1, null, null);
         Tag tag = new Tag(1, "tagName");
 
@@ -134,7 +134,7 @@ class GiftCertificateServiceImplTest {
         when(tagCertificateRepo.getAllTagsIdByGiftCertificate(anyInt())).thenReturn(List.of(1));
         when(tagRepo.getByIdList(anyList())).thenReturn(List.of(tag));
 
-        List<GiftCertificate> list = service.getByParams("tagName", null, null);
+        List<GiftCertificateDTO> list = service.getByParams("tagName", null, null);
 
         certificate.setTags(List.of(tag));
 
@@ -149,14 +149,14 @@ class GiftCertificateServiceImplTest {
 
     @Test
     void testGetByParamsAllPartNotNullCase() {
-        GiftCertificate certificate = new GiftCertificate(1, "Test", "Test Description",
+        GiftCertificateDTO certificate = new GiftCertificateDTO(1, "Test", "Test Description",
                 1.0, 1, null, null);
 
         when(certificateRepo.getByPartOfNameDescription("part")).thenReturn(List.of(certificate));
         when(tagCertificateRepo.getAllTagsIdByGiftCertificate(anyInt())).thenReturn(Collections.emptyList());
         when(tagRepo.getByIdList(anyList())).thenReturn(Collections.emptyList());
 
-        List<GiftCertificate> list = service.getByParams(null, "part", null);
+        List<GiftCertificateDTO> list = service.getByParams(null, "part", null);
 
         verify(certificateRepo, times(1)).getByPartOfNameDescription("part");
         verify(tagCertificateRepo, times(1)).getAllTagsIdByGiftCertificate(anyInt());
@@ -167,46 +167,46 @@ class GiftCertificateServiceImplTest {
 
     @Test
     void testGetByParamsAllASCCase() {
-        List<GiftCertificate> list = new ArrayList<>();
-        list.add(new GiftCertificate(1, "Test", "Test Description",
+        List<GiftCertificateDTO> list = new ArrayList<>();
+        list.add(new GiftCertificateDTO(1, "Test", "Test Description",
                 1.0, 1, LocalDateTime.MIN, LocalDateTime.MIN));
-        list.add(new GiftCertificate(1, "Test", "Test Description",
+        list.add(new GiftCertificateDTO(1, "Test", "Test Description",
                 1.0, 1, LocalDateTime.MAX, LocalDateTime.MAX));
 
         when(service.getAll()).thenReturn(new ArrayList<>(list));
 
-        List<GiftCertificate> result = service.getByParams(null, null, "ASC");
+        List<GiftCertificateDTO> result = service.getByParams(null, null, "ASC");
         assertEquals(List.of(list.get(0), list.get(1)), result);
     }
 
     @Test
     void testGetByParamsAllDESCSCase() {
-        List<GiftCertificate> list = new ArrayList<>();
-        list.add(new GiftCertificate(1, "Test", "Test Description",
+        List<GiftCertificateDTO> list = new ArrayList<>();
+        list.add(new GiftCertificateDTO(1, "Test", "Test Description",
                 1.0, 1, LocalDateTime.MIN, LocalDateTime.MIN));
-        list.add(new GiftCertificate(1, "Test", "Test Description",
+        list.add(new GiftCertificateDTO(1, "Test", "Test Description",
                 1.0, 1, LocalDateTime.MAX, LocalDateTime.MAX));
 
         when(service.getAll()).thenReturn(new ArrayList<>(list));
 
-        List<GiftCertificate> result = service.getByParams(null, null, "DESC");
+        List<GiftCertificateDTO> result = service.getByParams(null, null, "DESC");
         assertEquals(List.of(list.get(1), list.get(0)), result);
     }
 
     @Test
     void testCreateWithoutTagsCase() {
-        GiftCertificate certificate = new GiftCertificate(1, "Test", "Test Description", 1.0, 1, null, null);
+        GiftCertificateDTO certificate = new GiftCertificateDTO(1, "Test", "Test Description", 1.0, 1, null, null);
 
         when(certificateRepo.create(any())).thenReturn(certificate);
 
-        GiftCertificate result = service.create(certificate);
+        GiftCertificateDTO result = service.create(certificate);
 
         assertEquals(certificate, result);
     }
 
     @Test
     void testCreateWithoutTagsDataAccessExceptionCase() {
-        GiftCertificate certificate = new GiftCertificate(1, "Test", "Test Description", 1.0, 1, null, null);
+        GiftCertificateDTO certificate = new GiftCertificateDTO(1, "Test", "Test Description", 1.0, 1, null, null);
 
         when(certificateRepo.create(any())).thenThrow(new DataAccessException("") {});
 
@@ -215,8 +215,8 @@ class GiftCertificateServiceImplTest {
 
     @Test
     void testCreateWithTags() {
-        GiftCertificate certificate = new GiftCertificate(1, "Test", "Test Description", 1.0, 1, null, null);
-        GiftCertificate certificate2 = new GiftCertificate(1, "Test", "Test Description", 1.0, 1, null, null);
+        GiftCertificateDTO certificate = new GiftCertificateDTO(1, "Test", "Test Description", 1.0, 1, null, null);
+        GiftCertificateDTO certificate2 = new GiftCertificateDTO(1, "Test", "Test Description", 1.0, 1, null, null);
         Tag tag = new Tag(null, "tag");
         Tag tag2 = new Tag(1, "tag");
         certificate.setTags(List.of(tag));
@@ -238,12 +238,12 @@ class GiftCertificateServiceImplTest {
     @Test
     void testUpdateWithoutTag() {
         GiftCertificateServiceImpl spiedService = spy(service);
-        GiftCertificate certificate = new GiftCertificate(1, "Test", "Test Description", 1.0, 1, null, null);
+        GiftCertificateDTO certificate = new GiftCertificateDTO(1, "Test", "Test Description", 1.0, 1, null, null);
 
         doReturn(certificate).when(spiedService).getById(anyInt());
         when(certificateRepo.update(1, certificate)).thenReturn(certificate);
 
-        GiftCertificate result = spiedService.update(1, certificate);
+        GiftCertificateDTO result = spiedService.update(1, certificate);
 
         verify(spiedService, times(1)).getById(anyInt());
         verify(certificateRepo, times(1)).update(anyInt(), any());
@@ -254,7 +254,7 @@ class GiftCertificateServiceImplTest {
     @Test
     void testUpdateWithoutTagDataAccessExceptionCase() {
         GiftCertificateServiceImpl spiedService = spy(service);
-        GiftCertificate certificate = new GiftCertificate(1, "Test", "Test Description", 1.0, 1, null, null);
+        GiftCertificateDTO certificate = new GiftCertificateDTO(1, "Test", "Test Description", 1.0, 1, null, null);
 
         doReturn(certificate).when(spiedService).getById(anyInt());
         when(certificateRepo.update(1, certificate)).thenThrow(new DataAccessException("") {});
@@ -269,8 +269,8 @@ class GiftCertificateServiceImplTest {
     void testUpdateWithTag() {
         GiftCertificateServiceImpl spiedService = spy(service);
 
-        GiftCertificate certificate = new GiftCertificate(1, "Test", "Test Description", 1.0, 1, null, null);
-        GiftCertificate certificate2 = new GiftCertificate(1, "Test", "Test Description", 1.0, 1, null, null);
+        GiftCertificateDTO certificate = new GiftCertificateDTO(1, "Test", "Test Description", 1.0, 1, null, null);
+        GiftCertificateDTO certificate2 = new GiftCertificateDTO(1, "Test", "Test Description", 1.0, 1, null, null);
         Tag tag = new Tag(null, "tag");
         Tag tag2 = new Tag(1, "tag");
         certificate2.setTags(List.of(tag2));
@@ -296,14 +296,14 @@ class GiftCertificateServiceImplTest {
 
     @Test
     void testDeleteExistsCase() {
-        GiftCertificate certificate = new GiftCertificate(1, "Test", "Test Description", 1.0, 1, null, null);
+        GiftCertificateDTO certificate = new GiftCertificateDTO(1, "Test", "Test Description", 1.0, 1, null, null);
 
         GiftCertificateServiceImpl spiedService = spy(service);
 
         doReturn(certificate).when(spiedService).getById(anyInt());
         when(certificateRepo.delete(anyInt())).thenReturn(1);
 
-        GiftCertificate result = spiedService.delete(1);
+        GiftCertificateDTO result = spiedService.delete(1);
 
         verify(spiedService, times(1)).getById(anyInt());
         verify(spiedService, times(1)).delete(anyInt());
@@ -313,7 +313,7 @@ class GiftCertificateServiceImplTest {
 
     @Test
     void testDeleteDataAccessExceptionCase() {
-        GiftCertificate certificate = new GiftCertificate(1, "Test", "Test Description", 1.0, 1, null, null);
+        GiftCertificateDTO certificate = new GiftCertificateDTO(1, "Test", "Test Description", 1.0, 1, null, null);
 
         GiftCertificateServiceImpl spiedService = spy(service);
 

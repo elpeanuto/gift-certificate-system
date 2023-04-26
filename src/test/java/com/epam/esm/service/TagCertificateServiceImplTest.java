@@ -2,7 +2,7 @@ package com.epam.esm.service;
 
 import com.epam.esm.exception.exceptions.RepositoryException;
 import com.epam.esm.exception.exceptions.ResourceNotFoundException;
-import com.epam.esm.model.impl.Tag;
+import com.epam.esm.model.dto.Tag;
 import com.epam.esm.repository.api.TagRepository;
 import com.epam.esm.service.api.CRDService;
 import com.epam.esm.service.impl.TagServiceImpl;

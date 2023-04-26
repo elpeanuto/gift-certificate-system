@@ -2,8 +2,8 @@ package com.epam.esm.service.impl;
 
 import com.epam.esm.exception.exceptions.RepositoryException;
 import com.epam.esm.exception.exceptions.ResourceNotFoundException;
-import com.epam.esm.model.impl.GiftCertificate;
-import com.epam.esm.model.impl.Tag;
+import com.epam.esm.model.dto.GiftCertificateDTO;
+import com.epam.esm.model.dto.Tag;
 import com.epam.esm.repository.api.GiftCertificateRepository;
 import com.epam.esm.repository.api.TagGiftCertificateRepository;
 import com.epam.esm.repository.api.TagRepository;
@@ -27,9 +27,9 @@ import java.util.stream.Collectors;
  * @see GiftCertificateService
  */
 @Service
-public class GiftCertificateServiceImpl implements GiftCertificateService<GiftCertificate> {
+public class GiftCertificateServiceImpl implements GiftCertificateService<GiftCertificateDTO> {
 
-    private GiftCertificateRepository<GiftCertificate> certificateRepo;
+    private GiftCertificateRepository<GiftCertificateDTO> certificateRepo;
     private TagRepository<Tag> tagRepo;
     private TagGiftCertificateRepository tagCertificateRepo;
 
@@ -48,7 +48,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService<GiftCe
      * @param tagCertificateRepo the object that will be used to perform CRUD operations on TagGiftCertificates.
      */
     @Autowired
-    public GiftCertificateServiceImpl(GiftCertificateRepository<GiftCertificate> certificateRepo,
+    public GiftCertificateServiceImpl(GiftCertificateRepository<GiftCertificateDTO> certificateRepo,
                                       TagRepository<Tag> tagRepo, TagGiftCertificateRepository tagCertificateRepo) {
         this.certificateRepo = certificateRepo;
         this.tagRepo = tagRepo;
@@ -62,13 +62,13 @@ public class GiftCertificateServiceImpl implements GiftCertificateService<GiftCe
      * @throws RepositoryException if there was an error accessing the database.
      */
     @Override
-    public List<GiftCertificate> getAll() {
+    public List<GiftCertificateDTO> getAll() {
         try {
-            List<GiftCertificate> certificateList = certificateRepo.getAll();
+            List<GiftCertificateDTO> certificateList = certificateRepo.getAll();
 
-            for (GiftCertificate giftCertificate : certificateList) {
-                List<Long> tagIdList = tagCertificateRepo.getAllTagsIdByGiftCertificate(giftCertificate.getId());
-                giftCertificate.setTags(tagRepo.getByIdList(tagIdList));
+            for (GiftCertificateDTO giftCertificateDTO : certificateList) {
+                List<Long> tagIdList = tagCertificateRepo.getAllTagsIdByGiftCertificate(giftCertificateDTO.getId());
+                giftCertificateDTO.setTags(tagRepo.getByIdList(tagIdList));
             }
 
             return certificateList;
@@ -86,9 +86,9 @@ public class GiftCertificateServiceImpl implements GiftCertificateService<GiftCe
      * @throws ResourceNotFoundException if the GiftCertificate was not found in the database.
      */
     @Override
-    public GiftCertificate getById(long id) {
+    public GiftCertificateDTO getById(long id) {
         try {
-            GiftCertificate certificate;
+            GiftCertificateDTO certificate;
 
             certificate = certificateRepo.getById(id);
 
@@ -113,8 +113,8 @@ public class GiftCertificateServiceImpl implements GiftCertificateService<GiftCe
      * @return the list of gift certificates that meet the specified parameters
      */
     @Override
-    public List<GiftCertificate> getByParams(String tagName, String part, String sort) {
-        List<GiftCertificate> responseList = new ArrayList<>();
+    public List<GiftCertificateDTO> getByParams(String tagName, String part, String sort) {
+        List<GiftCertificateDTO> responseList = new ArrayList<>();
 
         if (tagName != null) {
             responseList.addAll(getByTagNameParam(tagName));
@@ -141,8 +141,8 @@ public class GiftCertificateServiceImpl implements GiftCertificateService<GiftCe
         return responseList;
     }
 
-    private List<GiftCertificate> getByTagNameParam(String name) {
-        List<GiftCertificate> responseList;
+    private List<GiftCertificateDTO> getByTagNameParam(String name) {
+        List<GiftCertificateDTO> responseList;
 
         Tag tag = tagRepo.getByName(name);
 
@@ -164,8 +164,8 @@ public class GiftCertificateServiceImpl implements GiftCertificateService<GiftCe
         return responseList;
     }
 
-    private List<GiftCertificate> getByPartParam(String part) {
-        List<GiftCertificate> responseList;
+    private List<GiftCertificateDTO> getByPartParam(String part) {
+        List<GiftCertificateDTO> responseList;
 
         responseList = certificateRepo.getByPartOfNameDescription(part);
         responseList
@@ -174,11 +174,11 @@ public class GiftCertificateServiceImpl implements GiftCertificateService<GiftCe
         return responseList;
     }
 
-    private void sortByParam(List<GiftCertificate> list, String sort) {
+    private void sortByParam(List<GiftCertificateDTO> list, String sort) {
         if (sort.equals("DESC"))
-            list.sort(Collections.reverseOrder(new GiftCertificate()));
+            list.sort(Collections.reverseOrder(new GiftCertificateDTO()));
         else if (sort.equals("ASC"))
-            list.sort(new GiftCertificate());
+            list.sort(new GiftCertificateDTO());
     }
 
     /**
@@ -189,13 +189,13 @@ public class GiftCertificateServiceImpl implements GiftCertificateService<GiftCe
      */
     @Transactional
     @Override
-    public GiftCertificate create(GiftCertificate certificate) {
+    public GiftCertificateDTO create(GiftCertificateDTO certificate) {
         return certificate.getTags() == null ? createGiftCertificate(certificate) :
                 createGiftCertificateWithTags(certificate);
     }
 
-    private GiftCertificate createGiftCertificate(GiftCertificate certificate) {
-        GiftCertificate result;
+    private GiftCertificateDTO createGiftCertificate(GiftCertificateDTO certificate) {
+        GiftCertificateDTO result;
 
         try {
             result = certificateRepo.create(certificate);
@@ -207,7 +207,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService<GiftCe
         return result;
     }
 
-    private GiftCertificate createGiftCertificateWithTags(GiftCertificate certificate) {
+    private GiftCertificateDTO createGiftCertificateWithTags(GiftCertificateDTO certificate) {
         List<Tag> tags = certificate.getTags().stream()
                 .distinct()
                 .toList();
@@ -224,7 +224,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService<GiftCe
 
         tagsToBind.forEach(tag -> tag.setId(tagRepo.getByName(tag.getName()).getId()));
 
-        GiftCertificate certificateFromDB = createGiftCertificate(certificate);
+        GiftCertificateDTO certificateFromDB = createGiftCertificate(certificate);
 
         tagsToCreate.stream()
                 .map(tagRepo::create)
@@ -248,8 +248,8 @@ public class GiftCertificateServiceImpl implements GiftCertificateService<GiftCe
      */
     @Override
     @Transactional
-    public GiftCertificate update(long id, GiftCertificate certificate) {
-        GiftCertificate certificateFromDB;
+    public GiftCertificateDTO update(long id, GiftCertificateDTO certificate) {
+        GiftCertificateDTO certificateFromDB;
 
         try {
             certificateFromDB = getById(id);
@@ -291,8 +291,8 @@ public class GiftCertificateServiceImpl implements GiftCertificateService<GiftCe
                 updateGiftCertificate(id, certificateFromDB) : updateGiftCertificateWithTags(id, certificateFromDB);
     }
 
-    private GiftCertificate updateGiftCertificate(long id, GiftCertificate certificate) {
-        GiftCertificate result;
+    private GiftCertificateDTO updateGiftCertificate(long id, GiftCertificateDTO certificate) {
+        GiftCertificateDTO result;
 
         try {
             result = certificateRepo.update(id, certificate);
@@ -303,7 +303,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService<GiftCe
         return result;
     }
 
-    private GiftCertificate updateGiftCertificateWithTags(long id, GiftCertificate certificate) {
+    private GiftCertificateDTO updateGiftCertificateWithTags(long id, GiftCertificateDTO certificate) {
         List<Tag> tags = certificate.getTags();
 
         List<Tag> tagsToCreate = tags.stream()
@@ -318,7 +318,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService<GiftCe
 
         tagsToBind.forEach(tag -> tag.setId(tagRepo.getByName(tag.getName()).getId()));
 
-        GiftCertificate updateCertificate = updateGiftCertificate(id, certificate);
+        GiftCertificateDTO updateCertificate = updateGiftCertificate(id, certificate);
 
         tagsToCreate.stream()
                 .map(tagRepo::create)
@@ -343,8 +343,8 @@ public class GiftCertificateServiceImpl implements GiftCertificateService<GiftCe
      * @throws RepositoryException if there was an error deleting the gift certificate from the repository
      */
     @Override
-    public GiftCertificate delete(long id) {
-        GiftCertificate result;
+    public GiftCertificateDTO delete(long id) {
+        GiftCertificateDTO result;
 
         try {
             result = getById(id);

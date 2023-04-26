@@ -1,6 +1,6 @@
 package com.epam.esm.repository.api;
 
-import com.epam.esm.model.impl.Tag;
+import com.epam.esm.model.dto.Tag;
 
 import java.util.List;
 

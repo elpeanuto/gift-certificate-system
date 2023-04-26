@@ -1,7 +1,7 @@
 package com.epam.esm.repository.impl;
 
 import com.epam.esm.exception.exceptions.RepositoryException;
-import com.epam.esm.model.impl.GiftCertificate;
+import com.epam.esm.model.dto.GiftCertificateDTO;
 import com.epam.esm.repository.api.GiftCertificateRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -26,7 +26,7 @@ import java.util.Map;
  * @see GiftCertificateRepository
  */
 @Repository
-public class GiftCertificateRepositoryImpl implements GiftCertificateRepository<GiftCertificate> {
+public class GiftCertificateRepositoryImpl implements GiftCertificateRepository<GiftCertificateDTO> {
 
     private final JdbcTemplate jdbcTemplate;
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
@@ -48,10 +48,10 @@ public class GiftCertificateRepositoryImpl implements GiftCertificateRepository<
      * @return List of all GiftCertificate objects
      */
     @Override
-    public List<GiftCertificate> getAll() {
+    public List<GiftCertificateDTO> getAll() {
         String sql = "SELECT * FROM gift_certificate";
 
-        return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(GiftCertificate.class));
+        return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(GiftCertificateDTO.class));
     }
 
     /**
@@ -61,7 +61,7 @@ public class GiftCertificateRepositoryImpl implements GiftCertificateRepository<
      * @return GiftCertificate object with the specified ID or null if no object is found
      */
     @Override
-    public GiftCertificate getById(long id) {
+    public GiftCertificateDTO getById(long id) {
         String sql = "SELECT * FROM gift_certificate WHERE id = ?";
 
         return jdbcTemplate.query(con -> {
@@ -69,7 +69,7 @@ public class GiftCertificateRepositoryImpl implements GiftCertificateRepository<
             ps.setLong(1, id);
 
             return ps;
-        }, new BeanPropertyRowMapper<>(GiftCertificate.class)).stream().findFirst().orElse(null);
+        }, new BeanPropertyRowMapper<>(GiftCertificateDTO.class)).stream().findFirst().orElse(null);
     }
 
     /**
@@ -79,7 +79,7 @@ public class GiftCertificateRepositoryImpl implements GiftCertificateRepository<
      * @return List of GiftCertificate objects with the specified IDs or an empty list if no objects are found
      */
     @Override
-    public List<GiftCertificate> getByIdList(List<Long> idList) {
+    public List<GiftCertificateDTO> getByIdList(List<Long> idList) {
         String sql = "SELECT * FROM gift_certificate WHERE id IN (:idList)";
 
         if (idList.isEmpty())
@@ -88,7 +88,7 @@ public class GiftCertificateRepositoryImpl implements GiftCertificateRepository<
         MapSqlParameterSource params = new MapSqlParameterSource();
         params.addValue("idList", idList);
 
-        return namedParameterJdbcTemplate.query(sql, params, new BeanPropertyRowMapper<>(GiftCertificate.class));
+        return namedParameterJdbcTemplate.query(sql, params, new BeanPropertyRowMapper<>(GiftCertificateDTO.class));
     }
 
     /**
@@ -98,7 +98,7 @@ public class GiftCertificateRepositoryImpl implements GiftCertificateRepository<
      * @return List of GiftCertificate objects whose name or description contains the specified pattern or an empty list if no objects are found
      */
     @Override
-    public List<GiftCertificate> getByPartOfNameDescription(String pattern) {
+    public List<GiftCertificateDTO> getByPartOfNameDescription(String pattern) {
         String sql = "SELECT * FROM gift_certificate WHERE name ILIKE ? OR description ILIKE ?";
 
         return jdbcTemplate.query(con -> {
@@ -107,7 +107,7 @@ public class GiftCertificateRepositoryImpl implements GiftCertificateRepository<
             ps.setString(2, "%" + pattern + "%");
 
             return ps;
-        }, new BeanPropertyRowMapper<>(GiftCertificate.class));
+        }, new BeanPropertyRowMapper<>(GiftCertificateDTO.class));
     }
 
     /**
@@ -117,7 +117,7 @@ public class GiftCertificateRepositoryImpl implements GiftCertificateRepository<
      * @return GiftCertificate object with the ID and create/update date fields set
      */
     @Override
-    public GiftCertificate create(GiftCertificate certificate) {
+    public GiftCertificateDTO create(GiftCertificateDTO certificate) {
         String sql = "INSERT INTO gift_certificate(name, description, price, duration) " +
                 "VALUES(?, ?, ?, ?)";
 
@@ -154,23 +154,23 @@ public class GiftCertificateRepositoryImpl implements GiftCertificateRepository<
      * of the provided updatedGiftCertificate object.
      *
      * @param id                     The ID of the GiftCertificate to be updated.
-     * @param updatedGiftCertificate The updated GiftCertificate object with new properties.
+     * @param updatedGiftCertificateDTO The updated GiftCertificate object with new properties.
      * @return The updated GiftCertificate object with the ID, create date and last update date fields set.
      * @throws RepositoryException If the update operation fails or if the ID does not exist.
      */
     @Override
-    public GiftCertificate update(long id, GiftCertificate updatedGiftCertificate) {
+    public GiftCertificateDTO update(long id, GiftCertificateDTO updatedGiftCertificateDTO) {
         String sql = "UPDATE gift_certificate SET name=?, description=?, price=?, duration=?, last_update_date=? WHERE id=?";
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
         int rows = jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-            ps.setString(1, updatedGiftCertificate.getName());
-            ps.setString(2, updatedGiftCertificate.getDescription());
-            ps.setDouble(3, updatedGiftCertificate.getPrice());
-            ps.setInt(4, updatedGiftCertificate.getDuration());
-            ps.setObject(5, updatedGiftCertificate.getLastUpdateDate());
+            ps.setString(1, updatedGiftCertificateDTO.getName());
+            ps.setString(2, updatedGiftCertificateDTO.getDescription());
+            ps.setDouble(3, updatedGiftCertificateDTO.getPrice());
+            ps.setInt(4, updatedGiftCertificateDTO.getDuration());
+            ps.setObject(5, updatedGiftCertificateDTO.getLastUpdateDate());
             ps.setLong(6, id);
             return ps;
         }, keyHolder);
@@ -185,10 +185,10 @@ public class GiftCertificateRepositoryImpl implements GiftCertificateRepository<
             throw new RepositoryException("Failed to get id.");
         }
 
-        updatedGiftCertificate.setId((long) key.get("id"));
-        updatedGiftCertificate.setCreateDate(((Timestamp) key.get("create_date")).toLocalDateTime());
+        updatedGiftCertificateDTO.setId((long) key.get("id"));
+        updatedGiftCertificateDTO.setCreateDate(((Timestamp) key.get("create_date")).toLocalDateTime());
 
-        return updatedGiftCertificate;
+        return updatedGiftCertificateDTO;
     }
 
     /**

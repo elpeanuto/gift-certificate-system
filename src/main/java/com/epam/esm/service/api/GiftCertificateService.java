@@ -1,6 +1,6 @@
 package com.epam.esm.service.api;
 
-import com.epam.esm.model.impl.GiftCertificate;
+import com.epam.esm.model.dto.GiftCertificateDTO;
 
 import java.util.List;
 
@@ -12,7 +12,7 @@ import java.util.List;
  * @param <T> the type of GiftCertificate being managed by this service
  * @see CRUDService
  */
-public interface GiftCertificateService<T extends GiftCertificate> extends CRUDService<T> {
+public interface GiftCertificateService<T extends GiftCertificateDTO> extends CRUDService<T> {
 
     /**
      * Returns a list of GiftCertificates based on the specified parameters.

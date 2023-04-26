@@ -1,6 +1,6 @@
 package com.epam.esm.service.api;
 
-import com.epam.esm.model.Entity;
+import com.epam.esm.model.dto.DTO;
 
 import java.util.List;
 
@@ -9,7 +9,7 @@ import java.util.List;
  *
  * @param <T> the type of entity that this service operates on.
  */
-public interface CRDService<T extends Entity> {
+public interface CRDService<T extends DTO> {
 
     /**
      * Retrieves all entities of type T from the repository.
