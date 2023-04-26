@@ -36,7 +36,7 @@ public class TagGiftCertificateRepositoryImpl implements TagGiftCertificateRepos
      * @return the number of rows affected by the insert statement
      */
     @Override
-    public int createTagGiftCertificate(int certificateId, int tagId) {
+    public int createTagGiftCertificate(long certificateId, long tagId) {
         String sql = "INSERT INTO gift_certificate_tag(gift_certificate_id, tag_id) VALUES (?, ?)";
 
         return jdbcTemplate.update(sql, certificateId, tagId);
@@ -49,10 +49,10 @@ public class TagGiftCertificateRepositoryImpl implements TagGiftCertificateRepos
      * @return List of Integer objects representing the IDs of tags associated with the gift certificate
      */
     @Override
-    public List<Integer> getAllTagsIdByGiftCertificate(int certificateId) {
+    public List<Long> getAllTagsIdByGiftCertificate(long certificateId) {
         String sql = "SELECT tag_id FROM gift_certificate_tag WHERE gift_certificate_id=?";
 
-        return jdbcTemplate.queryForList(sql, Integer.class, certificateId);
+        return jdbcTemplate.queryForList(sql, Long.class, certificateId);
     }
 
     /**
@@ -62,9 +62,9 @@ public class TagGiftCertificateRepositoryImpl implements TagGiftCertificateRepos
      * @return List of Integer objects representing the IDs of gift certificates associated with the tag
      */
     @Override
-    public List<Integer> getAllCertificateIdByTag(int tagId) {
+    public List<Long> getAllCertificateIdByTag(long tagId) {
         String sql = "SELECT gift_certificate_id FROM gift_certificate_tag WHERE tag_id=?";
 
-        return jdbcTemplate.queryForList(sql, Integer.class, tagId);
+        return jdbcTemplate.queryForList(sql, Long.class, tagId);
     }
 }

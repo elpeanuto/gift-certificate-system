@@ -8,7 +8,7 @@ import java.util.Objects;
 
 public class Tag implements Entity {
 
-    private Integer id;
+    private Long id;
 
     @NotNull(message = "Name is missing")
     @Size(min = 2, max = 30, message = "Name should be between 2 and 30 characters")
@@ -17,16 +17,16 @@ public class Tag implements Entity {
     public Tag() {
     }
 
-    public Tag(Integer id, String name) {
+    public Tag(Long id, String name) {
         this.id = id;
         this.name = name;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

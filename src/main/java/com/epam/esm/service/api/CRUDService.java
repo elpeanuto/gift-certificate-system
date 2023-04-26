@@ -18,5 +18,5 @@ public interface CRUDService<T extends Entity> extends CRDService<T> {
      * @param t  The entity instance with updated values.
      * @return The updated entity instance.
      */
-    T update(int id, T t);
+    T update(long id, T t);
 }

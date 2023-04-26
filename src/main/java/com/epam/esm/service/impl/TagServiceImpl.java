@@ -60,7 +60,7 @@ public class TagServiceImpl implements CRDService<Tag> {
      * @throws ResourceNotFoundException If a Tag object with the specified ID does not exist in the data store.
      */
     @Override
-    public Tag getById(int id) {
+    public Tag getById(long id) {
         Tag tag;
 
         try {
@@ -108,7 +108,7 @@ public class TagServiceImpl implements CRDService<Tag> {
      * @throws ResourceNotFoundException If a Tag object with the specified ID does not exist in the data store.
      */
     @Override
-    public Tag delete(int id) {
+    public Tag delete(long id) {
         Tag result;
 
         try {

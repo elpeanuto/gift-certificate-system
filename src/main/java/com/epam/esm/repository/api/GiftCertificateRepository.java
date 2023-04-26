@@ -22,7 +22,7 @@ public interface GiftCertificateRepository<T extends GiftCertificate> extends CR
      * @param idList The list of IDs of the GiftCertificate entities to retrieve.
      * @return A list of GiftCertificate entities with the specified IDs.
      */
-    List<T> getByIdList(List<Integer> idList);
+    List<T> getByIdList(List<Long> idList);
 
     /**
      * Retrieves a list of GiftCertificate entities that contain the specified pattern in their name or description.

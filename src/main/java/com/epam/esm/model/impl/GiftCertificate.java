@@ -19,7 +19,7 @@ public class GiftCertificate implements Entity, Comparator<GiftCertificate> {
 
     private static final String DATE_TIME_PATTERN = "yyyy-MM-dd'T'HH:mm:ss.SSS";
 
-    private Integer id;
+    private Long id;
 
     @NotNull(message = "Name is missing", groups = CreateValidationGroup.class)
     @Size(min = 2, max = 30, message = "Name should be between 2 and 30 characters",
@@ -53,7 +53,7 @@ public class GiftCertificate implements Entity, Comparator<GiftCertificate> {
 
     }
 
-    public GiftCertificate(Integer id, String name, String description, Double price, Integer duration, LocalDateTime createDate, LocalDateTime lastUpdateDate) {
+    public GiftCertificate(Long id, String name, String description, Double price, Integer duration, LocalDateTime createDate, LocalDateTime lastUpdateDate) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -63,11 +63,11 @@ public class GiftCertificate implements Entity, Comparator<GiftCertificate> {
         this.lastUpdateDate = lastUpdateDate;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

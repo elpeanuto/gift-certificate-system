@@ -61,12 +61,12 @@ public class TagRepositoryImpl implements TagRepository<Tag> {
      * @return the Tag object with the specified ID, or null if not found.
      */
     @Override
-    public Tag getById(int id) {
+    public Tag getById(long id) {
         String sql = "SELECT * FROM tag WHERE id = ?";
 
         return jdbcTemplate.query(con -> {
             PreparedStatement ps = con.prepareStatement(sql);
-            ps.setInt(1, id);
+            ps.setLong(1, id);
 
             return ps;
         }, new BeanPropertyRowMapper<>(Tag.class)).stream().findFirst().orElse(null);
@@ -97,7 +97,7 @@ public class TagRepositoryImpl implements TagRepository<Tag> {
      * @return a list of Tag objects with the specified IDs.
      */
     @Override
-    public List<Tag> getByIdList(List<Integer> idList) {
+    public List<Tag> getByIdList(List<Long> idList) {
         String sql = "SELECT * FROM tag WHERE id IN (:idList)";
 
         if (idList.isEmpty())
@@ -138,7 +138,7 @@ public class TagRepositoryImpl implements TagRepository<Tag> {
             throw new RepositoryException("Failed to get id.");
         }
 
-        tag.setId((int) key.get("id"));
+        tag.setId((long) key.get("id"));
 
         return tag;
     }
@@ -150,7 +150,7 @@ public class TagRepositoryImpl implements TagRepository<Tag> {
      * @return the number of rows affected by the deletion (should be 1 if successful)
      */
     @Override
-    public int delete(int id) {
+    public int delete(long id) {
         String sql = "DELETE FROM tag WHERE id=?";
 
         return jdbcTemplate.update(sql, id);

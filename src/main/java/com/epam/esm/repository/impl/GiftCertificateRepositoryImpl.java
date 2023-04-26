@@ -61,12 +61,12 @@ public class GiftCertificateRepositoryImpl implements GiftCertificateRepository<
      * @return GiftCertificate object with the specified ID or null if no object is found
      */
     @Override
-    public GiftCertificate getById(int id) {
+    public GiftCertificate getById(long id) {
         String sql = "SELECT * FROM gift_certificate WHERE id = ?";
 
         return jdbcTemplate.query(con -> {
             PreparedStatement ps = con.prepareStatement(sql);
-            ps.setInt(1, id);
+            ps.setLong(1, id);
 
             return ps;
         }, new BeanPropertyRowMapper<>(GiftCertificate.class)).stream().findFirst().orElse(null);
@@ -79,7 +79,7 @@ public class GiftCertificateRepositoryImpl implements GiftCertificateRepository<
      * @return List of GiftCertificate objects with the specified IDs or an empty list if no objects are found
      */
     @Override
-    public List<GiftCertificate> getByIdList(List<Integer> idList) {
+    public List<GiftCertificate> getByIdList(List<Long> idList) {
         String sql = "SELECT * FROM gift_certificate WHERE id IN (:idList)";
 
         if (idList.isEmpty())
@@ -142,7 +142,7 @@ public class GiftCertificateRepositoryImpl implements GiftCertificateRepository<
             throw new RepositoryException("Failed to get id.");
         }
 
-        certificate.setId((int) key.get("id"));
+        certificate.setId((long) key.get("id"));
         certificate.setCreateDate(((Timestamp) key.get("create_date")).toLocalDateTime());
         certificate.setLastUpdateDate(((Timestamp) key.get("last_update_date")).toLocalDateTime());
 
@@ -159,7 +159,7 @@ public class GiftCertificateRepositoryImpl implements GiftCertificateRepository<
      * @throws RepositoryException If the update operation fails or if the ID does not exist.
      */
     @Override
-    public GiftCertificate update(int id, GiftCertificate updatedGiftCertificate) {
+    public GiftCertificate update(long id, GiftCertificate updatedGiftCertificate) {
         String sql = "UPDATE gift_certificate SET name=?, description=?, price=?, duration=?, last_update_date=? WHERE id=?";
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -171,7 +171,7 @@ public class GiftCertificateRepositoryImpl implements GiftCertificateRepository<
             ps.setDouble(3, updatedGiftCertificate.getPrice());
             ps.setInt(4, updatedGiftCertificate.getDuration());
             ps.setObject(5, updatedGiftCertificate.getLastUpdateDate());
-            ps.setInt(6, id);
+            ps.setLong(6, id);
             return ps;
         }, keyHolder);
 
@@ -185,7 +185,7 @@ public class GiftCertificateRepositoryImpl implements GiftCertificateRepository<
             throw new RepositoryException("Failed to get id.");
         }
 
-        updatedGiftCertificate.setId((int) key.get("id"));
+        updatedGiftCertificate.setId((long) key.get("id"));
         updatedGiftCertificate.setCreateDate(((Timestamp) key.get("create_date")).toLocalDateTime());
 
         return updatedGiftCertificate;
@@ -199,7 +199,7 @@ public class GiftCertificateRepositoryImpl implements GiftCertificateRepository<
      * @throws RepositoryException If the delete operation fails or if the ID does not exist.
      */
     @Override
-    public int delete(int id) {
+    public int delete(long id) {
         String sql = "DELETE FROM gift_certificate WHERE id=?";
 
         return jdbcTemplate.update(sql, id);

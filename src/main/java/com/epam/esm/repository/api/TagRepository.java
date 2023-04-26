@@ -18,7 +18,7 @@ public interface TagRepository<T extends Tag> extends CRDRepository<T> {
      * @param idList A list of IDs of the Tag entities to retrieve.
      * @return A list of Tag entities with the specified IDs.
      */
-    List<T> getByIdList(List<Integer> idList);
+    List<T> getByIdList(List<Long> idList);
 
     /**
      * Retrieves a Tag entity with the specified name from the repository.

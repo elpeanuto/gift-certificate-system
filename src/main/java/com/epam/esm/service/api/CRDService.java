@@ -24,7 +24,7 @@ public interface CRDService<T extends Entity> {
      * @param id the ID of the entity to retrieve.
      * @return the entity with the specified ID, or null if no entity with that ID exists.
      */
-    T getById(int id);
+    T getById(long id);
 
     /**
      * Creates a new entity of type T in the repository.
@@ -40,5 +40,5 @@ public interface CRDService<T extends Entity> {
      * @param id the ID of the entity to delete.
      * @return the deleted entity, or null if no entity with that ID exists.
      */
-    T delete(int id);
+    T delete(long id);
 }

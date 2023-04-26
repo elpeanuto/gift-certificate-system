@@ -67,7 +67,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService<GiftCe
             List<GiftCertificate> certificateList = certificateRepo.getAll();
 
             for (GiftCertificate giftCertificate : certificateList) {
-                List<Integer> tagIdList = tagCertificateRepo.getAllTagsIdByGiftCertificate(giftCertificate.getId());
+                List<Long> tagIdList = tagCertificateRepo.getAllTagsIdByGiftCertificate(giftCertificate.getId());
                 giftCertificate.setTags(tagRepo.getByIdList(tagIdList));
             }
 
@@ -86,7 +86,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService<GiftCe
      * @throws ResourceNotFoundException if the GiftCertificate was not found in the database.
      */
     @Override
-    public GiftCertificate getById(int id) {
+    public GiftCertificate getById(long id) {
         try {
             GiftCertificate certificate;
 
@@ -95,7 +95,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService<GiftCe
             if (certificate == null)
                 throw new ResourceNotFoundException(id);
 
-            List<Integer> tagIdList = tagCertificateRepo.getAllTagsIdByGiftCertificate(id);
+            List<Long> tagIdList = tagCertificateRepo.getAllTagsIdByGiftCertificate(id);
             certificate.setTags(tagRepo.getByIdList(tagIdList));
 
             return certificate;
@@ -150,7 +150,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService<GiftCe
             return Collections.emptyList();
         }
 
-        List<Integer> certificateIds = tagCertificateRepo.getAllCertificateIdByTag(tag.getId());
+        List<Long> certificateIds = tagCertificateRepo.getAllCertificateIdByTag(tag.getId());
 
         if (certificateIds == null) {
             return Collections.emptyList();
@@ -248,7 +248,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService<GiftCe
      */
     @Override
     @Transactional
-    public GiftCertificate update(int id, GiftCertificate certificate) {
+    public GiftCertificate update(long id, GiftCertificate certificate) {
         GiftCertificate certificateFromDB;
 
         try {
@@ -291,7 +291,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService<GiftCe
                 updateGiftCertificate(id, certificateFromDB) : updateGiftCertificateWithTags(id, certificateFromDB);
     }
 
-    private GiftCertificate updateGiftCertificate(int id, GiftCertificate certificate) {
+    private GiftCertificate updateGiftCertificate(long id, GiftCertificate certificate) {
         GiftCertificate result;
 
         try {
@@ -303,7 +303,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService<GiftCe
         return result;
     }
 
-    private GiftCertificate updateGiftCertificateWithTags(int id, GiftCertificate certificate) {
+    private GiftCertificate updateGiftCertificateWithTags(long id, GiftCertificate certificate) {
         List<Tag> tags = certificate.getTags();
 
         List<Tag> tagsToCreate = tags.stream()
@@ -343,7 +343,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService<GiftCe
      * @throws RepositoryException if there was an error deleting the gift certificate from the repository
      */
     @Override
-    public GiftCertificate delete(int id) {
+    public GiftCertificate delete(long id) {
         GiftCertificate result;
 
         try {
