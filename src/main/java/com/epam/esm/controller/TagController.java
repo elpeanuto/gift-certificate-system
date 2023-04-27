@@ -76,11 +76,10 @@ public class TagController {
             String str = String.join(", ", errorMessages);
 
             logger.warn(str);
-            throw new InvalidRequestBodyException();
+            throw new InvalidRequestBodyException(str);
         }
 
-        service.create(tagDTO);
-        return tagDTO;
+        return service.create(tagDTO);
     }
 
     /**

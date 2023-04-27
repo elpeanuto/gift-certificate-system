@@ -18,7 +18,7 @@ public class GiftCertificateEntity {
     )
     @GeneratedValue(
             strategy = GenerationType.SEQUENCE,
-            generator = ""
+            generator = "certificate_sequence"
     )
     @Column(
             name = "id",
@@ -149,5 +149,19 @@ public class GiftCertificateEntity {
 
     public void setTags(Set<TagEntity> tags) {
         this.tags = tags;
+    }
+
+    @Override
+    public String toString() {
+        return "GiftCertificateEntity{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", price=" + price +
+                ", duration=" + duration +
+                ", createDate=" + createDate +
+                ", lastUpdateDate=" + lastUpdateDate +
+                ", tags=" + tags +
+                '}';
     }
 }

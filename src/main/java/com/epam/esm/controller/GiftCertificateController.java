@@ -2,6 +2,7 @@ package com.epam.esm.controller;
 
 import com.epam.esm.exception.exceptions.InvalidRequestBodyException;
 import com.epam.esm.model.dto.GiftCertificateDTO;
+import com.epam.esm.model.dto.TagDTO;
 import com.epam.esm.service.api.GiftCertificateService;
 import com.epam.esm.util.CreateValidationGroup;
 import com.epam.esm.util.UpdateValidationGroup;
@@ -17,7 +18,9 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * A RestController class that handles API requests related to gift certificates.
@@ -117,7 +120,7 @@ public class GiftCertificateController {
 
     private void validateGiftCertificate(GiftCertificateDTO certificate, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            List<String> errorMessages = new ArrayList<>();
+            Set<String> errorMessages = new HashSet<>();
             for (ObjectError error : bindingResult.getAllErrors()) {
                 errorMessages.add(error.getDefaultMessage());
             }
@@ -127,19 +130,23 @@ public class GiftCertificateController {
             throw new InvalidRequestBodyException(str);
         }
 
-        for (int i = 0; i < certificate.getTags().size(); i++) {
-            BindingResult tagBindingResult = new BeanPropertyBindingResult(certificate.getTags().get(i), "tag" + i);
-            validator.validate(certificate.getTags().get(i), tagBindingResult);
+        int i = 1;
+        for (TagDTO tag : certificate.getTags()) {
+            BindingResult tagBindingResult = new BeanPropertyBindingResult(tag, "tag" + i);
+            validator.validate(tag, tagBindingResult);
+
             if (tagBindingResult.hasErrors()) {
-                List<String> errorMessages = new ArrayList<>();
+                Set<String> errorMessages = new HashSet<>();
                 for (ObjectError error : tagBindingResult.getAllErrors()) {
                     errorMessages.add(error.getDefaultMessage());
                 }
-                String str = "Tag #" + (i + 1) + ": " + String.join(", ", errorMessages);
+                String str = "Tag #" + i + ": " + String.join(", ", errorMessages);
 
                 logger.warn(str);
                 throw new InvalidRequestBodyException(str);
             }
+
+            i++;
         }
     }
 }

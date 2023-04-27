@@ -83,4 +83,13 @@ public class TagEntity {
     public void setCertificates(Set<GiftCertificateEntity> certificates) {
         this.certificates = certificates;
     }
+
+    @Override
+    public String toString() {
+        return "TagEntity{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", certificates=" + certificates +
+                '}';
+    }
 }
