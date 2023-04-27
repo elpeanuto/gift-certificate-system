@@ -49,6 +49,11 @@ public class TagEntity {
 
     }
 
+    public TagEntity(Long id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
     public TagEntity(Long id, String name, Set<GiftCertificateEntity> certificates) {
         this.id = id;
         this.name = name;

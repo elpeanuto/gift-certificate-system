@@ -9,10 +9,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class GiftCertificateDTO implements DTO, Comparator<GiftCertificateDTO> {
 
@@ -46,13 +43,14 @@ public class GiftCertificateDTO implements DTO, Comparator<GiftCertificateDTO> {
     private LocalDateTime lastUpdateDate;
 
     @Valid
-    private List<Tag> tags = new ArrayList<>();
+    private Set<TagDTO> tagDTOs = new HashSet<>();
 
     public GiftCertificateDTO() {
 
     }
 
-    public GiftCertificateDTO(Long id, String name, String description, Double price, Integer duration, LocalDateTime createDate, LocalDateTime lastUpdateDate) {
+    public GiftCertificateDTO(Long id, String name, String description, Double price, Integer duration,
+                              LocalDateTime createDate, LocalDateTime lastUpdateDate) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -60,6 +58,18 @@ public class GiftCertificateDTO implements DTO, Comparator<GiftCertificateDTO> {
         this.duration = duration;
         this.createDate = createDate;
         this.lastUpdateDate = lastUpdateDate;
+    }
+
+    public GiftCertificateDTO(Long id, String name, String description, Double price, Integer duration,
+                              LocalDateTime createDate, LocalDateTime lastUpdateDate, Set<TagDTO> tagDTOs) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.price = price;
+        this.duration = duration;
+        this.createDate = createDate;
+        this.lastUpdateDate = lastUpdateDate;
+        this.tagDTOs = tagDTOs;
     }
 
     public Long getId() {
@@ -118,12 +128,12 @@ public class GiftCertificateDTO implements DTO, Comparator<GiftCertificateDTO> {
         this.lastUpdateDate = lastUpdateDate;
     }
 
-    public List<Tag> getTags() {
-        return tags;
+    public Set<TagDTO> getTags() {
+        return tagDTOs;
     }
 
-    public void setTags(List<Tag> tags) {
-        this.tags = tags;
+    public void setTags(Set<TagDTO> tagDTOs) {
+        this.tagDTOs = tagDTOs;
     }
 
     @Override
@@ -136,7 +146,7 @@ public class GiftCertificateDTO implements DTO, Comparator<GiftCertificateDTO> {
                 ", duration=" + duration +
                 ", createDate=" + createDate +
                 ", lastUpdateDate=" + lastUpdateDate +
-                ", tags=" + tags.toString() +
+                ", tags=" + tagDTOs.toString() +
                 '}';
     }
 

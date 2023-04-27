@@ -2,7 +2,7 @@ package com.epam.esm.service.impl;
 
 import com.epam.esm.exception.exceptions.RepositoryException;
 import com.epam.esm.exception.exceptions.ResourceNotFoundException;
-import com.epam.esm.model.dto.Tag;
+import com.epam.esm.model.dto.TagDTO;
 import com.epam.esm.repository.api.CRDRepository;
 import com.epam.esm.service.api.CRDService;
 import org.slf4j.Logger;
@@ -21,10 +21,10 @@ import java.util.List;
  * @see CRDService
  */
 @Service
-public class TagServiceImpl implements CRDService<Tag> {
+public class TagServiceImpl implements CRDService<TagDTO> {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
-    private final CRDRepository<Tag> tagRepo;
+    private final CRDRepository<TagDTO> tagRepo;
 
     /**
      * Constructor for the TagServiceImpl class.
@@ -32,7 +32,7 @@ public class TagServiceImpl implements CRDService<Tag> {
      * @param tagRepository The repository used to access the underlying data store for Tag objects.
      */
     @Autowired
-    public TagServiceImpl(CRDRepository<Tag> tagRepository) {
+    public TagServiceImpl(CRDRepository<TagDTO> tagRepository) {
         this.tagRepo = tagRepository;
     }
 
@@ -43,7 +43,7 @@ public class TagServiceImpl implements CRDService<Tag> {
      * @throws RepositoryException If there is an error retrieving the Tag objects.
      */
     @Override
-    public List<Tag> getAll() {
+    public List<TagDTO> getAll() {
         try {
             return tagRepo.getAll();
         } catch (DataAccessException e) {
@@ -60,35 +60,35 @@ public class TagServiceImpl implements CRDService<Tag> {
      * @throws ResourceNotFoundException If a Tag object with the specified ID does not exist in the data store.
      */
     @Override
-    public Tag getById(long id) {
-        Tag tag;
+    public TagDTO getById(long id) {
+        TagDTO tagDTO;
 
         try {
-            tag = tagRepo.getById(id);
+            tagDTO = tagRepo.getById(id);
         } catch (DataAccessException e) {
             throw new RepositoryException(RepositoryException.standardMessage(this.getClass().getSimpleName(), "getById(int id)", e));
         }
 
-        if (tag == null)
+        if (tagDTO == null)
             throw new ResourceNotFoundException(id);
 
-        return tag;
+        return tagDTO;
     }
 
     /**
      * Creates a new Tag object in the data store.
      *
-     * @param tag The Tag object to create in the data store.
+     * @param tagDTO The Tag object to create in the data store.
      * @return The newly created Tag object.
      * @throws RepositoryException If there is an error creating the Tag object.
      * @throws RepositoryException If a Tag object with the same name already exists in the data store.
      */
     @Override
-    public Tag create(Tag tag) {
-        Tag result;
+    public TagDTO create(TagDTO tagDTO) {
+        TagDTO result;
 
         try {
-            result = tagRepo.create(tag);
+            result = tagRepo.create(tagDTO);
         } catch (DuplicateKeyException e) {
             logger.error(e.getMessage());
             throw new RepositoryException("Tag with this name already exists");
@@ -108,8 +108,8 @@ public class TagServiceImpl implements CRDService<Tag> {
      * @throws ResourceNotFoundException If a Tag object with the specified ID does not exist in the data store.
      */
     @Override
-    public Tag delete(long id) {
-        Tag result;
+    public TagDTO delete(long id) {
+        TagDTO result;
 
         try {
             result = getById(id);

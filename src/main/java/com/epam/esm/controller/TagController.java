@@ -1,7 +1,7 @@
 package com.epam.esm.controller;
 
 import com.epam.esm.exception.exceptions.InvalidRequestBodyException;
-import com.epam.esm.model.dto.Tag;
+import com.epam.esm.model.dto.TagDTO;
 import com.epam.esm.service.api.CRDService;
 import com.epam.esm.service.impl.TagServiceImpl;
 import jakarta.validation.Valid;
@@ -23,7 +23,7 @@ import java.util.List;
 @RequestMapping("/tags")
 public class TagController {
 
-    private final CRDService<Tag> service;
+    private final CRDService<TagDTO> service;
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     /**
@@ -42,7 +42,7 @@ public class TagController {
      * @return a list of all Tag objects
      */
     @GetMapping()
-    public List<Tag> getAll() {
+    public List<TagDTO> getAll() {
         return service.getAll();
     }
 
@@ -53,21 +53,21 @@ public class TagController {
      * @return the Tag object with the specified id
      */
     @GetMapping("/{id}")
-    public Tag getById(@PathVariable("id") int id) {
+    public TagDTO getById(@PathVariable("id") int id) {
         return service.getById(id);
     }
 
     /**
      * Creates a new Tag object.
      *
-     * @param tag           the Tag object to create
+     * @param tagDTO           the Tag object to create
      * @param bindingResult the BindingResult object used to check for errors in the request body
      * @return the created Tag object
      * @throws InvalidRequestBodyException if there are errors in the request body
      */
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
-    public Tag create(@RequestBody @Valid Tag tag, BindingResult bindingResult) {
+    public TagDTO create(@RequestBody @Valid TagDTO tagDTO, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             List<String> errorMessages = new ArrayList<>();
             for (ObjectError error : bindingResult.getAllErrors()) {
@@ -79,8 +79,8 @@ public class TagController {
             throw new InvalidRequestBodyException();
         }
 
-        service.create(tag);
-        return tag;
+        service.create(tagDTO);
+        return tagDTO;
     }
 
     /**
@@ -90,7 +90,7 @@ public class TagController {
      * @return the deleted Tag object
      */
     @DeleteMapping("/{id}")
-    public Tag delete(@PathVariable("id") int id) {
+    public TagDTO delete(@PathVariable("id") int id) {
         return service.delete(id);
     }
 }

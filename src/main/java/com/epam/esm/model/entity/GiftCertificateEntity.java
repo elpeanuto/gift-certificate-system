@@ -43,7 +43,7 @@ public class GiftCertificateEntity {
             columnDefinition = "NUMERIC(10, 2)",
             nullable = false
     )
-    private Long price;
+    private Double price;
 
     @Column(
             name = "duration",
@@ -75,7 +75,7 @@ public class GiftCertificateEntity {
 
     }
 
-    public GiftCertificateEntity(Long id, String name, String description, Long price, Integer duration,
+    public GiftCertificateEntity(Long id, String name, String description, Double price, Integer duration,
                                  LocalDateTime createDate, Set<TagEntity> tags) {
         this.id = id;
         this.name = name;
@@ -111,11 +111,11 @@ public class GiftCertificateEntity {
         this.description = description;
     }
 
-    public Long getPrice() {
+    public Double getPrice() {
         return price;
     }
 
-    public void setPrice(Long price) {
+    public void setPrice(Double price) {
         this.price = price;
     }
 

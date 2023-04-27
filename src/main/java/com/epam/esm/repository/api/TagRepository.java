@@ -1,6 +1,6 @@
 package com.epam.esm.repository.api;
 
-import com.epam.esm.model.dto.Tag;
+import com.epam.esm.model.dto.TagDTO;
 
 import java.util.List;
 
@@ -10,7 +10,7 @@ import java.util.List;
  *
  * @see CRDRepository
  */
-public interface TagRepository<T extends Tag> extends CRDRepository<T> {
+public interface TagRepository<T extends TagDTO> extends CRDRepository<T> {
 
     /**
      * Retrieves a list of Tag entities with the specified IDs from the repository.

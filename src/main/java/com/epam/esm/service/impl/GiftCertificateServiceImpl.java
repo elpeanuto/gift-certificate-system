@@ -3,7 +3,7 @@ package com.epam.esm.service.impl;
 import com.epam.esm.exception.exceptions.RepositoryException;
 import com.epam.esm.exception.exceptions.ResourceNotFoundException;
 import com.epam.esm.model.dto.GiftCertificateDTO;
-import com.epam.esm.model.dto.Tag;
+import com.epam.esm.model.dto.TagDTO;
 import com.epam.esm.repository.api.GiftCertificateRepository;
 import com.epam.esm.repository.api.TagGiftCertificateRepository;
 import com.epam.esm.repository.api.TagRepository;
@@ -30,7 +30,7 @@ import java.util.stream.Collectors;
 public class GiftCertificateServiceImpl implements GiftCertificateService<GiftCertificateDTO> {
 
     private GiftCertificateRepository<GiftCertificateDTO> certificateRepo;
-    private TagRepository<Tag> tagRepo;
+    private TagRepository<TagDTO> tagRepo;
     private TagGiftCertificateRepository tagCertificateRepo;
 
     /**
@@ -49,7 +49,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService<GiftCe
      */
     @Autowired
     public GiftCertificateServiceImpl(GiftCertificateRepository<GiftCertificateDTO> certificateRepo,
-                                      TagRepository<Tag> tagRepo, TagGiftCertificateRepository tagCertificateRepo) {
+                                      TagRepository<TagDTO> tagRepo, TagGiftCertificateRepository tagCertificateRepo) {
         this.certificateRepo = certificateRepo;
         this.tagRepo = tagRepo;
         this.tagCertificateRepo = tagCertificateRepo;
@@ -144,13 +144,13 @@ public class GiftCertificateServiceImpl implements GiftCertificateService<GiftCe
     private List<GiftCertificateDTO> getByTagNameParam(String name) {
         List<GiftCertificateDTO> responseList;
 
-        Tag tag = tagRepo.getByName(name);
+        TagDTO tagDTO = tagRepo.getByName(name);
 
-        if (tag == null) {
+        if (tagDTO == null) {
             return Collections.emptyList();
         }
 
-        List<Long> certificateIds = tagCertificateRepo.getAllCertificateIdByTag(tag.getId());
+        List<Long> certificateIds = tagCertificateRepo.getAllCertificateIdByTag(tagDTO.getId());
 
         if (certificateIds == null) {
             return Collections.emptyList();
@@ -208,17 +208,17 @@ public class GiftCertificateServiceImpl implements GiftCertificateService<GiftCe
     }
 
     private GiftCertificateDTO createGiftCertificateWithTags(GiftCertificateDTO certificate) {
-        List<Tag> tags = certificate.getTags().stream()
+        List<TagDTO> tagDTOS = certificate.getTags().stream()
                 .distinct()
                 .toList();
 
-        certificate.setTags(tags);
+        certificate.setTags(tagDTOS);
 
-        List<Tag> tagsToCreate = tags.stream()
+        List<TagDTO> tagsToCreate = tagDTOS.stream()
                 .filter(tag -> tagRepo.getByName(tag.getName()) == null)
                 .toList();
 
-        List<Tag> tagsToBind = tags.stream()
+        List<TagDTO> tagsToBind = tagDTOS.stream()
                 .filter(tag -> tagRepo.getByName(tag.getName()) != null)
                 .toList();
 
@@ -261,12 +261,12 @@ public class GiftCertificateServiceImpl implements GiftCertificateService<GiftCe
             throw new ResourceNotFoundException(id);
         }
 
-        List<Tag> fromDBTags = certificateFromDB.getTags();
-        List<Tag> requestTags = certificate.getTags();
+        List<TagDTO> fromDBTagDTOS = certificateFromDB.getTags();
+        List<TagDTO> requestTagDTOS = certificate.getTags();
 
-        List<Tag> tagsToSet = requestTags.stream()
+        List<TagDTO> tagsToSet = requestTagDTOS.stream()
                 .distinct()
-                .filter(tag -> !fromDBTags.contains(tag))
+                .filter(tag -> !fromDBTagDTOS.contains(tag))
                 .toList();
 
         if (certificate.getName() != null) {
@@ -304,14 +304,14 @@ public class GiftCertificateServiceImpl implements GiftCertificateService<GiftCe
     }
 
     private GiftCertificateDTO updateGiftCertificateWithTags(long id, GiftCertificateDTO certificate) {
-        List<Tag> tags = certificate.getTags();
+        List<TagDTO> tagDTOS = certificate.getTags();
 
-        List<Tag> tagsToCreate = tags.stream()
+        List<TagDTO> tagsToCreate = tagDTOS.stream()
                 .filter(tag -> tagRepo.getByName(tag.getName()) == null)
                 .distinct()
                 .toList();
 
-        List<Tag> tagsToBind = tags.stream()
+        List<TagDTO> tagsToBind = tagDTOS.stream()
                 .filter(tag -> tagRepo.getByName(tag.getName()) != null)
                 .distinct()
                 .toList();

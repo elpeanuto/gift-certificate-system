@@ -3,7 +3,7 @@ package com.epam.esm.service;
 import com.epam.esm.exception.exceptions.RepositoryException;
 import com.epam.esm.exception.exceptions.ResourceNotFoundException;
 import com.epam.esm.model.dto.GiftCertificateDTO;
-import com.epam.esm.model.dto.Tag;
+import com.epam.esm.model.dto.TagDTO;
 import com.epam.esm.repository.api.GiftCertificateRepository;
 import com.epam.esm.repository.api.TagGiftCertificateRepository;
 import com.epam.esm.repository.api.TagRepository;
@@ -33,7 +33,7 @@ class GiftCertificateServiceImplTest {
     @Mock
     private GiftCertificateRepository<GiftCertificateDTO> certificateRepo;
     @Mock
-    private TagRepository<Tag> tagRepo;
+    private TagRepository<TagDTO> tagRepo;
     @Mock
     private TagGiftCertificateRepository tagCertificateRepo;
     @InjectMocks
@@ -126,17 +126,17 @@ class GiftCertificateServiceImplTest {
     void testGetByParamsAllTagNameNotNullCase() {
         GiftCertificateDTO certificate = new GiftCertificateDTO(1, "Test", "Test Description",
                 1.0, 1, null, null);
-        Tag tag = new Tag(1, "tagName");
+        TagDTO tagDTO = new TagDTO(1, "tagName");
 
-        when(tagRepo.getByName(anyString())).thenReturn(tag);
-        when(tagCertificateRepo.getAllCertificateIdByTag(tag.getId())).thenReturn(List.of(1));
+        when(tagRepo.getByName(anyString())).thenReturn(tagDTO);
+        when(tagCertificateRepo.getAllCertificateIdByTag(tagDTO.getId())).thenReturn(List.of(1));
         when(certificateRepo.getByIdList(anyList())).thenReturn(List.of(certificate));
         when(tagCertificateRepo.getAllTagsIdByGiftCertificate(anyInt())).thenReturn(List.of(1));
-        when(tagRepo.getByIdList(anyList())).thenReturn(List.of(tag));
+        when(tagRepo.getByIdList(anyList())).thenReturn(List.of(tagDTO));
 
         List<GiftCertificateDTO> list = service.getByParams("tagName", null, null);
 
-        certificate.setTags(List.of(tag));
+        certificate.setTags(List.of(tagDTO));
 
         verify(tagRepo, times(1)).getByName("tagName");
         verify(tagCertificateRepo, times(1)).getAllCertificateIdByTag(1);
@@ -217,13 +217,13 @@ class GiftCertificateServiceImplTest {
     void testCreateWithTags() {
         GiftCertificateDTO certificate = new GiftCertificateDTO(1, "Test", "Test Description", 1.0, 1, null, null);
         GiftCertificateDTO certificate2 = new GiftCertificateDTO(1, "Test", "Test Description", 1.0, 1, null, null);
-        Tag tag = new Tag(null, "tag");
-        Tag tag2 = new Tag(1, "tag");
-        certificate.setTags(List.of(tag));
-        certificate2.setTags(List.of(tag2));
+        TagDTO tagDTO = new TagDTO(null, "tag");
+        TagDTO tagDTO2 = new TagDTO(1, "tag");
+        certificate.setTags(List.of(tagDTO));
+        certificate2.setTags(List.of(tagDTO2));
 
         when(tagRepo.getByName("tag")).thenReturn(null);
-        when(tagRepo.getByName("tag")).thenReturn(new Tag(1, "tag"));
+        when(tagRepo.getByName("tag")).thenReturn(new TagDTO(1, "tag"));
         when(tagCertificateRepo.createTagGiftCertificate(1, 1)).thenReturn(1);
         when(certificateRepo.create(any())).thenReturn(certificate);
 
@@ -271,18 +271,18 @@ class GiftCertificateServiceImplTest {
 
         GiftCertificateDTO certificate = new GiftCertificateDTO(1, "Test", "Test Description", 1.0, 1, null, null);
         GiftCertificateDTO certificate2 = new GiftCertificateDTO(1, "Test", "Test Description", 1.0, 1, null, null);
-        Tag tag = new Tag(null, "tag");
-        Tag tag2 = new Tag(1, "tag");
-        certificate2.setTags(List.of(tag2));
+        TagDTO tagDTO = new TagDTO(null, "tag");
+        TagDTO tagDTO2 = new TagDTO(1, "tag");
+        certificate2.setTags(List.of(tagDTO2));
 
         doReturn(certificate).when(spiedService).getById(anyInt());
         when(tagRepo.getByName("tag")).thenReturn(null);
 
-        when(tagRepo.create(any())).thenReturn(tag2);
+        when(tagRepo.create(any())).thenReturn(tagDTO2);
         when(certificateRepo.update(1, certificate)).thenReturn(certificate);
         when(tagCertificateRepo.createTagGiftCertificate(1, 1)).thenReturn(1);
         when(tagCertificateRepo.getAllTagsIdByGiftCertificate(1)).thenReturn(null);
-        when(tagRepo.getByIdList(any())).thenReturn(List.of(tag2));
+        when(tagRepo.getByIdList(any())).thenReturn(List.of(tagDTO2));
 
         assertEquals(certificate2, spiedService.update(1, certificate2));
 

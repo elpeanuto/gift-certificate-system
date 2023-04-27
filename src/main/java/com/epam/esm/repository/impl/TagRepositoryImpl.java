@@ -1,7 +1,7 @@
 package com.epam.esm.repository.impl;
 
 import com.epam.esm.exception.exceptions.RepositoryException;
-import com.epam.esm.model.dto.Tag;
+import com.epam.esm.model.dto.TagDTO;
 import com.epam.esm.repository.api.TagRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -25,7 +25,7 @@ import java.util.Map;
  * @see TagRepository
  */
 @Repository
-public class TagRepositoryImpl implements TagRepository<Tag> {
+public class TagRepositoryImpl implements TagRepository<TagDTO> {
 
     private final JdbcTemplate jdbcTemplate;
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
@@ -48,10 +48,10 @@ public class TagRepositoryImpl implements TagRepository<Tag> {
      * @return a list of Tag objects.
      */
     @Override
-    public List<Tag> getAll() {
+    public List<TagDTO> getAll() {
         String sql = "SELECT * FROM tag";
 
-        return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Tag.class));
+        return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(TagDTO.class));
     }
 
     /**
@@ -61,7 +61,7 @@ public class TagRepositoryImpl implements TagRepository<Tag> {
      * @return the Tag object with the specified ID, or null if not found.
      */
     @Override
-    public Tag getById(long id) {
+    public TagDTO getById(long id) {
         String sql = "SELECT * FROM tag WHERE id = ?";
 
         return jdbcTemplate.query(con -> {
@@ -69,7 +69,7 @@ public class TagRepositoryImpl implements TagRepository<Tag> {
             ps.setLong(1, id);
 
             return ps;
-        }, new BeanPropertyRowMapper<>(Tag.class)).stream().findFirst().orElse(null);
+        }, new BeanPropertyRowMapper<>(TagDTO.class)).stream().findFirst().orElse(null);
     }
 
     /**
@@ -79,7 +79,7 @@ public class TagRepositoryImpl implements TagRepository<Tag> {
      * @return the Tag object with the specified name, or null if not found.
      */
     @Override
-    public Tag getByName(String name) {
+    public TagDTO getByName(String name) {
         String sql = "SELECT * FROM tag WHERE LOWER(name) = LOWER(?)";
 
         return jdbcTemplate.query(con -> {
@@ -87,7 +87,7 @@ public class TagRepositoryImpl implements TagRepository<Tag> {
             ps.setString(1, name);
 
             return ps;
-        }, new BeanPropertyRowMapper<>(Tag.class)).stream().findFirst().orElse(null);
+        }, new BeanPropertyRowMapper<>(TagDTO.class)).stream().findFirst().orElse(null);
     }
 
     /**
@@ -97,7 +97,7 @@ public class TagRepositoryImpl implements TagRepository<Tag> {
      * @return a list of Tag objects with the specified IDs.
      */
     @Override
-    public List<Tag> getByIdList(List<Long> idList) {
+    public List<TagDTO> getByIdList(List<Long> idList) {
         String sql = "SELECT * FROM tag WHERE id IN (:idList)";
 
         if (idList.isEmpty())
@@ -106,25 +106,25 @@ public class TagRepositoryImpl implements TagRepository<Tag> {
         MapSqlParameterSource params = new MapSqlParameterSource();
         params.addValue("idList", idList);
 
-        return namedParameterJdbcTemplate.query(sql, params, new BeanPropertyRowMapper<>(Tag.class));
+        return namedParameterJdbcTemplate.query(sql, params, new BeanPropertyRowMapper<>(TagDTO.class));
     }
 
     /**
      * Creates a new tag in the database.
      *
-     * @param tag the Tag object to be created.
+     * @param tagDTO the Tag object to be created.
      * @return the Tag object with the ID field set.
      * @throws RepositoryException if the operation fails.
      */
     @Override
-    public Tag create(Tag tag) {
+    public TagDTO create(TagDTO tagDTO) {
         String sql = "INSERT INTO tag(name) VALUES(?)";
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
         int rows = jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-            ps.setString(1, tag.getName());
+            ps.setString(1, tagDTO.getName());
             return ps;
         }, keyHolder);
 
@@ -138,9 +138,9 @@ public class TagRepositoryImpl implements TagRepository<Tag> {
             throw new RepositoryException("Failed to get id.");
         }
 
-        tag.setId((long) key.get("id"));
+        tagDTO.setId((long) key.get("id"));
 
-        return tag;
+        return tagDTO;
     }
 
     /**

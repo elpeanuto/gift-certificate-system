@@ -2,7 +2,7 @@ package com.epam.esm.service;
 
 import com.epam.esm.exception.exceptions.RepositoryException;
 import com.epam.esm.exception.exceptions.ResourceNotFoundException;
-import com.epam.esm.model.dto.Tag;
+import com.epam.esm.model.dto.TagDTO;
 import com.epam.esm.repository.api.TagRepository;
 import com.epam.esm.service.api.CRDService;
 import com.epam.esm.service.impl.TagServiceImpl;
@@ -25,9 +25,9 @@ import static org.mockito.Mockito.*;
 class TagCertificateServiceImplTest {
 
     @Mock
-    private TagRepository<Tag> repository;
+    private TagRepository<TagDTO> repository;
 
-    private CRDService<Tag> service;
+    private CRDService<TagDTO> service;
 
     @BeforeEach
     void setUp() {
@@ -36,15 +36,15 @@ class TagCertificateServiceImplTest {
 
     @Test
     void testGetAllReturnListOfTagsCase() {
-        List<Tag> expectedTags = new ArrayList<>();
-        expectedTags.add(new Tag(1, "tag1"));
-        expectedTags.add(new Tag(2, "tag2"));
+        List<TagDTO> expectedTagDTOS = new ArrayList<>();
+        expectedTagDTOS.add(new TagDTO(1, "tag1"));
+        expectedTagDTOS.add(new TagDTO(2, "tag2"));
 
-        when(repository.getAll()).thenReturn(expectedTags);
+        when(repository.getAll()).thenReturn(expectedTagDTOS);
 
-        List<Tag> actualTags = service.getAll();
+        List<TagDTO> actualTagDTOS = service.getAll();
 
-        assertEquals(expectedTags, actualTags);
+        assertEquals(expectedTagDTOS, actualTagDTOS);
         verify(repository, times(1)).getAll();
     }
 
@@ -58,14 +58,14 @@ class TagCertificateServiceImplTest {
 
     @Test
     void testGetByIdExistingTagIdCase() {
-        Tag expectedTag = new Tag(1, "tag1");
+        TagDTO expectedTagDTO = new TagDTO(1, "tag1");
 
-        when(repository.getById(expectedTag.getId())).thenReturn(expectedTag);
+        when(repository.getById(expectedTagDTO.getId())).thenReturn(expectedTagDTO);
 
-        Tag actualTag = service.getById(expectedTag.getId());
+        TagDTO actualTagDTO = service.getById(expectedTagDTO.getId());
 
-        assertEquals(expectedTag, actualTag);
-        verify(repository, times(1)).getById(expectedTag.getId());
+        assertEquals(expectedTagDTO, actualTagDTO);
+        verify(repository, times(1)).getById(expectedTagDTO.getId());
     }
 
     @Test
@@ -80,37 +80,37 @@ class TagCertificateServiceImplTest {
 
     @Test
     void testCreateValidTagCase() {
-        Tag expectedTag = new Tag(1, "tag1");
+        TagDTO expectedTagDTO = new TagDTO(1, "tag1");
 
-        when(repository.create(any(Tag.class))).thenReturn(expectedTag);
+        when(repository.create(any(TagDTO.class))).thenReturn(expectedTagDTO);
 
-        Tag actualTag = service.create(expectedTag);
+        TagDTO actualTagDTO = service.create(expectedTagDTO);
 
-        assertEquals(expectedTag, actualTag);
-        verify(repository, times(1)).create(expectedTag);
+        assertEquals(expectedTagDTO, actualTagDTO);
+        verify(repository, times(1)).create(expectedTagDTO);
     }
 
     @Test
     void testCreateDuplicateTagNameCase() {
-        Tag existingTag = new Tag(1, "tag1");
+        TagDTO existingTagDTO = new TagDTO(1, "tag1");
 
-        when(repository.create(existingTag)).thenThrow(DuplicateKeyException.class);
+        when(repository.create(existingTagDTO)).thenThrow(DuplicateKeyException.class);
 
-        assertThrows(RepositoryException.class, () -> service.create(existingTag));
-        verify(repository, times(1)).create(existingTag);
+        assertThrows(RepositoryException.class, () -> service.create(existingTagDTO));
+        verify(repository, times(1)).create(existingTagDTO);
     }
 
     @Test
     void testDeleteExistingTagIdCase() {
         int existingTagId = 1;
-        Tag tagToDelete = new Tag(existingTagId, "Test Tag");
+        TagDTO tagDTOToDelete = new TagDTO(existingTagId, "Test Tag");
 
-        when(repository.getById(existingTagId)).thenReturn(tagToDelete);
+        when(repository.getById(existingTagId)).thenReturn(tagDTOToDelete);
         when(repository.delete(existingTagId)).thenReturn(1);
 
-        Tag deletedTag = service.delete(existingTagId);
+        TagDTO deletedTagDTO = service.delete(existingTagId);
 
-        assertEquals(tagToDelete, deletedTag);
+        assertEquals(tagDTOToDelete, deletedTagDTO);
         verify(repository, times(1)).getById(existingTagId);
         verify(repository, times(1)).delete(existingTagId);
     }
@@ -129,7 +129,7 @@ class TagCertificateServiceImplTest {
     void testDeleteExistingTagIdRepositoryThrowsDataAccessExceptionCase() {
         int existingTagId = 1;
 
-        when(repository.getById(existingTagId)).thenReturn(new Tag(existingTagId, "Test Tag"));
+        when(repository.getById(existingTagId)).thenReturn(new TagDTO(existingTagId, "Test Tag"));
         when(repository.delete(existingTagId)).thenThrow(new DataAccessException("") {
         });
 
@@ -142,7 +142,7 @@ class TagCertificateServiceImplTest {
     void testDeleteExistingTagIdRepositoryReturnsZeroDeletedItemsCase() {
         int existingTagId = 1;
 
-        when(repository.getById(existingTagId)).thenReturn(new Tag(existingTagId, "Test Tag"));
+        when(repository.getById(existingTagId)).thenReturn(new TagDTO(existingTagId, "Test Tag"));
         when(repository.delete(existingTagId)).thenReturn(0);
 
         assertThrows(RepositoryException.class, () -> service.delete(existingTagId));

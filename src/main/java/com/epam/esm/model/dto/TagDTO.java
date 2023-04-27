@@ -5,7 +5,7 @@ import jakarta.validation.constraints.Size;
 
 import java.util.Objects;
 
-public class Tag implements DTO {
+public class TagDTO implements DTO {
 
     private Long id;
 
@@ -13,10 +13,10 @@ public class Tag implements DTO {
     @Size(min = 2, max = 30, message = "Name should be between 2 and 30 characters")
     private String name;
 
-    public Tag() {
+    public TagDTO() {
     }
 
-    public Tag(Long id, String name) {
+    public TagDTO(Long id, String name) {
         this.id = id;
         this.name = name;
     }
@@ -50,9 +50,9 @@ public class Tag implements DTO {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Tag tag = (Tag) o;
+        TagDTO tagDTO = (TagDTO) o;
 
-        return Objects.equals(name, tag.name);
+        return Objects.equals(name, tagDTO.name);
     }
 
     @Override
