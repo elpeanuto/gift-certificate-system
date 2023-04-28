@@ -36,13 +36,7 @@ public class TagEntity {
     )
     private String name;
 
-    @ManyToMany(
-            cascade = CascadeType.ALL
-    )
-    @JoinTable(
-            name = "gift_certificate_tag",
-            joinColumns = @JoinColumn(name = "tag_id"),
-            inverseJoinColumns = @JoinColumn(name = "gift_certificate_id"))
+    @ManyToMany
     private Set<GiftCertificateEntity> certificates = new HashSet<>();
 
     public TagEntity() {

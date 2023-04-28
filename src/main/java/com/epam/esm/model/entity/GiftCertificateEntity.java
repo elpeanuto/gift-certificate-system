@@ -61,12 +61,12 @@ public class GiftCertificateEntity {
     @Column(
             name = "last_update_date",
             columnDefinition = "TIMESTAMP",
-            nullable = false
+            nullable = false,
+            updatable = false
     )
     private LocalDateTime lastUpdateDate;
 
     @ManyToMany(
-            mappedBy = "certificates",
             cascade = CascadeType.ALL
     )
     private Set<TagEntity> tags = new HashSet<>();
@@ -76,14 +76,14 @@ public class GiftCertificateEntity {
     }
 
     public GiftCertificateEntity(Long id, String name, String description, Double price, Integer duration,
-                                 LocalDateTime createDate, Set<TagEntity> tags) {
+                                 LocalDateTime createDate, LocalDateTime lastUpdateDate, Set<TagEntity> tags) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.price = price;
         this.duration = duration;
         this.createDate = createDate;
-        this.lastUpdateDate = LocalDateTime.now();
+        this.lastUpdateDate = lastUpdateDate;
         this.tags = tags;
     }
 

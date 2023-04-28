@@ -34,6 +34,7 @@ public class GiftCertificateConverter {
                 dto.getPrice(),
                 dto.getDuration(),
                 dto.getCreateDate(),
+                dto.getLastUpdateDate(),
                 dto.getTags().stream()
                         .map(TagConverter::toEntity)
                         .collect(Collectors.toSet())
