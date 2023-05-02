@@ -1,32 +1,31 @@
-package com.epam.esm.model.impl;
+package com.epam.esm.model.dto;
 
-import com.epam.esm.model.Entity;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 import java.util.Objects;
 
-public class Tag implements Entity {
+public class TagDTO implements DTO {
 
-    private Integer id;
+    private Long id;
 
     @NotNull(message = "Name is missing")
     @Size(min = 2, max = 30, message = "Name should be between 2 and 30 characters")
     private String name;
 
-    public Tag() {
+    public TagDTO() {
     }
 
-    public Tag(Integer id, String name) {
+    public TagDTO(Long id, String name) {
         this.id = id;
         this.name = name;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -51,9 +50,9 @@ public class Tag implements Entity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Tag tag = (Tag) o;
+        TagDTO tagDTO = (TagDTO) o;
 
-        return Objects.equals(name, tag.name);
+        return Objects.equals(name, tagDTO.name);
     }
 
     @Override

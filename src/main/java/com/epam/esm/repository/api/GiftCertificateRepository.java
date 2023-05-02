@@ -1,6 +1,6 @@
 package com.epam.esm.repository.api;
 
-import com.epam.esm.model.impl.GiftCertificate;
+import com.epam.esm.model.entity.GiftCertificateEntity;
 
 import java.util.List;
 
@@ -14,7 +14,7 @@ import java.util.List;
  * @see CRUDRepository
  * @see CRDRepository
  */
-public interface GiftCertificateRepository<T extends GiftCertificate> extends CRUDRepository<T> {
+public interface GiftCertificateRepository extends CRUDRepository<GiftCertificateEntity> {
 
     /**
      * Retrieves a list of GiftCertificate entities with the specified IDs from the repository.
@@ -22,7 +22,7 @@ public interface GiftCertificateRepository<T extends GiftCertificate> extends CR
      * @param idList The list of IDs of the GiftCertificate entities to retrieve.
      * @return A list of GiftCertificate entities with the specified IDs.
      */
-    List<T> getByIdList(List<Integer> idList);
+    List<GiftCertificateEntity> getByIdList(List<Long> idList);
 
     /**
      * Retrieves a list of GiftCertificate entities that contain the specified pattern in their name or description.
@@ -30,5 +30,5 @@ public interface GiftCertificateRepository<T extends GiftCertificate> extends CR
      * @param pattern The pattern to search for in the GiftCertificate entities' name or description.
      * @return A list of GiftCertificate entities that contain the specified pattern in their name or description.
      */
-    List<T> getByPartOfNameDescription(String pattern);
+    List<GiftCertificateEntity> getByPartOfNameDescription(String pattern);
 }

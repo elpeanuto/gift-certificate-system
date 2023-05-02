@@ -1,7 +1,7 @@
 package com.epam.esm.repository;
 
 import com.epam.esm.Application;
-import com.epam.esm.model.impl.GiftCertificate;
+import com.epam.esm.model.dto.GiftCertificateDTO;
 import com.epam.esm.repository.api.GiftCertificateRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -22,28 +22,28 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class GiftCertificateRepositoryImplTest {
 
     @Autowired
-    private GiftCertificateRepository<GiftCertificate> repository;
+    private GiftCertificateRepository<GiftCertificateDTO> repository;
 
     @Test
     void testGetAll() {
-        List<GiftCertificate> requestList = new ArrayList<>();
-        requestList.add(new GiftCertificate(1, "Test", "Test Description", 1.0, 1, null, null));
-        requestList.add(new GiftCertificate(2, "Test", "Test Description", 1.0, 1, null, null));
-        requestList.add(new GiftCertificate(3, "Test", "Test Description", 1.0, 1, null, null));
+        List<GiftCertificateDTO> requestList = new ArrayList<>();
+        requestList.add(new GiftCertificateDTO(1, "Test", "Test Description", 1.0, 1, null, null));
+        requestList.add(new GiftCertificateDTO(2, "Test", "Test Description", 1.0, 1, null, null));
+        requestList.add(new GiftCertificateDTO(3, "Test", "Test Description", 1.0, 1, null, null));
 
         requestList.forEach(certificate -> repository.create(certificate));
 
-        List<GiftCertificate> response = repository.getAll();
+        List<GiftCertificateDTO> response = repository.getAll();
 
         assertEquals(response, requestList);
     }
 
     @Test
     void testGetById() {
-        List<GiftCertificate> requestList = new ArrayList<>();
-        requestList.add(new GiftCertificate(1, "Test", "Test Description", 1.0, 1, null, null));
-        requestList.add(new GiftCertificate(2, "Test", "Test Description", 1.0, 1, null, null));
-        requestList.add(new GiftCertificate(3, "Test", "Test Description", 1.0, 1, null, null));
+        List<GiftCertificateDTO> requestList = new ArrayList<>();
+        requestList.add(new GiftCertificateDTO(1, "Test", "Test Description", 1.0, 1, null, null));
+        requestList.add(new GiftCertificateDTO(2, "Test", "Test Description", 1.0, 1, null, null));
+        requestList.add(new GiftCertificateDTO(3, "Test", "Test Description", 1.0, 1, null, null));
 
         requestList.forEach(certificate -> repository.create(certificate));
 
@@ -54,14 +54,14 @@ class GiftCertificateRepositoryImplTest {
 
     @Test
     void testGetByIdList() {
-        List<GiftCertificate> requestList = new ArrayList<>();
-        requestList.add(new GiftCertificate(1, "Test", "Test Description", 1.0, 1, null, null));
-        requestList.add(new GiftCertificate(2, "Test", "Test Description", 1.0, 1, null, null));
-        requestList.add(new GiftCertificate(3, "Test", "Test Description", 1.0, 1, null, null));
+        List<GiftCertificateDTO> requestList = new ArrayList<>();
+        requestList.add(new GiftCertificateDTO(1, "Test", "Test Description", 1.0, 1, null, null));
+        requestList.add(new GiftCertificateDTO(2, "Test", "Test Description", 1.0, 1, null, null));
+        requestList.add(new GiftCertificateDTO(3, "Test", "Test Description", 1.0, 1, null, null));
 
         requestList.forEach(certificate -> repository.create(certificate));
 
-        List<GiftCertificate> response = repository.getByIdList(List.of(1, 3));
+        List<GiftCertificateDTO> response = repository.getByIdList(List.of(1, 3));
 
         assertEquals(response.get(0), requestList.get(0));
         assertEquals(response.get(1), requestList.get(2));
@@ -69,15 +69,15 @@ class GiftCertificateRepositoryImplTest {
 
     @Test
     void testGetByPartOfNameDescription() {
-        List<GiftCertificate> requestList = new ArrayList<>();
-        requestList.add(new GiftCertificate(1, "Test", "Test Description", 1.0, 1, null, null));
-        requestList.add(new GiftCertificate(2, "Rest", "Test Description", 1.0, 1, null, null));
-        requestList.add(new GiftCertificate(3, "Shopping", "Test Description", 1.0, 1, null, null));
+        List<GiftCertificateDTO> requestList = new ArrayList<>();
+        requestList.add(new GiftCertificateDTO(1, "Test", "Test Description", 1.0, 1, null, null));
+        requestList.add(new GiftCertificateDTO(2, "Rest", "Test Description", 1.0, 1, null, null));
+        requestList.add(new GiftCertificateDTO(3, "Shopping", "Test Description", 1.0, 1, null, null));
 
         requestList.forEach(certificate -> repository.create(certificate));
 
-        List<GiftCertificate> response = repository.getByPartOfNameDescription("Sho");
-        List<GiftCertificate> response2 = repository.getByPartOfNameDescription("desc");
+        List<GiftCertificateDTO> response = repository.getByPartOfNameDescription("Sho");
+        List<GiftCertificateDTO> response2 = repository.getByPartOfNameDescription("desc");
 
         assertEquals(response.get(0), requestList.get(2));
         assertEquals(response2, requestList);
@@ -85,14 +85,14 @@ class GiftCertificateRepositoryImplTest {
 
     @Test
     void testUpdate() {
-        List<GiftCertificate> requestList = new ArrayList<>();
-        requestList.add(new GiftCertificate(1, "Test", "Test Description", 1.0, 1, null, null));
-        requestList.add(new GiftCertificate(2, "Rest", "Test Description", 1.0, 1, null, null));
-        requestList.add(new GiftCertificate(3, "Shopping", "Test Description", 1.0, 1, null, null));
+        List<GiftCertificateDTO> requestList = new ArrayList<>();
+        requestList.add(new GiftCertificateDTO(1, "Test", "Test Description", 1.0, 1, null, null));
+        requestList.add(new GiftCertificateDTO(2, "Rest", "Test Description", 1.0, 1, null, null));
+        requestList.add(new GiftCertificateDTO(3, "Shopping", "Test Description", 1.0, 1, null, null));
 
         requestList.forEach(certificate -> repository.create(certificate));
 
-        GiftCertificate response = repository.update(1, requestList.get(2));
+        GiftCertificateDTO response = repository.update(1, requestList.get(2));
 
         assertEquals(response, requestList.get(2));
         assertEquals(response, requestList.get(2));
@@ -100,10 +100,10 @@ class GiftCertificateRepositoryImplTest {
 
     @Test
     void testDelete() {
-        List<GiftCertificate> requestList = new ArrayList<>();
-        requestList.add(new GiftCertificate(1, "Test", "Test Description", 1.0, 1, null, null));
-        requestList.add(new GiftCertificate(2, "Rest", "Test Description", 1.0, 1, null, null));
-        requestList.add(new GiftCertificate(3, "Shopping", "Test Description", 1.0, 1, null, null));
+        List<GiftCertificateDTO> requestList = new ArrayList<>();
+        requestList.add(new GiftCertificateDTO(1, "Test", "Test Description", 1.0, 1, null, null));
+        requestList.add(new GiftCertificateDTO(2, "Rest", "Test Description", 1.0, 1, null, null));
+        requestList.add(new GiftCertificateDTO(3, "Shopping", "Test Description", 1.0, 1, null, null));
 
         requestList.forEach(certificate -> repository.create(certificate));
 
@@ -112,7 +112,7 @@ class GiftCertificateRepositoryImplTest {
         assertEquals(1, repository.delete(3));
         assertEquals(0, repository.delete(4));
 
-        List<GiftCertificate> getAllResponse = repository.getAll();
+        List<GiftCertificateDTO> getAllResponse = repository.getAll();
 
         assertEquals(Collections.emptyList(), getAllResponse);
     }

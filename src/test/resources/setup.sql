@@ -1,5 +1,5 @@
 DROP TABLE IF EXISTS gift_certificate CASCADE ;
-DROP TABLE IF EXISTS tag CASCADE ;
+DROP TABLE IF EXISTS tagDTO CASCADE ;
 DROP TABLE IF EXISTS gift_certificate_tag;
 
 CREATE TABLE gift_certificate
@@ -13,7 +13,7 @@ CREATE TABLE gift_certificate
     last_update_date TIMESTAMP      NOT NULL DEFAULT current_timestamp
 );
 
-CREATE TABLE tag
+CREATE TABLE tagDTO
 (
     id   SERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL UNIQUE
@@ -25,5 +25,5 @@ CREATE TABLE gift_certificate_tag
     tag_id              INTEGER NOT NULL,
     PRIMARY KEY (gift_certificate_id, tag_id),
     FOREIGN KEY (gift_certificate_id) REFERENCES gift_certificate (id) ON DELETE CASCADE,
-    FOREIGN KEY (tag_id) REFERENCES tag (id) ON DELETE CASCADE
+    FOREIGN KEY (tag_id) REFERENCES tagDTO (id) ON DELETE CASCADE
 );

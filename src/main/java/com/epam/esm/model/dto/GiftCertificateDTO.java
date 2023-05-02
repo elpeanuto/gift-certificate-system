@@ -1,6 +1,5 @@
-package com.epam.esm.model.impl;
+package com.epam.esm.model.dto;
 
-import com.epam.esm.model.Entity;
 import com.epam.esm.util.CreateValidationGroup;
 import com.epam.esm.util.UpdateValidationGroup;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -10,16 +9,16 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
-public class GiftCertificate implements Entity, Comparator<GiftCertificate> {
+public class GiftCertificateDTO implements DTO, Comparator<GiftCertificateDTO> {
 
     private static final String DATE_TIME_PATTERN = "yyyy-MM-dd'T'HH:mm:ss.SSS";
 
-    private Integer id;
+    private Long id;
 
     @NotNull(message = "Name is missing", groups = CreateValidationGroup.class)
     @Size(min = 2, max = 30, message = "Name should be between 2 and 30 characters",
@@ -47,13 +46,14 @@ public class GiftCertificate implements Entity, Comparator<GiftCertificate> {
     private LocalDateTime lastUpdateDate;
 
     @Valid
-    private List<Tag> tags = new ArrayList<>();
+    private Set<TagDTO> tagDTOs = new HashSet<>();
 
-    public GiftCertificate() {
+    public GiftCertificateDTO() {
 
     }
 
-    public GiftCertificate(Integer id, String name, String description, Double price, Integer duration, LocalDateTime createDate, LocalDateTime lastUpdateDate) {
+    public GiftCertificateDTO(Long id, String name, String description, Double price, Integer duration,
+                              LocalDateTime createDate, LocalDateTime lastUpdateDate) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -63,11 +63,23 @@ public class GiftCertificate implements Entity, Comparator<GiftCertificate> {
         this.lastUpdateDate = lastUpdateDate;
     }
 
-    public Integer getId() {
+    public GiftCertificateDTO(Long id, String name, String description, Double price, Integer duration,
+                              LocalDateTime createDate, LocalDateTime lastUpdateDate, Set<TagDTO> tagDTOs) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.price = price;
+        this.duration = duration;
+        this.createDate = createDate;
+        this.lastUpdateDate = lastUpdateDate;
+        this.tagDTOs = tagDTOs;
+    }
+
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -119,12 +131,12 @@ public class GiftCertificate implements Entity, Comparator<GiftCertificate> {
         this.lastUpdateDate = lastUpdateDate;
     }
 
-    public List<Tag> getTags() {
-        return tags;
+    public Set<TagDTO> getTags() {
+        return tagDTOs;
     }
 
-    public void setTags(List<Tag> tags) {
-        this.tags = tags;
+    public void setTags(Set<TagDTO> tagDTOs) {
+        this.tagDTOs = tagDTOs;
     }
 
     @Override
@@ -137,12 +149,12 @@ public class GiftCertificate implements Entity, Comparator<GiftCertificate> {
                 ", duration=" + duration +
                 ", createDate=" + createDate +
                 ", lastUpdateDate=" + lastUpdateDate +
-                ", tags=" + tags.toString() +
+                ", tags=" + tagDTOs.toString() +
                 '}';
     }
 
     @Override
-    public int compare(GiftCertificate o1, GiftCertificate o2) {
+    public int compare(GiftCertificateDTO o1, GiftCertificateDTO o2) {
         LocalDateTime date1 = o1.getLastUpdateDate();
         LocalDateTime date2 = o2.getLastUpdateDate();
         return date1.compareTo(date2);
@@ -153,7 +165,7 @@ public class GiftCertificate implements Entity, Comparator<GiftCertificate> {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        GiftCertificate that = (GiftCertificate) o;
+        GiftCertificateDTO that = (GiftCertificateDTO) o;
 
         if (!Objects.equals(name, that.name)) return false;
         if (!Objects.equals(description, that.description)) return false;

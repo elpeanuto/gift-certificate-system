@@ -5,9 +5,13 @@ import org.springframework.http.HttpStatus;
 public enum CustomHttpStatus {
 
     INVALID_REQUEST_BODY(40001, HttpStatus.Series.CLIENT_ERROR, "Invalid request body"),
-    RESOURCE_NOT_FOUND(40201, HttpStatus.Series.CLIENT_ERROR, "Resource not found"),
     NOT_READABLE(40002, HttpStatus.Series.CLIENT_ERROR, "Http message not readable"),
+    ALREADY_EXISTS_ERROR(40003, HttpStatus.Series.CLIENT_ERROR, "Already Exists"),
+
+    RESOURCE_NOT_FOUND(40201, HttpStatus.Series.CLIENT_ERROR, "Resource not found"),
+
     REPOSITORY_ERROR(50001, HttpStatus.Series.SERVER_ERROR, "Repository error");
+
 
     private final int value;
     private final HttpStatus.Series series;

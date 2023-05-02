@@ -1,6 +1,6 @@
 package com.epam.esm.repository.api;
 
-import com.epam.esm.model.impl.Tag;
+import com.epam.esm.model.entity.TagEntity;
 
 import java.util.List;
 
@@ -10,7 +10,7 @@ import java.util.List;
  *
  * @see CRDRepository
  */
-public interface TagRepository<T extends Tag> extends CRDRepository<T> {
+public interface TagRepository extends CRDRepository<TagEntity> {
 
     /**
      * Retrieves a list of Tag entities with the specified IDs from the repository.
@@ -18,7 +18,7 @@ public interface TagRepository<T extends Tag> extends CRDRepository<T> {
      * @param idList A list of IDs of the Tag entities to retrieve.
      * @return A list of Tag entities with the specified IDs.
      */
-    List<T> getByIdList(List<Integer> idList);
+    List<TagEntity> getByIdList(List<Long> idList);
 
     /**
      * Retrieves a Tag entity with the specified name from the repository.
@@ -26,5 +26,5 @@ public interface TagRepository<T extends Tag> extends CRDRepository<T> {
      * @param name The name of the Tag entity to retrieve.
      * @return The Tag entity with the specified name, or null if no entity was found.
      */
-    T getByName(String name);
+    TagEntity getByName(String name);
 }
