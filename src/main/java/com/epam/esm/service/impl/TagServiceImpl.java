@@ -1,5 +1,6 @@
 package com.epam.esm.service.impl;
 
+import com.epam.esm.exception.exceptions.EntityAlreadyExistsException;
 import com.epam.esm.exception.exceptions.RepositoryException;
 import com.epam.esm.exception.exceptions.ResourceNotFoundException;
 import com.epam.esm.model.converter.TagConverter;
@@ -49,7 +50,7 @@ public class TagServiceImpl implements CRDService<TagDTO> {
         TagEntity entity = tagRepo.getById(id);
 
         if(entity == null)
-            throw new ResourceNotFoundException();
+            throw new ResourceNotFoundException(id);
 
         return toDto(entity);
     }
@@ -58,7 +59,7 @@ public class TagServiceImpl implements CRDService<TagDTO> {
     @Transactional
     public TagDTO create(TagDTO tagDTO) {
         if(tagRepo.getByName(tagDTO.getName()) != null)
-            throw new RepositoryException();
+            throw new EntityAlreadyExistsException();
 
       return toDto(tagRepo.create(toEntity(tagDTO)));
     }
@@ -69,7 +70,7 @@ public class TagServiceImpl implements CRDService<TagDTO> {
         TagEntity entity = tagRepo.delete(id);
 
         if(entity == null)
-            throw new ResourceNotFoundException();
+            throw new ResourceNotFoundException(id);
 
         return toDto(entity);
     }

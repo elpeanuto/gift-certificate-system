@@ -1,5 +1,6 @@
 package com.epam.esm.exception.handler;
 
+import com.epam.esm.exception.exceptions.EntityAlreadyExistsException;
 import com.epam.esm.exception.exceptions.InvalidRequestBodyException;
 import com.epam.esm.exception.exceptions.RepositoryException;
 import com.epam.esm.exception.exceptions.ResourceNotFoundException;
@@ -32,6 +33,16 @@ public class RestExceptionHandler {
                 Integer.toString(status.getValue()));
 
         return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(EntityAlreadyExistsException.class)
+    public ResponseEntity<ErrorResponse> handleMyCustomException(EntityAlreadyExistsException e) {
+        CustomHttpStatus status = CustomHttpStatus.RESOURCE_NOT_FOUND;
+
+        ErrorResponse errorResponse = new ErrorResponse(e.getMessage(),
+                Integer.toString(status.getValue()));
+
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
