@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
-@Entity(name = "GiftCertificate")
+@Entity
 @Table(name = "gift_certificate")
 public class GiftCertificateEntity {
 
@@ -66,9 +66,11 @@ public class GiftCertificateEntity {
     )
     private LocalDateTime lastUpdateDate;
 
-    @ManyToMany(
-            mappedBy = "certificates",
-            cascade = CascadeType.ALL
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable(
+            name = "gift_certificate_tag",
+            joinColumns = @JoinColumn(name = "gift_certificate_id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id")
     )
     private Set<TagEntity> tags = new HashSet<>();
 

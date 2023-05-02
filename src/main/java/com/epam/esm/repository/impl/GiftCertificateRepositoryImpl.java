@@ -1,6 +1,8 @@
 package com.epam.esm.repository.impl;
 
+import com.epam.esm.exception.exceptions.ResourceNotFoundException;
 import com.epam.esm.model.entity.GiftCertificateEntity;
+import com.epam.esm.model.entity.TagEntity;
 import com.epam.esm.repository.api.GiftCertificateRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -22,31 +24,39 @@ public class GiftCertificateRepositoryImpl implements GiftCertificateRepository 
 
     @Override
     public List<GiftCertificateEntity> getAll() {
-        manager.getTransaction().begin();
-
-       // manager.
-
-        return null;
+        return manager.createQuery("SELECT с FROM GiftCertificateEntity с", GiftCertificateEntity.class).getResultList();
     }
 
     @Override
     public GiftCertificateEntity getById(long id) {
-        return null;
+        GiftCertificateEntity entity = manager.find(GiftCertificateEntity.class, id);
+
+        if(entity == null)
+            throw new ResourceNotFoundException(id);
+
+        return entity;
     }
 
     @Override
-    public GiftCertificateEntity create(GiftCertificateEntity giftCertificateEntity) {
-        return null;
+    public GiftCertificateEntity create(GiftCertificateEntity certificate) {
+        manager.persist(certificate);
+        return certificate;
     }
 
     @Override
     public GiftCertificateEntity delete(long id) {
-        return null;
+        GiftCertificateEntity entity = manager.find(GiftCertificateEntity.class, id);
+
+        if (entity != null) {
+            manager.remove(entity);
+        }
+
+        return entity;
     }
 
     @Override
-    public GiftCertificateEntity update(long id, GiftCertificateEntity giftCertificateEntity) {
-        return null;
+    public GiftCertificateEntity update(long id, GiftCertificateEntity certificate) {
+        return manager.merge(certificate);
     }
 
     @Override

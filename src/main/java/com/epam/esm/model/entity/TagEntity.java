@@ -36,7 +36,7 @@ public class TagEntity {
     )
     private String name;
 
-    @ManyToMany
+    @ManyToMany(mappedBy = "tags")
     private Set<GiftCertificateEntity> certificates = new HashSet<>();
 
     public TagEntity() {
