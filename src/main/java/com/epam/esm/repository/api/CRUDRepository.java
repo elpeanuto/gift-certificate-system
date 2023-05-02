@@ -16,5 +16,5 @@ public interface CRUDRepository<T> extends CRDRepository<T> {
      * @param t  The updated entity to replace the old entity with.
      * @return The updated entity of type T.
      */
-    T update(long id, T t);
+    T update(T t);
 }

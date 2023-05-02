@@ -55,7 +55,7 @@ public class GiftCertificateRepositoryImpl implements GiftCertificateRepository 
     }
 
     @Override
-    public GiftCertificateEntity update(long id, GiftCertificateEntity certificate) {
+    public GiftCertificateEntity update(GiftCertificateEntity certificate) {
         return manager.merge(certificate);
     }
 

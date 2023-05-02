@@ -64,20 +64,8 @@ public class GiftCertificateServiceImpl implements GiftCertificateService<GiftCe
         giftCertificateDTO.setCreateDate(now);
         giftCertificateDTO.setLastUpdateDate(now);
 
-        Set<TagEntity> tagEntities = new HashSet<>();
-
-        for (TagDTO tagDTO : giftCertificateDTO.getTags()) {
-            TagEntity tagEntity = tagRepo.getByName(tagDTO.getName());
-
-            if (tagEntity == null) {
-                tagEntity = tagRepo.create(TagConverter.toEntity(tagDTO));
-            }
-
-            tagEntities.add(tagEntity);
-        }
-
         GiftCertificateEntity certificate = toEntity(giftCertificateDTO);
-        certificate.setTags(tagEntities);
+        certificate.setTags(createMissingTags(giftCertificateDTO.getTags()));
 
         return toDto(certificateRepo.create(certificate));
     }
@@ -98,48 +86,43 @@ public class GiftCertificateServiceImpl implements GiftCertificateService<GiftCe
     public GiftCertificateDTO update(long id, GiftCertificateDTO giftCertificateDTO) {
         GiftCertificateEntity entity = certificateRepo.getById(id);
 
-        giftCertificateDTO.setId(entity.getId());
-        giftCertificateDTO.setCreateDate(entity.getCreateDate());
-        giftCertificateDTO.setLastUpdateDate(LocalDateTime.now());
+        entity.setLastUpdateDate(LocalDateTime.now());
 
-        if (giftCertificateDTO.getName() == null) {
-            giftCertificateDTO.setName(entity.getName());
+        if (giftCertificateDTO.getName() != null) {
+            entity.setName(giftCertificateDTO.getName());
         }
-        if (giftCertificateDTO.getDuration() == null) {
-            giftCertificateDTO.setDuration(entity.getDuration());
+        if (giftCertificateDTO.getDuration() != null) {
+            entity.setDuration(giftCertificateDTO.getDuration());
         }
-        if (giftCertificateDTO.getDescription() == null) {
-            giftCertificateDTO.setDescription(entity.getDescription());
+        if (giftCertificateDTO.getDescription() != null) {
+            entity.setDescription(giftCertificateDTO.getDescription());
         }
-        if (giftCertificateDTO.getPrice() == null) {
-            giftCertificateDTO.setPrice(entity.getPrice());
+        if (giftCertificateDTO.getPrice() != null) {
+            entity.setPrice(giftCertificateDTO.getPrice());
         }
-        if(giftCertificateDTO.getTags() == null) {
-            giftCertificateDTO.setTags(entity.getTags().stream()
-                    .map(TagConverter::toDto)
-                    .collect(Collectors.toSet()));
-        } else {
-            Set<TagEntity> tagEntities = new HashSet<>();
-
-            for (TagDTO tagDTO : giftCertificateDTO.getTags()) {
-                TagEntity tagEntity = tagRepo.getByName(tagDTO.getName());
-
-                if (tagEntity == null) {
-                    tagEntity = tagRepo.create(TagConverter.toEntity(tagDTO));
-                }
-
-                tagEntities.add(tagEntity);
-            }
-
-            giftCertificateDTO.setTags(tagEntities.stream().map(TagConverter::toDto).collect(Collectors.toSet()));
+        if (giftCertificateDTO.getTags() != null) {
+            entity.setTags(createMissingTags(giftCertificateDTO.getTags()));
         }
 
-        return toDto(certificateRepo.update(id, toEntity(giftCertificateDTO)));
+        return toDto(certificateRepo.update(entity));
     }
 
     @Override
     @Transactional
     public List<GiftCertificateDTO> getByParams(String name, String part, String sort) {
         return null;
+    }
+
+    private Set<TagEntity> createMissingTags(Set<TagDTO> set) {
+        return set.stream()
+                .map(tag -> {
+                    TagEntity entity = tagRepo.getByName(tag.getName());
+
+                    if (entity == null)
+                        entity = tagRepo.create(TagConverter.toEntity(tag));
+
+                    return entity;
+                })
+                .collect(Collectors.toSet());
     }
 }
