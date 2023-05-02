@@ -67,6 +67,7 @@ public class GiftCertificateEntity {
     private LocalDateTime lastUpdateDate;
 
     @ManyToMany(
+            mappedBy = "certificates",
             cascade = CascadeType.ALL
     )
     private Set<TagEntity> tags = new HashSet<>();

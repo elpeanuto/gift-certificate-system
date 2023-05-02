@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
-@Entity(name = "Tag")
+@Entity
 @Table(
         name = "tag",
         uniqueConstraints = {

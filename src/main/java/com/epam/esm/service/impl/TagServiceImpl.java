@@ -1,19 +1,19 @@
 package com.epam.esm.service.impl;
 
+import com.epam.esm.exception.exceptions.RepositoryException;
 import com.epam.esm.exception.exceptions.ResourceNotFoundException;
 import com.epam.esm.model.converter.TagConverter;
 import com.epam.esm.model.dto.TagDTO;
 import com.epam.esm.model.entity.TagEntity;
 import com.epam.esm.repository.api.TagRepository;
 import com.epam.esm.service.api.CRDService;
+import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 import static com.epam.esm.model.converter.TagConverter.toDto;
 import static com.epam.esm.model.converter.TagConverter.toEntity;
@@ -36,39 +36,41 @@ public class TagServiceImpl implements CRDService<TagDTO> {
     }
 
     @Override
+    @Transactional
     public List<TagDTO> getAll() {
-        return tagRepo.findAll().stream()
+        return tagRepo.getAll().stream()
                 .map(TagConverter::toDto)
                 .toList();
     }
 
     @Override
-    public TagDTO getById(long id) {
-        Optional<TagEntity> result = tagRepo.findById(id);
-
-        if(result.isEmpty()){
-            throw new ResourceNotFoundException();
-        }
-
-        return toDto(result.get());
-    }
-
-    @Override
-    public TagDTO create(TagDTO dto) {
-        return toDto(tagRepo.save(toEntity(dto)));
-    }
-
     @Transactional
-    @Override
-    public TagDTO delete(long id) {
-        Optional<TagEntity> result = tagRepo.findById(id);
+    public TagDTO getById(long id) {
+        TagEntity entity = tagRepo.getById(id);
 
-        if(result.isEmpty()){
+        if(entity == null)
             throw new ResourceNotFoundException();
-        }
 
-        tagRepo.deleteById(id);
+        return toDto(entity);
+    }
 
-        return toDto(result.get());
+    @Override
+    @Transactional
+    public TagDTO create(TagDTO tagDTO) {
+        if(tagRepo.getByName(tagDTO.getName()) != null)
+            throw new RepositoryException();
+
+      return toDto(tagRepo.create(toEntity(tagDTO)));
+    }
+
+    @Override
+    @Transactional
+    public TagDTO delete(long id) {
+        TagEntity entity = tagRepo.delete(id);
+
+        if(entity == null)
+            throw new ResourceNotFoundException();
+
+        return toDto(entity);
     }
 }
