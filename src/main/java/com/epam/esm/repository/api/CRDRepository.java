@@ -1,6 +1,7 @@
 package com.epam.esm.repository.api;
 
 import com.epam.esm.model.entity.TagEntity;
+import com.epam.esm.model.filtering.Pagination;
 
 import java.util.List;
 
@@ -16,7 +17,7 @@ public interface CRDRepository<T> {
      *
      * @return A list of all entities of type T.
      */
-    List<T> getAll();
+    List<T> getAll(Pagination pagination);
 
     /**
      * Retrieves an entity of type T with the specified ID from the repository.

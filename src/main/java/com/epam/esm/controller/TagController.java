@@ -1,6 +1,7 @@
 package com.epam.esm.controller;
 
 import com.epam.esm.exception.exceptions.InvalidRequestBodyException;
+import com.epam.esm.model.filtering.Pagination;
 import com.epam.esm.model.dto.TagDTO;
 import com.epam.esm.service.api.CRDService;
 import com.epam.esm.service.impl.TagServiceImpl;
@@ -9,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
@@ -42,8 +44,14 @@ public class TagController {
      * @return a list of all Tag objects
      */
     @GetMapping()
-    public List<TagDTO> getAll() {
-        return service.getAll();
+    public ResponseEntity<List<TagDTO>> getAll(
+            @RequestParam(value = "page", defaultValue = "0", required = false) Integer page,
+            @RequestParam(value = "limit", defaultValue = "5", required = false) Integer limit
+    ) {
+
+        Pagination pagination = new Pagination(page, limit);
+
+        return ResponseEntity.ok(service.getAll(pagination));
     }
 
     /**
@@ -53,8 +61,8 @@ public class TagController {
      * @return the Tag object with the specified id
      */
     @GetMapping("/{id}")
-    public TagDTO getById(@PathVariable("id") int id) {
-        return service.getById(id);
+    public ResponseEntity<TagDTO> getById(@PathVariable("id") int id) {
+        return ResponseEntity.ok(service.getById(id));
     }
 
     /**
@@ -66,8 +74,7 @@ public class TagController {
      * @throws InvalidRequestBodyException if there are errors in the request body
      */
     @PostMapping()
-    @ResponseStatus(HttpStatus.CREATED)
-    public TagDTO create(@RequestBody @Valid TagDTO tagDTO, BindingResult bindingResult) {
+    public ResponseEntity<TagDTO> create(@RequestBody @Valid TagDTO tagDTO, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             List<String> errorMessages = new ArrayList<>();
             for (ObjectError error : bindingResult.getAllErrors()) {
@@ -79,7 +86,7 @@ public class TagController {
             throw new InvalidRequestBodyException(str);
         }
 
-        return service.create(tagDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(service.create(tagDTO));
     }
 
     /**
@@ -89,7 +96,7 @@ public class TagController {
      * @return the deleted Tag object
      */
     @DeleteMapping("/{id}")
-    public TagDTO delete(@PathVariable("id") int id) {
-        return service.delete(id);
+    public ResponseEntity<TagDTO> delete(@PathVariable("id") int id) {
+        return ResponseEntity.ok(service.delete(id));
     }
 }

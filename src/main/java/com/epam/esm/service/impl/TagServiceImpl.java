@@ -1,9 +1,9 @@
 package com.epam.esm.service.impl;
 
 import com.epam.esm.exception.exceptions.EntityAlreadyExistsException;
-import com.epam.esm.exception.exceptions.RepositoryException;
 import com.epam.esm.exception.exceptions.ResourceNotFoundException;
 import com.epam.esm.model.converter.TagConverter;
+import com.epam.esm.model.filtering.Pagination;
 import com.epam.esm.model.dto.TagDTO;
 import com.epam.esm.model.entity.TagEntity;
 import com.epam.esm.repository.api.TagRepository;
@@ -38,8 +38,10 @@ public class TagServiceImpl implements CRDService<TagDTO> {
 
     @Override
     @Transactional
-    public List<TagDTO> getAll() {
-        return tagRepo.getAll().stream()
+    public List<TagDTO> getAll(Pagination pagination) {
+
+
+        return tagRepo.getAll(pagination).stream()
                 .map(TagConverter::toDto)
                 .toList();
     }

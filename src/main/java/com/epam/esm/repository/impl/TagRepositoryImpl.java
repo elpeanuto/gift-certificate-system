@@ -1,6 +1,7 @@
 package com.epam.esm.repository.impl;
 
 import com.epam.esm.model.entity.TagEntity;
+import com.epam.esm.model.filtering.Pagination;
 import com.epam.esm.repository.api.TagRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -27,8 +28,19 @@ public class TagRepositoryImpl implements TagRepository {
     private EntityManager manager;
 
     @Override
-    public List<TagEntity> getAll() {
-        return manager.createQuery("SELECT t FROM TagEntity t", TagEntity.class).getResultList();
+    public List<TagEntity> getAll(Pagination pagination) {
+        CriteriaBuilder cb = manager.getCriteriaBuilder();
+        CriteriaQuery<TagEntity> query = cb.createQuery(TagEntity.class);
+        Root<TagEntity> root = query.from(TagEntity.class);
+
+        query.select(root);
+
+        TypedQuery<TagEntity> typedQuery = manager.createQuery(query);
+
+        typedQuery.setFirstResult(pagination.page() * pagination.limit());
+        typedQuery.setMaxResults(pagination.limit());
+
+        return typedQuery.getResultList();
     }
 
     @Override
