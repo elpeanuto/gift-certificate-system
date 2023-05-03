@@ -1,5 +1,7 @@
 package com.epam.esm.repository.api;
 
+import com.epam.esm.model.filter.Pagination;
+
 /**
  * The CRUDRepository interface extends the CRDRepository interface, which provides CRUD (Create, Read, Update, Delete) operations for a specific entity type T.
  * For more information on the CRDRepository interface, see its Javadoc documentation.
@@ -7,7 +9,7 @@ package com.epam.esm.repository.api;
  * @param <T> The entity type that this repository operates on.
  * @see CRDRepository
  */
-public interface CRUDRepository<T> extends CRDRepository<T> {
+public interface CRUDRepository<T, F extends Pagination> extends CRDRepository<T, F> {
 
     /**
      * Updates an existing entity of type T with the specified ID in the repository.

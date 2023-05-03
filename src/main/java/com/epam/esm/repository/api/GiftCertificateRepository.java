@@ -1,6 +1,7 @@
 package com.epam.esm.repository.api;
 
 import com.epam.esm.model.entity.GiftCertificateEntity;
+import com.epam.esm.model.filter.GiftCertificateFilter;
 
 import java.util.List;
 
@@ -14,7 +15,7 @@ import java.util.List;
  * @see CRUDRepository
  * @see CRDRepository
  */
-public interface GiftCertificateRepository extends CRUDRepository<GiftCertificateEntity> {
+public interface GiftCertificateRepository extends CRUDRepository<GiftCertificateEntity, GiftCertificateFilter> {
 
     /**
      * Retrieves a list of GiftCertificate entities with the specified IDs from the repository.

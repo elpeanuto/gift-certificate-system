@@ -2,8 +2,7 @@ package com.epam.esm.repository.impl;
 
 import com.epam.esm.exception.exceptions.ResourceNotFoundException;
 import com.epam.esm.model.entity.GiftCertificateEntity;
-import com.epam.esm.model.entity.TagEntity;
-import com.epam.esm.model.filtering.Pagination;
+import com.epam.esm.model.filter.GiftCertificateFilter;
 import com.epam.esm.repository.api.GiftCertificateRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -28,7 +27,7 @@ public class GiftCertificateRepositoryImpl implements GiftCertificateRepository 
     private EntityManager manager;
 
     @Override
-    public List<GiftCertificateEntity> getAll(Pagination pagination) {
+    public List<GiftCertificateEntity> getAll(GiftCertificateFilter pagination) {
         CriteriaBuilder cb = manager.getCriteriaBuilder();
         CriteriaQuery<GiftCertificateEntity> query = cb.createQuery(GiftCertificateEntity.class);
         Root<GiftCertificateEntity> root = query.from(GiftCertificateEntity.class);
@@ -37,8 +36,8 @@ public class GiftCertificateRepositoryImpl implements GiftCertificateRepository 
 
         TypedQuery<GiftCertificateEntity> typedQuery = manager.createQuery(query);
 
-        typedQuery.setFirstResult(pagination.page() * pagination.limit());
-        typedQuery.setMaxResults(pagination.limit());
+        typedQuery.setFirstResult(pagination.getPage() * pagination.getLimit());
+        typedQuery.setMaxResults(pagination.getLimit());
 
         return typedQuery.getResultList();
     }

@@ -1,8 +1,8 @@
 package com.epam.esm.controller;
 
 import com.epam.esm.exception.exceptions.InvalidRequestBodyException;
-import com.epam.esm.model.filtering.Pagination;
 import com.epam.esm.model.dto.TagDTO;
+import com.epam.esm.model.filter.TagFilter;
 import com.epam.esm.service.api.CRDService;
 import com.epam.esm.service.impl.TagServiceImpl;
 import jakarta.validation.Valid;
@@ -25,7 +25,7 @@ import java.util.List;
 @RequestMapping("/tags")
 public class TagController {
 
-    private final CRDService<TagDTO> service;
+    private final CRDService<TagDTO, TagFilter> service;
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     /**
@@ -45,13 +45,9 @@ public class TagController {
      */
     @GetMapping()
     public ResponseEntity<List<TagDTO>> getAll(
-            @RequestParam(value = "page", defaultValue = "0", required = false) Integer page,
-            @RequestParam(value = "limit", defaultValue = "5", required = false) Integer limit
+            @ModelAttribute() TagFilter tagFilter
     ) {
-
-        Pagination pagination = new Pagination(page, limit);
-
-        return ResponseEntity.ok(service.getAll(pagination));
+        return ResponseEntity.ok(service.getAll(tagFilter));
     }
 
     /**

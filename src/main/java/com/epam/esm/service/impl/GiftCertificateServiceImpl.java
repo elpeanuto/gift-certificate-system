@@ -4,10 +4,10 @@ import com.epam.esm.exception.exceptions.ResourceNotFoundException;
 import com.epam.esm.model.converter.GiftCertificateConverter;
 import com.epam.esm.model.converter.TagConverter;
 import com.epam.esm.model.dto.GiftCertificateDTO;
-import com.epam.esm.model.filtering.Pagination;
 import com.epam.esm.model.dto.TagDTO;
 import com.epam.esm.model.entity.GiftCertificateEntity;
 import com.epam.esm.model.entity.TagEntity;
+import com.epam.esm.model.filter.GiftCertificateFilter;
 import com.epam.esm.repository.api.GiftCertificateRepository;
 import com.epam.esm.repository.api.TagRepository;
 import com.epam.esm.service.api.GiftCertificateService;
@@ -16,7 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static com.epam.esm.model.converter.GiftCertificateConverter.toDto;
@@ -30,7 +31,7 @@ import static com.epam.esm.model.converter.GiftCertificateConverter.toEntity;
  * @see GiftCertificateService
  */
 @Service
-public class GiftCertificateServiceImpl implements GiftCertificateService<GiftCertificateDTO> {
+public class GiftCertificateServiceImpl implements GiftCertificateService {
 
     private GiftCertificateRepository certificateRepo;
     private TagRepository tagRepo;
@@ -43,7 +44,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService<GiftCe
 
     @Override
     @Transactional
-    public List<GiftCertificateDTO> getAll(Pagination pagination) {
+    public List<GiftCertificateDTO> getAll(GiftCertificateFilter pagination) {
         return certificateRepo.getAll(pagination).stream()
                 .map(GiftCertificateConverter::toDto)
                 .toList();

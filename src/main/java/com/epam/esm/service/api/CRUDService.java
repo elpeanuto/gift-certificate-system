@@ -1,6 +1,6 @@
 package com.epam.esm.service.api;
 
-import com.epam.esm.model.dto.DTO;
+import com.epam.esm.model.filter.Pagination;
 
 /**
  * This interface defines basic CRUD (Create, Read, Update, Delete) operations for an entity T.
@@ -9,7 +9,7 @@ import com.epam.esm.model.dto.DTO;
  * @param <T> The type of entity to perform CRUD operations on.
  * @see CRDService
  */
-public interface CRUDService<T extends DTO> extends CRDService<T> {
+public interface CRUDService<T, F extends Pagination> extends CRDService<T, F> {
 
     /**
      * Updates an existing entity with the provided id with the provided entity instance.

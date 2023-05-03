@@ -1,7 +1,6 @@
 package com.epam.esm.service.api;
 
-import com.epam.esm.model.dto.DTO;
-import com.epam.esm.model.filtering.Pagination;
+import com.epam.esm.model.filter.Pagination;
 
 import java.util.List;
 
@@ -10,14 +9,14 @@ import java.util.List;
  *
  * @param <T> the type of entity that this service operates on.
  */
-public interface CRDService<T extends DTO> {
+public interface CRDService<T, F extends Pagination> {
 
     /**
      * Retrieves all entities of type T from the repository.
      *
      * @return a list containing all entities of type T.
      */
-    List<T> getAll(Pagination pagination);
+    List<T> getAll(F pagination);
 
     /**
      * Retrieves an entity of type T with the specified ID from the repository.

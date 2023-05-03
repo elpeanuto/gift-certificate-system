@@ -1,17 +1,15 @@
 package com.epam.esm.repository.impl;
 
 import com.epam.esm.model.entity.TagEntity;
-import com.epam.esm.model.filtering.Pagination;
+import com.epam.esm.model.filter.GiftCertificateFilter;
+import com.epam.esm.model.filter.TagFilter;
 import com.epam.esm.repository.api.TagRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import jakarta.persistence.Query;
 import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.criteria.CriteriaDelete;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
-import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -28,7 +26,7 @@ public class TagRepositoryImpl implements TagRepository {
     private EntityManager manager;
 
     @Override
-    public List<TagEntity> getAll(Pagination pagination) {
+    public List<TagEntity> getAll(TagFilter filter) {
         CriteriaBuilder cb = manager.getCriteriaBuilder();
         CriteriaQuery<TagEntity> query = cb.createQuery(TagEntity.class);
         Root<TagEntity> root = query.from(TagEntity.class);
@@ -37,8 +35,8 @@ public class TagRepositoryImpl implements TagRepository {
 
         TypedQuery<TagEntity> typedQuery = manager.createQuery(query);
 
-        typedQuery.setFirstResult(pagination.page() * pagination.limit());
-        typedQuery.setMaxResults(pagination.limit());
+        typedQuery.setFirstResult(filter.getPage() * filter.getLimit());
+        typedQuery.setMaxResults(filter.getPage());
 
         return typedQuery.getResultList();
     }

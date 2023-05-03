@@ -3,7 +3,7 @@ package com.epam.esm.controller;
 import com.epam.esm.exception.exceptions.InvalidRequestBodyException;
 import com.epam.esm.model.dto.GiftCertificateDTO;
 import com.epam.esm.model.dto.TagDTO;
-import com.epam.esm.model.filtering.Pagination;
+import com.epam.esm.model.filter.GiftCertificateFilter;
 import com.epam.esm.service.api.GiftCertificateService;
 import com.epam.esm.util.CreateValidationGroup;
 import com.epam.esm.util.UpdateValidationGroup;
@@ -31,7 +31,7 @@ import java.util.Set;
 public class GiftCertificateController {
 
     private final Validator validator;
-    private final GiftCertificateService<GiftCertificateDTO> service;
+    private final GiftCertificateService service;
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     /**
@@ -41,7 +41,7 @@ public class GiftCertificateController {
      * @param service   a GiftCertificateService object used to interact with gift certificate data in the database
      */
     @Autowired
-    public GiftCertificateController(Validator validator, GiftCertificateService<GiftCertificateDTO> service) {
+    public GiftCertificateController(Validator validator, GiftCertificateService service) {
         this.validator = validator;
         this.service = service;
     }
@@ -49,12 +49,11 @@ public class GiftCertificateController {
     //todo filtering from module 2
     @GetMapping()
     public ResponseEntity<List<GiftCertificateDTO>> getAll(
-            @RequestParam(value = "page", defaultValue = "0", required = false) Integer page,
-            @RequestParam(value = "limit", defaultValue = "5", required = false) Integer limit
+            @ModelAttribute GiftCertificateFilter giftCertificateFilter
     ) {
-        Pagination pagination = new Pagination(page, limit);
+        System.out.println(giftCertificateFilter);
 
-        return ResponseEntity.ok(service.getAll(pagination));
+        return ResponseEntity.ok(service.getAll(giftCertificateFilter));
     }
 
     /**
