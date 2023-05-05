@@ -7,6 +7,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import org.springframework.hateoas.RepresentationModel;
 
 import java.time.LocalDateTime;
 import java.util.Comparator;
@@ -14,7 +15,8 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
-public class GiftCertificateDTO implements DTO, Comparator<GiftCertificateDTO> {
+public class GiftCertificateDTO extends RepresentationModel<GiftCertificateDTO>
+        implements DTO, Comparator<GiftCertificateDTO>{
 
     private static final String DATE_TIME_PATTERN = "yyyy-MM-dd'T'HH:mm:ss.SSS";
 

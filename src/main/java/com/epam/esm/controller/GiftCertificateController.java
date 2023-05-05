@@ -11,6 +11,7 @@ import com.epam.esm.util.UpdateValidationGroup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BeanPropertyBindingResult;
@@ -23,6 +24,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import static com.epam.esm.model.hateoas.GiftCertificateLinker.bindLinks;
 
 /**
  * A RestController class that handles API requests related to gift certificates.
@@ -48,17 +51,21 @@ public class GiftCertificateController {
     }
 
     @GetMapping()
-    public ResponseEntity<List<GiftCertificateDTO>> getAll(
+    public ResponseEntity<CollectionModel<GiftCertificateDTO>> getAll(
             @ModelAttribute Pagination pagination
     ) {
-        return ResponseEntity.ok(service.getAll(pagination));
+        List<GiftCertificateDTO> list = service.getAll(pagination);
+
+        return ResponseEntity.ok(bindLinks(list));
     }
 
     @GetMapping("/search")
-    public ResponseEntity<List<GiftCertificateDTO>> search(
+    public ResponseEntity<CollectionModel<GiftCertificateDTO>>  search(
             @ModelAttribute GiftCertificateFilter giftCertificateFilter
     ) {
-        return ResponseEntity.ok(service.doSearch(giftCertificateFilter));
+        List<GiftCertificateDTO> certificate = service.doSearch(giftCertificateFilter);
+
+        return ResponseEntity.ok(bindLinks(certificate));
     }
 
     /**
@@ -68,8 +75,12 @@ public class GiftCertificateController {
      * @return a GiftCertificate object that matches the given ID
      */
     @GetMapping("/{id}")
-    public ResponseEntity<GiftCertificateDTO> getById(@PathVariable("id") int id) {
-        return ResponseEntity.ok(service.getById(id));
+    public ResponseEntity<GiftCertificateDTO> getById(@PathVariable("id") long id) {
+        GiftCertificateDTO certificate = service.getById(id);
+
+        bindLinks(certificate);
+
+        return ResponseEntity.ok(certificate);
     }
 
     /**
@@ -98,7 +109,7 @@ public class GiftCertificateController {
      * @throws InvalidRequestBodyException if the provided data is not valid
      */
     @PatchMapping("/{id}")
-    public ResponseEntity<GiftCertificateDTO> update(@PathVariable("id") int id,
+    public ResponseEntity<GiftCertificateDTO> update(@PathVariable("id") long id,
                                                      @RequestBody @Validated(UpdateValidationGroup.class) GiftCertificateDTO certificate,
                                                      BindingResult bindingResult) {
         validateGiftCertificate(certificate, bindingResult);
@@ -113,7 +124,7 @@ public class GiftCertificateController {
      * @return a GiftCertificate object that represents the deleted gift certificate
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<GiftCertificateDTO> delete(@PathVariable("id") int id) {
+    public ResponseEntity<GiftCertificateDTO> delete(@PathVariable("id") long id) {
         return ResponseEntity.ok(service.delete(id));
     }
 

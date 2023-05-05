@@ -10,6 +10,7 @@ import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -18,6 +19,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.epam.esm.model.hateoas.TagLinker.bindLinks;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 /**
  * A RestController class that handles API requests related to tags.
@@ -45,10 +50,17 @@ public class TagController {
      * @return a list of all Tag objects
      */
     @GetMapping()
-    public ResponseEntity<List<TagDTO>> getAll(
+    public ResponseEntity<CollectionModel<TagDTO>> getAll(
             @ModelAttribute() TagFilter tagFilter
     ) {
-        return ResponseEntity.ok(service.getAll(tagFilter));
+        List<TagDTO> tags = service.getAll(tagFilter);
+
+        bindLinks(tags);
+
+        CollectionModel<TagDTO> collectionModel = CollectionModel.of(tags,
+                linkTo(methodOn(TagController.class).getAll(null)).withSelfRel());
+
+        return ResponseEntity.ok(collectionModel);
     }
 
     /**
@@ -58,14 +70,18 @@ public class TagController {
      * @return the Tag object with the specified id
      */
     @GetMapping("/{id}")
-    public ResponseEntity<TagDTO> getById(@PathVariable("id") int id) {
-        return ResponseEntity.ok(service.getById(id));
+    public ResponseEntity<TagDTO> getById(@PathVariable("id") long id) {
+        TagDTO tag = service.getById(id);
+
+        bindLinks(tag);
+
+        return ResponseEntity.ok(tag);
     }
 
     /**
      * Creates a new Tag object.
      *
-     * @param tagDTO           the Tag object to create
+     * @param tagDTO        the Tag object to create
      * @param bindingResult the BindingResult object used to check for errors in the request body
      * @return the created Tag object
      * @throws InvalidRequestBodyException if there are errors in the request body
@@ -93,7 +109,7 @@ public class TagController {
      * @return the deleted Tag object
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<TagDTO> delete(@PathVariable("id") int id) {
+    public ResponseEntity<TagDTO> delete(@PathVariable("id") long id) {
         return ResponseEntity.ok(service.delete(id));
     }
 }

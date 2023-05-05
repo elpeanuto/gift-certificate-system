@@ -2,10 +2,11 @@ package com.epam.esm.model.dto;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import org.springframework.hateoas.RepresentationModel;
 
 import java.util.Objects;
 
-public class TagDTO implements DTO {
+public class TagDTO extends RepresentationModel<TagDTO> implements DTO {
 
     private Long id;
 

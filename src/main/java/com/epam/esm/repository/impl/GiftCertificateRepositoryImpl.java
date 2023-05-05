@@ -1,10 +1,10 @@
 package com.epam.esm.repository.impl;
 
 import com.epam.esm.exception.exceptions.ResourceNotFoundException;
+import com.epam.esm.model.dto.filter.GiftCertificateFilter;
 import com.epam.esm.model.dto.filter.Pagination;
 import com.epam.esm.model.entity.GiftCertificateEntity;
 import com.epam.esm.model.entity.TagEntity;
-import com.epam.esm.model.dto.filter.GiftCertificateFilter;
 import com.epam.esm.repository.api.GiftCertificateRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;

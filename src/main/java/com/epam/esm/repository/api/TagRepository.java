@@ -1,7 +1,7 @@
 package com.epam.esm.repository.api;
 
-import com.epam.esm.model.entity.TagEntity;
 import com.epam.esm.model.dto.filter.Pagination;
+import com.epam.esm.model.entity.TagEntity;
 
 import java.util.List;
 

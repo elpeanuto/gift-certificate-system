@@ -1,7 +1,7 @@
 package com.epam.esm.repository.impl;
 
-import com.epam.esm.model.entity.TagEntity;
 import com.epam.esm.model.dto.filter.Pagination;
+import com.epam.esm.model.entity.TagEntity;
 import com.epam.esm.repository.api.TagRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
