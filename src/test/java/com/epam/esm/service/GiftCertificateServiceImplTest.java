@@ -7,7 +7,7 @@ import com.epam.esm.model.dto.TagDTO;
 import com.epam.esm.repository.api.GiftCertificateRepository;
 import com.epam.esm.repository.api.TagGiftCertificateRepository;
 import com.epam.esm.repository.api.TagRepository;
-import com.epam.esm.service.impl.GiftCertificateServiceImpl;
+import com.epam.esm.service.services.impl.GiftCertificateServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

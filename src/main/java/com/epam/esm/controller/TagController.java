@@ -2,9 +2,10 @@ package com.epam.esm.controller;
 
 import com.epam.esm.exception.exceptions.InvalidRequestBodyException;
 import com.epam.esm.model.dto.TagDTO;
-import com.epam.esm.model.filter.TagFilter;
-import com.epam.esm.service.api.CRDService;
-import com.epam.esm.service.impl.TagServiceImpl;
+import com.epam.esm.model.dto.filter.Pagination;
+import com.epam.esm.model.dto.filter.TagFilter;
+import com.epam.esm.service.services.api.CRDService;
+import com.epam.esm.service.services.impl.TagServiceImpl;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,7 +26,7 @@ import java.util.List;
 @RequestMapping("/tags")
 public class TagController {
 
-    private final CRDService<TagDTO, TagFilter> service;
+    private final CRDService<TagDTO, Pagination> service;
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     /**

@@ -1,8 +1,7 @@
 package com.epam.esm.repository.api;
 
 import com.epam.esm.model.entity.TagEntity;
-import com.epam.esm.model.filter.GiftCertificateFilter;
-import com.epam.esm.model.filter.TagFilter;
+import com.epam.esm.model.dto.filter.Pagination;
 
 import java.util.List;
 
@@ -12,9 +11,7 @@ import java.util.List;
  *
  * @see CRDRepository
  */
-public interface TagRepository extends CRDRepository<TagEntity, TagFilter> {
-
-    List<TagEntity> getAll(TagFilter filter);
+public interface TagRepository extends CRDRepository<TagEntity, Pagination> {
 
     /**
      * Retrieves a list of Tag entities with the specified IDs from the repository.

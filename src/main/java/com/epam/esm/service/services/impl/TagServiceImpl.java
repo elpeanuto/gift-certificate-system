@@ -1,13 +1,13 @@
-package com.epam.esm.service.impl;
+package com.epam.esm.service.services.impl;
 
 import com.epam.esm.exception.exceptions.EntityAlreadyExistsException;
 import com.epam.esm.exception.exceptions.ResourceNotFoundException;
 import com.epam.esm.model.converter.TagConverter;
 import com.epam.esm.model.dto.TagDTO;
 import com.epam.esm.model.entity.TagEntity;
-import com.epam.esm.model.filter.TagFilter;
+import com.epam.esm.model.dto.filter.Pagination;
 import com.epam.esm.repository.api.TagRepository;
-import com.epam.esm.service.api.CRDService;
+import com.epam.esm.service.services.api.CRDService;
 import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,7 +26,7 @@ import static com.epam.esm.model.converter.TagConverter.toEntity;
  * @see CRDService
  */
 @Service
-public class TagServiceImpl implements CRDService<TagDTO, TagFilter> {
+public class TagServiceImpl implements CRDService<TagDTO, Pagination> {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
     private final TagRepository tagRepo;
@@ -38,10 +38,8 @@ public class TagServiceImpl implements CRDService<TagDTO, TagFilter> {
 
     @Override
     @Transactional
-    public List<TagDTO> getAll(TagFilter filter) {
-
-
-        return tagRepo.getAll(filter).stream()
+    public List<TagDTO> getAll(Pagination pagination) {
+        return tagRepo.getAll(pagination).stream()
                 .map(TagConverter::toDto)
                 .toList();
     }

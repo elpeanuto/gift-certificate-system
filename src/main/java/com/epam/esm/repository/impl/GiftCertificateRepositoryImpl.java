@@ -1,9 +1,10 @@
 package com.epam.esm.repository.impl;
 
 import com.epam.esm.exception.exceptions.ResourceNotFoundException;
+import com.epam.esm.model.dto.filter.Pagination;
 import com.epam.esm.model.entity.GiftCertificateEntity;
 import com.epam.esm.model.entity.TagEntity;
-import com.epam.esm.model.filter.GiftCertificateFilter;
+import com.epam.esm.model.dto.filter.GiftCertificateFilter;
 import com.epam.esm.repository.api.GiftCertificateRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -12,10 +13,8 @@ import jakarta.persistence.criteria.*;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * Implementation of {@link GiftCertificateRepository} interface that uses JdbcTemplate and NamedParameterJdbcTemplate
@@ -30,7 +29,23 @@ public class GiftCertificateRepositoryImpl implements GiftCertificateRepository 
     private EntityManager manager;
 
     @Override
-    public List<GiftCertificateEntity> getAll(GiftCertificateFilter filter) {
+    public List<GiftCertificateEntity> getAll(Pagination filter) {
+        CriteriaBuilder cb = manager.getCriteriaBuilder();
+        CriteriaQuery<GiftCertificateEntity> query = cb.createQuery(GiftCertificateEntity.class);
+        Root<GiftCertificateEntity> root = query.from(GiftCertificateEntity.class);
+
+        query.select(root);
+
+        TypedQuery<GiftCertificateEntity> typedQuery = manager.createQuery(query);
+
+        typedQuery.setFirstResult(filter.getPage() * filter.getLimit());
+        typedQuery.setMaxResults(filter.getLimit());
+
+        return typedQuery.getResultList();
+    }
+
+    @Override
+    public List<GiftCertificateEntity> doSearch(GiftCertificateFilter filter) {
         CriteriaBuilder cb = manager.getCriteriaBuilder();
         CriteriaQuery<GiftCertificateEntity> query = cb.createQuery(GiftCertificateEntity.class);
         Root<GiftCertificateEntity> root = query.from(GiftCertificateEntity.class);

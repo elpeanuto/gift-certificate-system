@@ -1,4 +1,4 @@
-package com.epam.esm.model.filter;
+package com.epam.esm.model.dto.filter;
 
 public class TagFilter extends Pagination {
 

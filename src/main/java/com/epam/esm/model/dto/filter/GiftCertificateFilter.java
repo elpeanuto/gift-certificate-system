@@ -1,4 +1,4 @@
-package com.epam.esm.model.filter;
+package com.epam.esm.model.dto.filter;
 
 import java.util.Set;
 

@@ -1,4 +1,4 @@
-package com.epam.esm.service.impl;
+package com.epam.esm.service.services.impl;
 
 import com.epam.esm.exception.exceptions.ResourceNotFoundException;
 import com.epam.esm.model.converter.GiftCertificateConverter;
@@ -7,10 +7,11 @@ import com.epam.esm.model.dto.GiftCertificateDTO;
 import com.epam.esm.model.dto.TagDTO;
 import com.epam.esm.model.entity.GiftCertificateEntity;
 import com.epam.esm.model.entity.TagEntity;
-import com.epam.esm.model.filter.GiftCertificateFilter;
+import com.epam.esm.model.dto.filter.GiftCertificateFilter;
+import com.epam.esm.model.dto.filter.Pagination;
 import com.epam.esm.repository.api.GiftCertificateRepository;
 import com.epam.esm.repository.api.TagRepository;
-import com.epam.esm.service.api.GiftCertificateService;
+import com.epam.esm.service.services.api.GiftCertificateService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -44,8 +45,16 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
 
     @Override
     @Transactional
-    public List<GiftCertificateDTO> getAll(GiftCertificateFilter pagination) {
+    public List<GiftCertificateDTO> getAll(Pagination pagination) {
         return certificateRepo.getAll(pagination).stream()
+                .map(GiftCertificateConverter::toDto)
+                .toList();
+    }
+
+    @Override
+    @Transactional
+    public List<GiftCertificateDTO> doSearch(GiftCertificateFilter filter) {
+        return  certificateRepo.doSearch(filter).stream()
                 .map(GiftCertificateConverter::toDto)
                 .toList();
     }
@@ -75,7 +84,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     public GiftCertificateDTO delete(long id) {
         GiftCertificateEntity entity = certificateRepo.delete(id);
 
-        if(entity == null)
+        if (entity == null)
             throw new ResourceNotFoundException(id);
 
         return toDto(entity);

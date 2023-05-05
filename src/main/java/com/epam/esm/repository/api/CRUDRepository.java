@@ -1,6 +1,6 @@
 package com.epam.esm.repository.api;
 
-import com.epam.esm.model.filter.Pagination;
+import com.epam.esm.model.dto.filter.Pagination;
 
 /**
  * The CRUDRepository interface extends the CRDRepository interface, which provides CRUD (Create, Read, Update, Delete) operations for a specific entity type T.

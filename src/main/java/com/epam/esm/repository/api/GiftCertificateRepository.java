@@ -1,7 +1,9 @@
 package com.epam.esm.repository.api;
 
 import com.epam.esm.model.entity.GiftCertificateEntity;
-import com.epam.esm.model.filter.GiftCertificateFilter;
+import com.epam.esm.model.dto.filter.GiftCertificateFilter;
+import com.epam.esm.model.dto.filter.Pagination;
+import com.epam.esm.service.filter.Search;
 
 import java.util.List;
 
@@ -15,7 +17,8 @@ import java.util.List;
  * @see CRUDRepository
  * @see CRDRepository
  */
-public interface GiftCertificateRepository extends CRUDRepository<GiftCertificateEntity, GiftCertificateFilter> {
+public interface GiftCertificateRepository extends CRUDRepository<GiftCertificateEntity, Pagination>,
+        Search<GiftCertificateEntity, GiftCertificateFilter> {
 
     /**
      * Retrieves a list of GiftCertificate entities with the specified IDs from the repository.

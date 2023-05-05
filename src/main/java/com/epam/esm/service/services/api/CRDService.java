@@ -1,6 +1,6 @@
-package com.epam.esm.service.api;
+package com.epam.esm.service.services.api;
 
-import com.epam.esm.model.filter.Pagination;
+import com.epam.esm.model.dto.filter.Pagination;
 
 import java.util.List;
 
