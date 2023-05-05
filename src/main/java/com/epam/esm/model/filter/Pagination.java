@@ -11,33 +11,22 @@ public class Pagination {
 
     public Pagination(Integer page, Integer limit) {
         this.page = page != null ? page : DEFAULT_PAGE;
-        this.limit = limit != null ? limit : DEFAULT_LIMIT;
-
-        if(limit > MAX_LIMIT)
-            this.limit = MAX_LIMIT;
+        this.limit = limit != null ? Math.min(limit, MAX_LIMIT) : DEFAULT_LIMIT;
     }
 
     public Integer getPage() {
-        return page;
-    }
-
-    public void setPage(Integer page) {
-        this.page = page;
+        return page != null ? page : DEFAULT_PAGE;
     }
 
     public Integer getLimit() {
-        return limit;
-    }
-
-    public void setLimit(Integer limit) {
-        this.limit = limit;
+        return limit != null ? Math.min(limit, MAX_LIMIT) : DEFAULT_LIMIT;
     }
 
     @Override
     public String toString() {
         return "Pagination{" +
-                "page=" + page +
-                ", limit=" + limit +
+                "page=" + getPage() +
+                ", limit=" + getLimit() +
                 '}';
     }
 }

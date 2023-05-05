@@ -51,8 +51,6 @@ public class GiftCertificateController {
     public ResponseEntity<List<GiftCertificateDTO>> getAll(
             @ModelAttribute GiftCertificateFilter giftCertificateFilter
     ) {
-        System.out.println(giftCertificateFilter);
-
         return ResponseEntity.ok(service.getAll(giftCertificateFilter));
     }
 
