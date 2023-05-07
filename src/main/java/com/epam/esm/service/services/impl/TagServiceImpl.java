@@ -47,10 +47,8 @@ public class TagServiceImpl implements CRDService<TagDTO, Pagination> {
     @Override
     @Transactional
     public TagDTO getById(long id) {
-        TagEntity entity = tagRepo.getById(id);
-
-        if(entity == null)
-            throw new ResourceNotFoundException(id);
+        TagEntity entity = tagRepo.getById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(id));
 
         return toDto(entity);
     }
@@ -58,10 +56,10 @@ public class TagServiceImpl implements CRDService<TagDTO, Pagination> {
     @Override
     @Transactional
     public TagDTO create(TagDTO tagDTO) {
-        if(tagRepo.getByName(tagDTO.getName()) != null)
+        if (tagRepo.getByName(tagDTO.getName()) != null)
             throw new EntityAlreadyExistsException();
 
-      return toDto(tagRepo.create(toEntity(tagDTO)));
+        return toDto(tagRepo.create(toEntity(tagDTO)));
     }
 
     @Override
@@ -69,7 +67,7 @@ public class TagServiceImpl implements CRDService<TagDTO, Pagination> {
     public TagDTO delete(long id) {
         TagEntity entity = tagRepo.delete(id);
 
-        if(entity == null)
+        if (entity == null)
             throw new ResourceNotFoundException(id);
 
         return toDto(entity);

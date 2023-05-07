@@ -39,7 +39,7 @@ public class OrderEntity {
     )
     private Double price;
 
-    public OrderEntity(){
+    public OrderEntity() {
 
     }
 

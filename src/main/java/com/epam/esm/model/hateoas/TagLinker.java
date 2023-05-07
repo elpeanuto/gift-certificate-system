@@ -23,7 +23,7 @@ public class TagLinker {
     public static CollectionModel<TagDTO> bindLinks(List<TagDTO> tags) {
         tags.forEach(TagLinker::bindLinks);
 
-       return CollectionModel.of(tags,
+        return CollectionModel.of(tags,
                 linkTo(methodOn(TagController.class).getAll(null)).withSelfRel());
     }
 }

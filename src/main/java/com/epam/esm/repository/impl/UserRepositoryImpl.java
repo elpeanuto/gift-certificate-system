@@ -12,6 +12,7 @@ import jakarta.persistence.criteria.Root;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class UserRepositoryImpl implements CRUDRepository<UserEntity, Pagination> {
@@ -36,8 +37,10 @@ public class UserRepositoryImpl implements CRUDRepository<UserEntity, Pagination
     }
 
     @Override
-    public UserEntity getById(long id) {
-        return manager.find(UserEntity.class, id);
+    public Optional<UserEntity> getById(long id) {
+        UserEntity entity = manager.find(UserEntity.class, id);
+
+        return Optional.ofNullable(entity);
     }
 
     @Override

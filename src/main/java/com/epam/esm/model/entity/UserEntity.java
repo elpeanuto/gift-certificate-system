@@ -8,7 +8,7 @@ import jakarta.persistence.*;
         uniqueConstraints = {
                 @UniqueConstraint(name = "user-email", columnNames = "email")
         }
-        )
+)
 public class UserEntity {
 
     @Id

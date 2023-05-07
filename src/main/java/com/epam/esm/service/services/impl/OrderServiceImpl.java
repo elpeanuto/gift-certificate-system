@@ -1,5 +1,6 @@
 package com.epam.esm.service.services.impl;
 
+import com.epam.esm.exception.exceptions.ResourceNotFoundException;
 import com.epam.esm.model.converter.OrderConverter;
 import com.epam.esm.model.dto.OrderDTO;
 import com.epam.esm.model.dto.filter.Pagination;
@@ -8,6 +9,7 @@ import com.epam.esm.model.entity.UserEntity;
 import com.epam.esm.repository.api.CRUDRepository;
 import com.epam.esm.repository.impl.GiftCertificateRepositoryImpl;
 import com.epam.esm.service.services.api.CRUDService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,6 +34,7 @@ public class OrderServiceImpl implements CRUDService<OrderDTO, Pagination> {
     }
 
     @Override
+    @Transactional
     public List<OrderDTO> getAll(Pagination pagination) {
         return orderRepo.getAll(pagination).stream()
                 .map(OrderConverter::toDto)
@@ -39,11 +42,16 @@ public class OrderServiceImpl implements CRUDService<OrderDTO, Pagination> {
     }
 
     @Override
+    @Transactional
     public OrderDTO getById(long id) {
-        return toDto(orderRepo.getById(id));
+        OrderEntity entity = orderRepo.getById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(id));
+
+        return toDto(entity);
     }
 
     @Override
+    @Transactional
     public OrderDTO create(OrderDTO orderDTO) {
         orderDTO.setCreateDate(LocalDateTime.now());
 
@@ -56,11 +64,13 @@ public class OrderServiceImpl implements CRUDService<OrderDTO, Pagination> {
     }
 
     @Override
+    @Transactional
     public OrderDTO delete(long id) {
         throw new UnsupportedOperationException();
     }
 
     @Override
+    @Transactional
     public OrderDTO update(long id, OrderDTO orderDTO) {
         throw new UnsupportedOperationException();
     }

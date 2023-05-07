@@ -1,6 +1,5 @@
 package com.epam.esm.repository.impl;
 
-import com.epam.esm.exception.exceptions.ResourceNotFoundException;
 import com.epam.esm.model.dto.filter.GiftCertificateFilter;
 import com.epam.esm.model.dto.filter.Pagination;
 import com.epam.esm.model.entity.GiftCertificateEntity;
@@ -14,6 +13,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -102,13 +102,10 @@ public class GiftCertificateRepositoryImpl implements GiftCertificateRepository 
     }
 
     @Override
-    public GiftCertificateEntity getById(long id) {
+    public Optional<GiftCertificateEntity> getById(long id) {
         GiftCertificateEntity entity = manager.find(GiftCertificateEntity.class, id);
 
-        if (entity == null)
-            throw new ResourceNotFoundException(id);
-
-        return entity;
+        return Optional.ofNullable(entity);
     }
 
     @Override

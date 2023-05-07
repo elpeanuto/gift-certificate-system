@@ -60,7 +60,7 @@ public class GiftCertificateController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<CollectionModel<GiftCertificateDTO>>  search(
+    public ResponseEntity<CollectionModel<GiftCertificateDTO>> search(
             @ModelAttribute GiftCertificateFilter giftCertificateFilter
     ) {
         List<GiftCertificateDTO> certificate = service.doSearch(giftCertificateFilter);

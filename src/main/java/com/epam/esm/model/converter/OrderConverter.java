@@ -18,7 +18,7 @@ public class OrderConverter {
                         .toList(),
                 entity.getCreateDate(),
                 entity.getPrice()
-                );
+        );
     }
 
     public static OrderEntity toEntity(OrderDTO dto) {
@@ -30,6 +30,6 @@ public class OrderConverter {
                         .toList(),
                 dto.getCreateDate(),
                 dto.getTotalPrice()
-                );
+        );
     }
 }

@@ -34,8 +34,8 @@ import static com.epam.esm.model.converter.GiftCertificateConverter.toEntity;
 @Service
 public class GiftCertificateServiceImpl implements GiftCertificateService {
 
-    private GiftCertificateRepository certificateRepo;
-    private TagRepository tagRepo;
+    private final GiftCertificateRepository certificateRepo;
+    private final TagRepository tagRepo;
 
     @Autowired
     public GiftCertificateServiceImpl(GiftCertificateRepository certificateRepo, TagRepository tagRepo) {
@@ -62,7 +62,10 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     @Override
     @Transactional
     public GiftCertificateDTO getById(long id) {
-        return toDto(certificateRepo.getById(id));
+        GiftCertificateEntity entity = certificateRepo.getById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(id));
+
+        return toDto(entity);
     }
 
     @Override
@@ -93,7 +96,8 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     @Override
     @Transactional
     public GiftCertificateDTO update(long id, GiftCertificateDTO giftCertificateDTO) {
-        GiftCertificateEntity entity = certificateRepo.getById(id);
+        GiftCertificateEntity entity = certificateRepo.getById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(id));
 
         entity.setLastUpdateDate(LocalDateTime.now());
 

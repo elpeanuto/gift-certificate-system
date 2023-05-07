@@ -16,7 +16,7 @@ import java.util.Objects;
 import java.util.Set;
 
 public class GiftCertificateDTO extends RepresentationModel<GiftCertificateDTO>
-        implements DTO, Comparator<GiftCertificateDTO>{
+        implements DTO, Comparator<GiftCertificateDTO> {
 
     private static final String DATE_TIME_PATTERN = "yyyy-MM-dd'T'HH:mm:ss.SSS";
 

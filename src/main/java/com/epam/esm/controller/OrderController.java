@@ -1,20 +1,15 @@
 package com.epam.esm.controller;
 
-import com.epam.esm.exception.exceptions.InvalidRequestBodyException;
 import com.epam.esm.model.dto.OrderDTO;
 import com.epam.esm.model.dto.filter.Pagination;
 import com.epam.esm.service.services.api.CRUDService;
-import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static com.epam.esm.model.hateoas.OrderLinker.bindLinks;

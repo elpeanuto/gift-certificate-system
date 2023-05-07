@@ -3,6 +3,7 @@ package com.epam.esm.repository.api;
 import com.epam.esm.model.dto.filter.Pagination;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * The CRDRepository interface provides CRD operations for a specific entity type T.
@@ -24,7 +25,7 @@ public interface CRDRepository<T, F extends Pagination> {
      * @param id The ID of the entity to retrieve.
      * @return The entity of type T with the specified ID, or null if no entity was found.
      */
-    T getById(long id);
+    Optional<T> getById(long id);
 
     /**
      * Creates a new entity of type T in the repository.

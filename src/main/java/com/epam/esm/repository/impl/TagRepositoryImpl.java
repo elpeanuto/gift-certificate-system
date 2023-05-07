@@ -12,6 +12,7 @@ import jakarta.persistence.criteria.Root;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Implementation of the TagRepository interface that uses JdbcTemplate and NamedParameterJdbcTemplate to interact with the database.
@@ -41,8 +42,10 @@ public class TagRepositoryImpl implements TagRepository {
     }
 
     @Override
-    public TagEntity getById(long id) {
-        return manager.find(TagEntity.class, id);
+    public Optional<TagEntity> getById(long id) {
+        TagEntity entity = manager.find(TagEntity.class, id);
+
+        return Optional.ofNullable(entity);
     }
 
     @Override
