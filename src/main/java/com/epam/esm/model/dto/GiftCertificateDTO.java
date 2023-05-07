@@ -1,7 +1,7 @@
 package com.epam.esm.model.dto;
 
-import com.epam.esm.util.CreateValidationGroup;
-import com.epam.esm.util.UpdateValidationGroup;
+import com.epam.esm.controller.util.CreateValidationGroup;
+import com.epam.esm.controller.util.UpdateValidationGroup;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;

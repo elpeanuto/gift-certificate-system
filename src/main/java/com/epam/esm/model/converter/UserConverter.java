@@ -1,8 +1,6 @@
 package com.epam.esm.model.converter;
 
-import com.epam.esm.model.dto.TagDTO;
 import com.epam.esm.model.dto.UserDTO;
-import com.epam.esm.model.entity.TagEntity;
 import com.epam.esm.model.entity.UserEntity;
 
 public class UserConverter {

@@ -1,7 +1,7 @@
 package com.epam.esm.repository.impl;
 
 import com.epam.esm.model.dto.filter.Pagination;
-import com.epam.esm.model.entity.UserEntity;
+import com.epam.esm.model.entity.OrderEntity;
 import com.epam.esm.repository.api.CRUDRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -14,20 +14,20 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public class UserRepositoryImpl implements CRUDRepository<UserEntity, Pagination> {
+public class OrderRepository implements CRUDRepository<OrderEntity, Pagination> {
 
     @PersistenceContext
     private EntityManager manager;
 
     @Override
-    public List<UserEntity> getAll(Pagination pagination) {
+    public List<OrderEntity> getAll(Pagination pagination) {
         CriteriaBuilder cb = manager.getCriteriaBuilder();
-        CriteriaQuery<UserEntity> query = cb.createQuery(UserEntity.class);
-        Root<UserEntity> root = query.from(UserEntity.class);
+        CriteriaQuery<OrderEntity> query = cb.createQuery(OrderEntity.class);
+        Root<OrderEntity> root = query.from(OrderEntity.class);
 
         query.select(root);
 
-        TypedQuery<UserEntity> typedQuery = manager.createQuery(query);
+        TypedQuery<OrderEntity> typedQuery = manager.createQuery(query);
 
         typedQuery.setFirstResult(pagination.getPage() * pagination.getLimit());
         typedQuery.setMaxResults(pagination.getLimit());
@@ -36,22 +36,23 @@ public class UserRepositoryImpl implements CRUDRepository<UserEntity, Pagination
     }
 
     @Override
-    public UserEntity getById(long id) {
-        return manager.find(UserEntity.class, id);
+    public OrderEntity getById(long id) {
+        return manager.find(OrderEntity.class, id);
     }
 
     @Override
-    public UserEntity create(UserEntity userEntity) {
+    public OrderEntity create(OrderEntity order) {
+        manager.persist(order);
+        return order;
+    }
+
+    @Override
+    public OrderEntity delete(long id) {
         return null;
     }
 
     @Override
-    public UserEntity delete(long id) {
-        return null;
-    }
-
-    @Override
-    public UserEntity update(UserEntity userEntity) {
+    public OrderEntity update(OrderEntity order) {
         return null;
     }
 }

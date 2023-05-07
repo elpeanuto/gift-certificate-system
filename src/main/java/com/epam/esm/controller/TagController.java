@@ -21,8 +21,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.epam.esm.model.hateoas.TagLinker.bindLinks;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 /**
  * A RestController class that handles API requests related to tags.
@@ -55,12 +53,7 @@ public class TagController {
     ) {
         List<TagDTO> tags = service.getAll(tagFilter);
 
-        bindLinks(tags);
-
-        CollectionModel<TagDTO> collectionModel = CollectionModel.of(tags,
-                linkTo(methodOn(TagController.class).getAll(null)).withSelfRel());
-
-        return ResponseEntity.ok(collectionModel);
+        return ResponseEntity.ok(bindLinks(tags));
     }
 
     /**

@@ -21,10 +21,7 @@ public class UserLinker {
     }
 
     public static CollectionModel<UserDTO> bindLinks(List<UserDTO> users) {
-        users.forEach(user -> {
-            user.add(linkTo(methodOn(UserController.class).getById(user.getId())).withSelfRel());
-            user.add(linkTo(methodOn(UserController.class).getAll(null)).withRel("tags"));
-        });
+        users.forEach(UserLinker::bindLinks);
 
         return CollectionModel.of(users,
                 linkTo(methodOn(TagController.class).getAll(null)).withSelfRel());

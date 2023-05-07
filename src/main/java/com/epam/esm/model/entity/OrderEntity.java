@@ -3,6 +3,8 @@ package com.epam.esm.model.entity;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "orders")
@@ -20,9 +22,9 @@ public class OrderEntity {
     @JoinColumn(name = "user_id", nullable = false)
     private UserEntity user;
 
-    @ManyToOne
+    @ManyToMany
     @JoinColumn(name = "certificate_id", nullable = false)
-    private GiftCertificateEntity certificate;
+    private List<GiftCertificateEntity> certificates = new ArrayList<>();
 
     @Column(
             name = "create_date",
@@ -41,9 +43,11 @@ public class OrderEntity {
 
     }
 
-    public OrderEntity(Long id, UserEntity user, LocalDateTime createDate, Double price) {
+    public OrderEntity(Long id, UserEntity user, List<GiftCertificateEntity> certificates,
+                       LocalDateTime createDate, Double price) {
         this.id = id;
         this.user = user;
+        this.certificates = certificates;
         this.createDate = createDate;
         this.price = price;
     }
@@ -62,6 +66,14 @@ public class OrderEntity {
 
     public void setUser(UserEntity user) {
         this.user = user;
+    }
+
+    public List<GiftCertificateEntity> getCertificates() {
+        return certificates;
+    }
+
+    public void setCertificates(List<GiftCertificateEntity> certificates) {
+        this.certificates = certificates;
     }
 
     public LocalDateTime getCreateDate() {

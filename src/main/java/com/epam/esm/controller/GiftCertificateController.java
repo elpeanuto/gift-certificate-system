@@ -1,13 +1,13 @@
 package com.epam.esm.controller;
 
+import com.epam.esm.controller.util.CreateValidationGroup;
+import com.epam.esm.controller.util.UpdateValidationGroup;
 import com.epam.esm.exception.exceptions.InvalidRequestBodyException;
 import com.epam.esm.model.dto.GiftCertificateDTO;
 import com.epam.esm.model.dto.TagDTO;
 import com.epam.esm.model.dto.filter.GiftCertificateFilter;
 import com.epam.esm.model.dto.filter.Pagination;
 import com.epam.esm.service.services.api.GiftCertificateService;
-import com.epam.esm.util.CreateValidationGroup;
-import com.epam.esm.util.UpdateValidationGroup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

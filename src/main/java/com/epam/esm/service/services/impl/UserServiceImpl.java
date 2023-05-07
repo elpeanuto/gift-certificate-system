@@ -1,11 +1,9 @@
 package com.epam.esm.service.services.impl;
 
 import com.epam.esm.exception.exceptions.ResourceNotFoundException;
-import com.epam.esm.model.converter.TagConverter;
 import com.epam.esm.model.converter.UserConverter;
 import com.epam.esm.model.dto.UserDTO;
 import com.epam.esm.model.dto.filter.Pagination;
-import com.epam.esm.model.entity.TagEntity;
 import com.epam.esm.model.entity.UserEntity;
 import com.epam.esm.repository.api.CRUDRepository;
 import com.epam.esm.service.services.api.CRUDService;
@@ -45,16 +43,16 @@ public class UserServiceImpl implements CRUDService<UserDTO, Pagination> {
 
     @Override
     public UserDTO create(UserDTO userDTO) {
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public UserDTO delete(long id) {
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public UserDTO update(long id, UserDTO userDTO) {
-        return null;
+        throw new UnsupportedOperationException();
     }
 }

@@ -12,8 +12,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 import static com.epam.esm.model.hateoas.UserLinker.bindLinks;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
 @RequestMapping("/users")
@@ -32,12 +30,7 @@ public class UserController {
     ) {
         List<UserDTO> users = service.getAll(tagFilter);
 
-        bindLinks(users);
-
-        CollectionModel<UserDTO> collectionModel = CollectionModel.of(users,
-                linkTo(methodOn(TagController.class).getAll(null)).withSelfRel());
-
-        return ResponseEntity.ok(collectionModel);
+        return ResponseEntity.ok(bindLinks(users));
     }
 
     @GetMapping("/{id}")

@@ -54,7 +54,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     @Override
     @Transactional
     public List<GiftCertificateDTO> doSearch(GiftCertificateFilter filter) {
-        return  certificateRepo.doSearch(filter).stream()
+        return certificateRepo.doSearch(filter).stream()
                 .map(GiftCertificateConverter::toDto)
                 .toList();
     }
@@ -119,7 +119,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     @Override
     @Transactional
     public List<GiftCertificateDTO> getByParams(String name, String part, String sort) {
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     private Set<TagEntity> createMissingTags(Set<TagDTO> set) {
