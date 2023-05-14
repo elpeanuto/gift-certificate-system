@@ -1,9 +1,11 @@
 package com.epam.esm.controller;
 
 import com.epam.esm.model.dto.UserDTO;
+import com.epam.esm.model.dto.UserOrderDTO;
 import com.epam.esm.model.dto.filter.Pagination;
 import com.epam.esm.model.dto.filter.TagFilter;
-import com.epam.esm.service.services.api.CRUDService;
+import com.epam.esm.model.hateoas.OrderLinker;
+import com.epam.esm.service.services.api.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.ResponseEntity;
@@ -17,10 +19,10 @@ import static com.epam.esm.model.hateoas.UserLinker.bindLinks;
 @RequestMapping("/users")
 public class UserController {
 
-    private final CRUDService<UserDTO, Pagination> service;
+    private final UserService service;
 
     @Autowired
-    public UserController(CRUDService<UserDTO, Pagination> service) {
+    public UserController(UserService service) {
         this.service = service;
     }
 
@@ -41,4 +43,34 @@ public class UserController {
 
         return ResponseEntity.ok(user);
     }
+
+    @GetMapping("/{userId}/orders")
+    public ResponseEntity<CollectionModel<UserOrderDTO>> getOrders(
+            @PathVariable("userId") long userId,
+            @ModelAttribute() Pagination pagination
+    ) {
+        List<UserOrderDTO> userOrders = service.getOrders(userId, pagination);
+
+        return ResponseEntity.ok(OrderLinker.bindLinksForUserOrder(userOrders));
+    }
+
+    @GetMapping("/{userId}/orders/{orderId}")
+    public ResponseEntity<CollectionModel<UserOrderDTO>> getOrders(
+            @PathVariable("userId") long userId,
+            @PathVariable("orderId") long orderId,
+            @ModelAttribute() Pagination pagination
+    ) {
+        List<UserOrderDTO> userOrders = service.getOrderById(userId, orderId, pagination);
+
+        return ResponseEntity.ok(OrderLinker.bindLinksForUserOrder(userOrders));
+    }
+
+//    @GetMapping("/highestCostOrder")
+//    public ResponseEntity<UserDTO> getHig() {
+//        UserDTO user = service.getById(id);
+//
+//        bindLinks(user);
+//
+//        return ResponseEntity.ok(user);
+//    }
 }

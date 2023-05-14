@@ -2,7 +2,8 @@ package com.epam.esm.repository.impl;
 
 import com.epam.esm.model.dto.filter.Pagination;
 import com.epam.esm.model.entity.OrderEntity;
-import com.epam.esm.repository.api.CRUDRepository;
+import com.epam.esm.model.entity.UserEntity;
+import com.epam.esm.repository.api.OrderRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
@@ -15,7 +16,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public class OrderRepository implements CRUDRepository<OrderEntity, Pagination> {
+public class OrderRepositoryImpl implements OrderRepository {
 
     @PersistenceContext
     private EntityManager manager;
@@ -57,5 +58,42 @@ public class OrderRepository implements CRUDRepository<OrderEntity, Pagination> 
     @Override
     public OrderEntity update(OrderEntity order) {
         return null;
+    }
+
+    @Override
+    public List<OrderEntity> getByUserId(Long userId, Pagination pagination) {
+        CriteriaBuilder cb = manager.getCriteriaBuilder();
+        CriteriaQuery<OrderEntity> query = cb.createQuery(OrderEntity.class);
+        Root<OrderEntity> root = query.from(OrderEntity.class);
+
+        query.where(cb.equal(root.get("user"), new UserEntity(userId)));
+
+        query.select(root);
+
+        TypedQuery<OrderEntity> typedQuery = manager.createQuery(query);
+
+
+        typedQuery.setFirstResult(pagination.getPage() * pagination.getLimit());
+        typedQuery.setMaxResults(pagination.getLimit());
+
+        return typedQuery.getResultList();
+    }
+
+    @Override
+    public List<OrderEntity> getUserOrderById(long userId, long orderId, Pagination pagination) {
+        CriteriaBuilder cb = manager.getCriteriaBuilder();
+        CriteriaQuery<OrderEntity> query = cb.createQuery(OrderEntity.class);
+        Root<OrderEntity> root = query.from(OrderEntity.class);
+
+        query.where(cb.equal(root.get("user"), new UserEntity(userId)), cb.and( cb.equal(root.get("id"), orderId)));
+
+        query.select(root);
+
+        TypedQuery<OrderEntity> typedQuery = manager.createQuery(query);
+
+        typedQuery.setFirstResult(pagination.getPage() * pagination.getLimit());
+        typedQuery.setMaxResults(pagination.getLimit());
+
+        return typedQuery.getResultList();
     }
 }

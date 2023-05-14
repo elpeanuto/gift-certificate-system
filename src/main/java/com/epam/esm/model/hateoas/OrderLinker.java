@@ -2,7 +2,9 @@ package com.epam.esm.model.hateoas;
 
 import com.epam.esm.controller.OrderController;
 import com.epam.esm.controller.TagController;
+import com.epam.esm.controller.UserController;
 import com.epam.esm.model.dto.OrderDTO;
+import com.epam.esm.model.dto.UserOrderDTO;
 import org.springframework.hateoas.CollectionModel;
 
 import java.util.List;
@@ -21,6 +23,19 @@ public class OrderLinker {
     }
 
     public static CollectionModel<OrderDTO> bindLinks(List<OrderDTO> orders) {
+        orders.forEach(OrderLinker::bindLinks);
+
+        return CollectionModel.of(orders,
+                linkTo(methodOn(TagController.class).getAll(null)).withSelfRel());
+    }
+
+    public static void bindLinks(UserOrderDTO order) {
+        order.add(linkTo(methodOn(OrderController.class).getById(order.getOrderId())).withSelfRel());
+        order.add(linkTo(methodOn(UserController.class).getById(order.getUserId())).withRel("user"));
+        order.add(linkTo(methodOn(OrderController.class).getAll(null)).withRel("tags"));
+    }
+
+    public static CollectionModel<UserOrderDTO> bindLinksForUserOrder(List<UserOrderDTO> orders) {
         orders.forEach(OrderLinker::bindLinks);
 
         return CollectionModel.of(orders,

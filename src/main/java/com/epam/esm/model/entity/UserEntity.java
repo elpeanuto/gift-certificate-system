@@ -53,6 +53,10 @@ public class UserEntity {
 
     }
 
+    public UserEntity(Long id) {
+        this.id = id;
+    }
+
     public UserEntity(Long id, String firstName, String lastName, String email, String password) {
         this.id = id;
         this.firstName = firstName;

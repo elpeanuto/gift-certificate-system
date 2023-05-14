@@ -2,8 +2,10 @@ package com.epam.esm.service.services.impl;
 
 import com.epam.esm.exception.exceptions.ResourceNotFoundException;
 import com.epam.esm.model.converter.OrderConverter;
+import com.epam.esm.model.dto.GiftCertificateDTO;
 import com.epam.esm.model.dto.OrderDTO;
 import com.epam.esm.model.dto.filter.Pagination;
+import com.epam.esm.model.entity.GiftCertificateEntity;
 import com.epam.esm.model.entity.OrderEntity;
 import com.epam.esm.model.entity.UserEntity;
 import com.epam.esm.repository.api.CRUDRepository;
@@ -15,9 +17,10 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import static com.epam.esm.model.converter.OrderConverter.toDto;
-import static com.epam.esm.model.converter.OrderConverter.toEntity;
 
 @Service
 public class OrderServiceImpl implements CRUDService<OrderDTO, Pagination> {
@@ -53,14 +56,34 @@ public class OrderServiceImpl implements CRUDService<OrderDTO, Pagination> {
     @Override
     @Transactional
     public OrderDTO create(OrderDTO orderDTO) {
-        orderDTO.setCreateDate(LocalDateTime.now());
+        System.out.println(orderDTO);
 
         Long userId = orderDTO.getUser().getId();
+        List<GiftCertificateDTO> dtoList = orderDTO.getCertificates();
 
+        Set<GiftCertificateEntity> certificateEntities = dtoList.stream()
+                .map(certificate -> certificateRepo.getById(certificate.getId())
+                        .orElseThrow(() -> new ResourceNotFoundException(certificate.getId())))
+                .collect(Collectors.toSet());
 
-        //todo
+        UserEntity userEntity = userRepo.getById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException(userId));
 
-        return toDto(orderRepo.create(toEntity(orderDTO)));
+        Double totalPrice = certificateEntities.stream().
+                mapToDouble(GiftCertificateEntity::getPrice)
+                .sum();
+
+        OrderEntity orderEntity = new OrderEntity(
+                null,
+                userEntity,
+                certificateEntities,
+                LocalDateTime.now(),
+                totalPrice
+                );
+
+        System.out.println(orderEntity);
+
+        return toDto(orderRepo.create(orderEntity));
     }
 
     @Override

@@ -3,8 +3,8 @@ package com.epam.esm.model.entity;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "orders")
@@ -16,15 +16,27 @@ public class OrderEntity {
             sequenceName = "order_sequence",
             allocationSize = 1
     )
+    @GeneratedValue(
+            strategy = GenerationType.SEQUENCE,
+            generator = "order_sequence"
+    )
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(
+            cascade = CascadeType.MERGE
+    )
     @JoinColumn(name = "user_id", nullable = false)
     private UserEntity user;
 
-    @ManyToMany
-    @JoinColumn(name = "certificate_id", nullable = false)
-    private List<GiftCertificateEntity> certificates = new ArrayList<>();
+    @ManyToMany(
+            cascade = CascadeType.MERGE
+    )
+    @JoinTable(
+            name = "order_gift_certificate",
+            joinColumns = @JoinColumn(name = "order_id"),
+            inverseJoinColumns = @JoinColumn(name = "gift_certificate_id")
+    )
+    private Set<GiftCertificateEntity> certificates = new HashSet<>();
 
     @Column(
             name = "create_date",
@@ -43,7 +55,7 @@ public class OrderEntity {
 
     }
 
-    public OrderEntity(Long id, UserEntity user, List<GiftCertificateEntity> certificates,
+    public OrderEntity(Long id, UserEntity user, Set<GiftCertificateEntity> certificates,
                        LocalDateTime createDate, Double price) {
         this.id = id;
         this.user = user;
@@ -68,11 +80,11 @@ public class OrderEntity {
         this.user = user;
     }
 
-    public List<GiftCertificateEntity> getCertificates() {
+    public Set<GiftCertificateEntity> getCertificates() {
         return certificates;
     }
 
-    public void setCertificates(List<GiftCertificateEntity> certificates) {
+    public void setCertificates(Set<GiftCertificateEntity> certificates) {
         this.certificates = certificates;
     }
 

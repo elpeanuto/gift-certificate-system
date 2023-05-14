@@ -32,6 +32,8 @@ public class RestExceptionHandler {
         ErrorResponse errorResponse = new ErrorResponse(e.getMessage(),
                 Integer.toString(status.getValue()));
 
+        e.printStackTrace();
+
         return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
     }
 

@@ -9,14 +9,14 @@ public class OrderDTO extends RepresentationModel<OrderDTO> implements DTO {
 
     private Long id;
     private UserDTO user;
-    private List<GiftCertificateDTO> certificate;
+    private List<GiftCertificateDTO> certificates;
     private LocalDateTime createDate;
     private Double totalPrice;
 
-    public OrderDTO(Long id, UserDTO user, List<GiftCertificateDTO> certificate, LocalDateTime createDate, Double totalPrice) {
+    public OrderDTO(Long id, UserDTO user, List<GiftCertificateDTO> certificates, LocalDateTime createDate, Double totalPrice) {
         this.id = id;
         this.user = user;
-        this.certificate = certificate;
+        this.certificates = certificates;
         this.createDate = createDate;
         this.totalPrice = totalPrice;
     }
@@ -37,12 +37,12 @@ public class OrderDTO extends RepresentationModel<OrderDTO> implements DTO {
         this.user = user;
     }
 
-    public List<GiftCertificateDTO> getCertificate() {
-        return certificate;
+    public List<GiftCertificateDTO> getCertificates() {
+        return certificates;
     }
 
-    public void setCertificate(List<GiftCertificateDTO> certificate) {
-        this.certificate = certificate;
+    public void setCertificates(List<GiftCertificateDTO> certificates) {
+        this.certificates = certificates;
     }
 
     public LocalDateTime getCreateDate() {
@@ -66,7 +66,7 @@ public class OrderDTO extends RepresentationModel<OrderDTO> implements DTO {
         return "OrderDTO{" +
                 "id=" + id +
                 ", user=" + user +
-                ", certificate=" + certificate +
+                ", certificate=" + certificates +
                 ", createDate=" + createDate +
                 ", totalPrice=" + totalPrice +
                 '}';
