@@ -54,17 +54,6 @@ public class UserController {
         return ResponseEntity.ok(OrderLinker.bindLinksForUserOrder(userOrders));
     }
 
-    @GetMapping("/{userId}/orders/{orderId}")
-    public ResponseEntity<CollectionModel<UserOrderDTO>> getOrders(
-            @PathVariable("userId") long userId,
-            @PathVariable("orderId") long orderId,
-            @ModelAttribute() Pagination pagination
-    ) {
-        List<UserOrderDTO> userOrders = service.getOrderById(userId, orderId, pagination);
-
-        return ResponseEntity.ok(OrderLinker.bindLinksForUserOrder(userOrders));
-    }
-
 //    @GetMapping("/highestCostOrder")
 //    public ResponseEntity<UserDTO> getHig() {
 //        UserDTO user = service.getById(id);

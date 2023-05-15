@@ -63,6 +63,8 @@ public class GiftCertificateController {
     public ResponseEntity<CollectionModel<GiftCertificateDTO>> search(
             @ModelAttribute GiftCertificateFilter giftCertificateFilter
     ) {
+        System.out.println(giftCertificateFilter);
+
         List<GiftCertificateDTO> certificate = service.doSearch(giftCertificateFilter);
 
         return ResponseEntity.ok(bindLinks(certificate));
@@ -96,7 +98,11 @@ public class GiftCertificateController {
                                                      BindingResult bindingResult) {
         validateGiftCertificate(certificate, bindingResult);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(service.create(certificate));
+        GiftCertificateDTO body = service.create(certificate);
+
+        bindLinks(body);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(body);
     }
 
     /**
@@ -114,7 +120,11 @@ public class GiftCertificateController {
                                                      BindingResult bindingResult) {
         validateGiftCertificate(certificate, bindingResult);
 
-        return ResponseEntity.ok(service.update(id, certificate));
+        GiftCertificateDTO update = service.update(id, certificate);
+
+        bindLinks(update);
+
+        return ResponseEntity.ok(update);
     }
 
     /**

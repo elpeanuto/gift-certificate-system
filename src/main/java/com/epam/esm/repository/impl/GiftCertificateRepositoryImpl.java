@@ -7,6 +7,7 @@ import com.epam.esm.model.entity.TagEntity;
 import com.epam.esm.repository.api.GiftCertificateRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.Query;
 import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.*;
 import org.springframework.stereotype.Repository;
@@ -132,11 +133,19 @@ public class GiftCertificateRepositoryImpl implements GiftCertificateRepository 
 
     @Override
     public List<GiftCertificateEntity> getByIdList(List<Long> idList) {
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public List<GiftCertificateEntity> getByPartOfNameDescription(String pattern) {
-        return null;
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public boolean isCertificateOrdered(long id) {
+        Query query = manager.createQuery("SELECT COUNT(o) > 0 FROM OrderEntity o JOIN o.certificates c WHERE c.id = :certificateId");
+        query.setParameter("certificateId", id);
+
+        return (boolean) query.getSingleResult();
     }
 }

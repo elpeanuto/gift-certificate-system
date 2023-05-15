@@ -9,6 +9,7 @@ public enum CustomHttpStatus {
     ALREADY_EXISTS_ERROR(40003, HttpStatus.Series.CLIENT_ERROR, "Already Exists"),
 
     RESOURCE_NOT_FOUND(40201, HttpStatus.Series.CLIENT_ERROR, "Resource not found"),
+    DATA_INTEGRITY_VIOLATION(40901, HttpStatus.Series.CLIENT_ERROR, "Resource not found"),
 
     REPOSITORY_ERROR(50001, HttpStatus.Series.SERVER_ERROR, "Repository error");
 

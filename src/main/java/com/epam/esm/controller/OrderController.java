@@ -45,9 +45,11 @@ public class OrderController {
 
     @PostMapping()
     public ResponseEntity<OrderDTO> create(@RequestBody OrderDTO orderDTO) {
-        System.out.println(orderDTO);
+        OrderDTO order = service.create(orderDTO);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(service.create(orderDTO));
+        bindLinks(order);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(order);
     }
 
     @DeleteMapping("/{id}")

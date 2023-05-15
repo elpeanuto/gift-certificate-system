@@ -35,4 +35,6 @@ public interface GiftCertificateRepository extends CRUDRepository<GiftCertificat
      * @return A list of GiftCertificate entities that contain the specified pattern in their name or description.
      */
     List<GiftCertificateEntity> getByPartOfNameDescription(String pattern);
+
+    boolean isCertificateOrdered(long id);
 }

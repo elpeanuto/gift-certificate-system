@@ -71,6 +71,15 @@ public class TagController {
         return ResponseEntity.ok(tag);
     }
 
+//    @GetMapping("/mostPopularTag")
+//    public ResponseEntity<TagDTO> get() {
+//        TagDTO tag = service.getById(id);
+//
+//        bindLinks(tag);
+//
+//        return ResponseEntity.ok(tag);
+//    }
+
     /**
      * Creates a new Tag object.
      *
@@ -92,7 +101,11 @@ public class TagController {
             throw new InvalidRequestBodyException(str);
         }
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(service.create(tagDTO));
+        TagDTO tag = service.create(tagDTO);
+
+        bindLinks(tag);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(tag);
     }
 
     /**
@@ -103,6 +116,8 @@ public class TagController {
      */
     @DeleteMapping("/{id}")
     public ResponseEntity<TagDTO> delete(@PathVariable("id") long id) {
-        return ResponseEntity.ok(service.delete(id));
+        TagDTO tag = service.delete(id);
+
+        return ResponseEntity.ok(tag);
     }
 }

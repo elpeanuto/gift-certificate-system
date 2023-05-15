@@ -18,14 +18,11 @@ public class GiftCertificateLinker {
         certificate.add(linkTo(methodOn(GiftCertificateController.class).getById(certificate.getId())).withSelfRel());
         certificate.add(linkTo(methodOn(GiftCertificateController.class).update(certificate.getId(), null, null)).withRel("update"));
         certificate.add(linkTo(methodOn(GiftCertificateController.class).delete(certificate.getId())).withRel("delete"));
-        certificate.add(linkTo(methodOn(GiftCertificateController.class).getAll(null)).withRel("tags"));
+        certificate.getTags().forEach(TagLinker::bindLinks);
     }
 
     public static CollectionModel<GiftCertificateDTO> bindLinks(List<GiftCertificateDTO> certificates) {
-        certificates.forEach(certificate -> {
-            certificate.getTags().forEach(TagLinker::bindLinks);
-            bindLinks(certificate);
-        });
+        certificates.forEach(GiftCertificateLinker::bindLinks);
 
         return CollectionModel.of(certificates,
                 linkTo(methodOn(GiftCertificateController.class).getAll(null)).withSelfRel());

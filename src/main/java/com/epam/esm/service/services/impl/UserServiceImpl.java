@@ -75,13 +75,4 @@ public class UserServiceImpl implements UserService {
                 .map(OrderConverter::orderToUserOrder)
                 .toList();
     }
-
-    @Override
-    public List<UserOrderDTO> getOrderById(long userId, long orderId, Pagination pagination) {
-        List<OrderEntity> userOrderById = orderRepo.getUserOrderById(userId, orderId, pagination);
-
-        return userOrderById.stream()
-                .map(OrderConverter::orderToUserOrder)
-                .toList();
-    }
 }

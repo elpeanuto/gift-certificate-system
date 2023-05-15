@@ -9,7 +9,5 @@ import java.util.List;
 public interface UserService extends CRUDService<UserDTO, Pagination>{
 
     List<UserOrderDTO> getOrders(long id, Pagination pagination);
-
-    List<UserOrderDTO> getOrderById(long userId, long orderId, Pagination pagination);
 }
 

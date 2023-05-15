@@ -52,12 +52,12 @@ public class OrderRepositoryImpl implements OrderRepository {
 
     @Override
     public OrderEntity delete(long id) {
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public OrderEntity update(OrderEntity order) {
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override
@@ -67,25 +67,6 @@ public class OrderRepositoryImpl implements OrderRepository {
         Root<OrderEntity> root = query.from(OrderEntity.class);
 
         query.where(cb.equal(root.get("user"), new UserEntity(userId)));
-
-        query.select(root);
-
-        TypedQuery<OrderEntity> typedQuery = manager.createQuery(query);
-
-
-        typedQuery.setFirstResult(pagination.getPage() * pagination.getLimit());
-        typedQuery.setMaxResults(pagination.getLimit());
-
-        return typedQuery.getResultList();
-    }
-
-    @Override
-    public List<OrderEntity> getUserOrderById(long userId, long orderId, Pagination pagination) {
-        CriteriaBuilder cb = manager.getCriteriaBuilder();
-        CriteriaQuery<OrderEntity> query = cb.createQuery(OrderEntity.class);
-        Root<OrderEntity> root = query.from(OrderEntity.class);
-
-        query.where(cb.equal(root.get("user"), new UserEntity(userId)), cb.and( cb.equal(root.get("id"), orderId)));
 
         query.select(root);
 

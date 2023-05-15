@@ -17,7 +17,6 @@ public class TagLinker {
     public static void bindLinks(TagDTO tag) {
         tag.add(linkTo(methodOn(TagController.class).getById(tag.getId())).withSelfRel());
         tag.add(linkTo(methodOn(TagController.class).delete(tag.getId())).withRel("delete"));
-        tag.add(linkTo(methodOn(TagController.class).getAll(null)).withRel("tags"));
     }
 
     public static CollectionModel<TagDTO> bindLinks(List<TagDTO> tags) {

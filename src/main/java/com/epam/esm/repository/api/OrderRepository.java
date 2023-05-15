@@ -8,7 +8,5 @@ import java.util.List;
 public interface OrderRepository extends CRUDRepository<OrderEntity, Pagination> {
 
     List<OrderEntity> getByUserId(Long userId, Pagination pagination);
-
-    List<OrderEntity> getUserOrderById(long userId, long orderId, Pagination pagination);
 }
 

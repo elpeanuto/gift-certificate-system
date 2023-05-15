@@ -1,6 +1,5 @@
 package com.epam.esm.model.hateoas;
 
-import com.epam.esm.controller.TagController;
 import com.epam.esm.controller.UserController;
 import com.epam.esm.model.dto.UserDTO;
 import org.springframework.hateoas.CollectionModel;
@@ -17,13 +16,13 @@ public class UserLinker {
 
     public static void bindLinks(UserDTO user) {
         user.add(linkTo(methodOn(UserController.class).getById(user.getId())).withSelfRel());
-        user.add(linkTo(methodOn(UserController.class).getAll(null)).withRel("tags"));
+        user.add(linkTo(methodOn(UserController.class).getOrders(user.getId(), null)).withRel("orders"));
     }
 
     public static CollectionModel<UserDTO> bindLinks(List<UserDTO> users) {
         users.forEach(UserLinker::bindLinks);
 
         return CollectionModel.of(users,
-                linkTo(methodOn(TagController.class).getAll(null)).withSelfRel());
+                linkTo(methodOn(UserController.class).getAll(null)).withSelfRel());
     }
 }

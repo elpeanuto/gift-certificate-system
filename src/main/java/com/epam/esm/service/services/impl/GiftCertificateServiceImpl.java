@@ -14,6 +14,7 @@ import com.epam.esm.repository.api.TagRepository;
 import com.epam.esm.service.services.api.GiftCertificateService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -85,6 +86,9 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     @Override
     @Transactional
     public GiftCertificateDTO delete(long id) {
+        if(certificateRepo.isCertificateOrdered(id))
+            throw new DataIntegrityViolationException("This certificate is ordered");
+
         GiftCertificateEntity entity = certificateRepo.delete(id);
 
         if (entity == null)

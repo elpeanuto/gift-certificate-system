@@ -45,16 +45,16 @@ public class UserRepositoryImpl implements CRUDRepository<UserEntity, Pagination
 
     @Override
     public UserEntity create(UserEntity userEntity) {
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public UserEntity delete(long id) {
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public UserEntity update(UserEntity userEntity) {
-        return null;
+        throw new UnsupportedOperationException();
     }
 }
