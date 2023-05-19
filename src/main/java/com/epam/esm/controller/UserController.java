@@ -52,13 +52,4 @@ public class UserController {
 
         return ResponseEntity.ok(OrderLinker.bindLinksForUserOrder(userOrders));
     }
-
-//    @GetMapping("/highestCostOrder")
-//    public ResponseEntity<UserDTO> getHig() {
-//        UserDTO user = service.getById(id);
-//
-//        bindLinks(user);
-//
-//        return ResponseEntity.ok(user);
-//    }
 }

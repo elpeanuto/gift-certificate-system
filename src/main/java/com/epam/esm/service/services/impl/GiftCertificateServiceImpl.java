@@ -124,12 +124,6 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
         return toDto(certificateRepo.update(entity));
     }
 
-    @Override
-    @Transactional
-    public List<GiftCertificateDTO> getByParams(String name, String part, String sort) {
-        throw new UnsupportedOperationException();
-    }
-
     private Set<TagEntity> createMissingTags(Set<TagDTO> set) {
         return set.stream()
                 .map(tag -> {
