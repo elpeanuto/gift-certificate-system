@@ -1,5 +1,9 @@
 package com.epam.esm.model.dto;
 
+import com.epam.esm.controller.util.OrderValidationGroup;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.hateoas.RepresentationModel;
 
 import java.time.LocalDateTime;
@@ -8,8 +12,16 @@ import java.util.List;
 public class OrderDTO extends RepresentationModel<OrderDTO> implements DTO {
 
     private Long id;
+
+    @NotNull(message = "User is missing", groups = OrderValidationGroup.class)
+    @Valid
     private UserDTO user;
+
+    @NotNull(message = "Certificates are missing", groups = OrderValidationGroup.class)
+    @NotEmpty(message = "Certificates cant be empty", groups = OrderValidationGroup.class)
+    @Valid
     private List<GiftCertificateDTO> certificates;
+
     private LocalDateTime createDate;
     private Double totalPrice;
 

@@ -69,7 +69,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserOrderDTO> getOrders(long id, Pagination pagination) {
-        List<OrderEntity> orders = orderRepo.getByUserId(id, pagination);
+        UserEntity userEntity = userRepo.getById(id).orElseThrow(() -> new ResourceNotFoundException(id));
+
+        List<OrderEntity> orders = orderRepo.getByUserId(userEntity.getId(), pagination);
 
         return orders.stream()
                 .map(OrderConverter::orderToUserOrder)

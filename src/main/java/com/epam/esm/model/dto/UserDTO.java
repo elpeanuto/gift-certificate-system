@@ -1,5 +1,6 @@
 package com.epam.esm.model.dto;
 
+import com.epam.esm.controller.util.OrderValidationGroup;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
@@ -11,6 +12,7 @@ import java.util.Objects;
 
 public class UserDTO extends RepresentationModel<UserDTO> implements DTO {
 
+    @NotNull(message = "Id is missing", groups = OrderValidationGroup.class)
     private Long id;
 
     @Size(min = 2, max = 30, message = "firstName should be between 2 and 30 characters")

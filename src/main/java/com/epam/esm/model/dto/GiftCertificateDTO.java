@@ -1,6 +1,7 @@
 package com.epam.esm.model.dto;
 
 import com.epam.esm.controller.util.CreateValidationGroup;
+import com.epam.esm.controller.util.OrderValidationGroup;
 import com.epam.esm.controller.util.UpdateValidationGroup;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.Valid;
@@ -20,6 +21,7 @@ public class GiftCertificateDTO extends RepresentationModel<GiftCertificateDTO>
 
     private static final String DATE_TIME_PATTERN = "yyyy-MM-dd'T'HH:mm:ss.SSS";
 
+    @NotNull(message = "Id is missing", groups = OrderValidationGroup.class)
     private Long id;
 
     @NotNull(message = "Name is missing", groups = CreateValidationGroup.class)
