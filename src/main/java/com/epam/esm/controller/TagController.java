@@ -3,9 +3,7 @@ package com.epam.esm.controller;
 import com.epam.esm.exception.exceptions.InvalidRequestBodyException;
 import com.epam.esm.model.dto.TagDTO;
 import com.epam.esm.model.dto.filter.Pagination;
-import com.epam.esm.model.dto.filter.TagFilter;
-import com.epam.esm.service.services.api.CRDService;
-import com.epam.esm.service.services.impl.TagServiceImpl;
+import com.epam.esm.service.services.api.TagService;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,7 +27,7 @@ import static com.epam.esm.model.hateoas.TagLinker.bindLinks;
 @RequestMapping("/tags")
 public class TagController {
 
-    private final CRDService<TagDTO, Pagination> service;
+    private final TagService service;
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     /**
@@ -38,7 +36,7 @@ public class TagController {
      * @param service the service used to perform CRUD operations on Tag objects
      */
     @Autowired
-    public TagController(TagServiceImpl service) {
+    public TagController(TagService service) {
         this.service = service;
     }
 
@@ -49,9 +47,9 @@ public class TagController {
      */
     @GetMapping()
     public ResponseEntity<CollectionModel<TagDTO>> getAll(
-            @ModelAttribute() TagFilter tagFilter
+            @ModelAttribute() Pagination pagination
     ) {
-        List<TagDTO> tags = service.getAll(tagFilter);
+        List<TagDTO> tags = service.getAll(pagination);
 
         return ResponseEntity.ok(bindLinks(tags));
     }
@@ -71,14 +69,14 @@ public class TagController {
         return ResponseEntity.ok(tag);
     }
 
-//    @GetMapping("/mostPopularTag")
-//    public ResponseEntity<TagDTO> get() {
-//        TagDTO tag = service.getById(id);
-//
-//        bindLinks(tag);
-//
-//        return ResponseEntity.ok(tag);
-//    }
+    @GetMapping("/widelyUsedTag")
+    public ResponseEntity<TagDTO> getWidelyUsedTag() {
+        TagDTO tag = service.getWidelyUsedTag();
+
+        bindLinks(tag);
+
+        return ResponseEntity.ok(tag);
+    }
 
     /**
      * Creates a new Tag object.

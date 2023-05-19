@@ -4,6 +4,7 @@ import com.epam.esm.model.dto.filter.Pagination;
 import com.epam.esm.model.entity.TagEntity;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * The TagRepository interface provides methods for managing Tag entities in the repository, including creating, retrieving, and deleting Tag entities.
@@ -28,4 +29,6 @@ public interface TagRepository extends CRDRepository<TagEntity, Pagination> {
      * @return The Tag entity with the specified name, or null if no entity was found.
      */
     TagEntity getByName(String name);
+
+    Optional<TagEntity> getWidelyUsedTag();
 }

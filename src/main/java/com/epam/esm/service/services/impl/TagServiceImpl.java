@@ -8,6 +8,7 @@ import com.epam.esm.model.dto.filter.Pagination;
 import com.epam.esm.model.entity.TagEntity;
 import com.epam.esm.repository.api.TagRepository;
 import com.epam.esm.service.services.api.CRDService;
+import com.epam.esm.service.services.api.TagService;
 import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 import static com.epam.esm.model.converter.TagConverter.toDto;
 import static com.epam.esm.model.converter.TagConverter.toEntity;
@@ -26,7 +28,7 @@ import static com.epam.esm.model.converter.TagConverter.toEntity;
  * @see CRDService
  */
 @Service
-public class TagServiceImpl implements CRDService<TagDTO, Pagination> {
+public class TagServiceImpl implements TagService {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
     private final TagRepository tagRepo;
@@ -71,5 +73,13 @@ public class TagServiceImpl implements CRDService<TagDTO, Pagination> {
             throw new ResourceNotFoundException(id);
 
         return toDto(entity);
+    }
+
+    @Override
+    public TagDTO getWidelyUsedTag() {
+        TagEntity widelyUsedTag = tagRepo.getWidelyUsedTag()
+                .orElseThrow(() -> new ResourceNotFoundException("Cant find widely used tag"));
+
+        return toDto(widelyUsedTag);
     }
 }

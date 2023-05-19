@@ -1,14 +1,15 @@
 package com.epam.esm.repository.impl;
 
 import com.epam.esm.model.dto.filter.Pagination;
+import com.epam.esm.model.entity.GiftCertificateEntity;
+import com.epam.esm.model.entity.OrderEntity;
 import com.epam.esm.model.entity.TagEntity;
+import com.epam.esm.model.entity.UserEntity;
 import com.epam.esm.repository.api.TagRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.criteria.CriteriaQuery;
-import jakarta.persistence.criteria.Root;
+import jakarta.persistence.criteria.*;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -77,4 +78,26 @@ public class TagRepositoryImpl implements TagRepository {
         List<TagEntity> tags = query.getResultList();
         return tags.isEmpty() ? null : tags.get(0);
     }
+
+    @Override
+    public Optional<TagEntity> getWidelyUsedTag() {
+        CriteriaBuilder cb = manager.getCriteriaBuilder();
+        CriteriaQuery<TagEntity> query = cb.createQuery(TagEntity.class);
+        Root<OrderEntity> orderRoot = query.from(OrderEntity.class);
+        Join<OrderEntity, GiftCertificateEntity> certificateJoin = orderRoot.join("certificates");
+        Join<GiftCertificateEntity, TagEntity> tagJoin = certificateJoin.join("tags");
+
+        query
+                .select(tagJoin)
+                .groupBy(tagJoin)
+                .orderBy(cb.desc(cb.count(tagJoin)));
+
+        TypedQuery<TagEntity> typedQuery = manager.createQuery(query);
+        typedQuery.setMaxResults(1);
+
+        return typedQuery.getResultList().stream().findFirst();
+    }
+
+
 }
+

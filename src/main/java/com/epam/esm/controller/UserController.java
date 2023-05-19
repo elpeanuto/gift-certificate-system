@@ -3,7 +3,6 @@ package com.epam.esm.controller;
 import com.epam.esm.model.dto.UserDTO;
 import com.epam.esm.model.dto.UserOrderDTO;
 import com.epam.esm.model.dto.filter.Pagination;
-import com.epam.esm.model.dto.filter.TagFilter;
 import com.epam.esm.model.hateoas.OrderLinker;
 import com.epam.esm.service.services.api.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,9 +27,9 @@ public class UserController {
 
     @GetMapping()
     public ResponseEntity<CollectionModel<UserDTO>> getAll(
-            @ModelAttribute() TagFilter tagFilter
+            @ModelAttribute() Pagination pagination
     ) {
-        List<UserDTO> users = service.getAll(tagFilter);
+        List<UserDTO> users = service.getAll(pagination);
 
         return ResponseEntity.ok(bindLinks(users));
     }
