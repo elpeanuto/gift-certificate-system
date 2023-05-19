@@ -1,11 +1,13 @@
 package com.epam.esm.model.entity;
 
 import jakarta.persistence.*;
+import org.hibernate.envers.Audited;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
+@Audited
 @Entity
 @Table(name = "orders")
 public class OrderEntity {

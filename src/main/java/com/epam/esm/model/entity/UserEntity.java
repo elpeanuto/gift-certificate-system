@@ -1,7 +1,9 @@
 package com.epam.esm.model.entity;
 
 import jakarta.persistence.*;
+import org.hibernate.envers.Audited;
 
+@Audited
 @Entity
 @Table(
         name = "users",
