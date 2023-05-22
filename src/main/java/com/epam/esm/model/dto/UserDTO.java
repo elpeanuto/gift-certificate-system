@@ -2,6 +2,7 @@ package com.epam.esm.model.dto;
 
 import com.epam.esm.controller.util.OrderValidationGroup;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
@@ -28,7 +29,7 @@ public class UserDTO extends RepresentationModel<UserDTO> implements DTO {
     @Size(min = 2, max = 30, message = "Email should be between 2 and 30 characters")
     private String email;
 
-    @JsonIgnore
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @NotNull(message = "Password is missing")
     @Size(min = 2, max = 30, message = "Password should be between 2 and 30 characters")
     private String password;

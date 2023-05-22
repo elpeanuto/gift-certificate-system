@@ -45,7 +45,8 @@ public class UserRepositoryImpl implements CRUDRepository<UserEntity, Pagination
 
     @Override
     public UserEntity create(UserEntity userEntity) {
-        throw new UnsupportedOperationException();
+        manager.persist(userEntity);
+        return userEntity;
     }
 
     @Override

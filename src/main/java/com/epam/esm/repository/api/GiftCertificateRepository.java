@@ -5,8 +5,6 @@ import com.epam.esm.model.dto.filter.Pagination;
 import com.epam.esm.model.entity.GiftCertificateEntity;
 import com.epam.esm.service.filter.Search;
 
-import java.util.List;
-
 /**
  * The GiftCertificateRepository interface extends the CRUDRepository interface, which extends the CRDRepository interface.
  * The CRUDRepository interface provides CRUD (Create, Read, Update, Delete) operations for a specific entity type T, and
