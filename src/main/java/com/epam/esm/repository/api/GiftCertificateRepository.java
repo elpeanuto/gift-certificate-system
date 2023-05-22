@@ -1,8 +1,9 @@
 package com.epam.esm.repository.api;
 
-import com.epam.esm.model.impl.GiftCertificate;
-
-import java.util.List;
+import com.epam.esm.model.dto.filter.GiftCertificateFilter;
+import com.epam.esm.model.dto.filter.Pagination;
+import com.epam.esm.model.entity.GiftCertificateEntity;
+import com.epam.esm.service.filter.Search;
 
 /**
  * The GiftCertificateRepository interface extends the CRUDRepository interface, which extends the CRDRepository interface.
@@ -14,21 +15,8 @@ import java.util.List;
  * @see CRUDRepository
  * @see CRDRepository
  */
-public interface GiftCertificateRepository<T extends GiftCertificate> extends CRUDRepository<T> {
+public interface GiftCertificateRepository extends CRUDRepository<GiftCertificateEntity, Pagination>,
+        Search<GiftCertificateEntity, GiftCertificateFilter> {
 
-    /**
-     * Retrieves a list of GiftCertificate entities with the specified IDs from the repository.
-     *
-     * @param idList The list of IDs of the GiftCertificate entities to retrieve.
-     * @return A list of GiftCertificate entities with the specified IDs.
-     */
-    List<T> getByIdList(List<Integer> idList);
-
-    /**
-     * Retrieves a list of GiftCertificate entities that contain the specified pattern in their name or description.
-     *
-     * @param pattern The pattern to search for in the GiftCertificate entities' name or description.
-     * @return A list of GiftCertificate entities that contain the specified pattern in their name or description.
-     */
-    List<T> getByPartOfNameDescription(String pattern);
+    boolean isCertificateOrdered(long id);
 }
