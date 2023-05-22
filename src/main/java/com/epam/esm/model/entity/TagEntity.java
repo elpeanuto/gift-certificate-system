@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import org.hibernate.envers.Audited;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Audited
@@ -87,5 +88,20 @@ public class TagEntity {
                 ", name='" + name + '\'' +
                 ", certificates=" + certificates +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        TagEntity entity = (TagEntity) o;
+
+        return Objects.equals(name, entity.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return name != null ? name.hashCode() : 0;
     }
 }

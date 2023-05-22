@@ -169,4 +169,30 @@ public class GiftCertificateEntity {
                 ", tags=" + tags +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        GiftCertificateEntity entity = (GiftCertificateEntity) o;
+
+        if (!name.equals(entity.name)) return false;
+        if (!description.equals(entity.description)) return false;
+        if (!price.equals(entity.price)) return false;
+        if (!duration.equals(entity.duration)) return false;
+        if (!createDate.equals(entity.createDate)) return false;
+        return lastUpdateDate.equals(entity.lastUpdateDate);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = name.hashCode();
+        result = 31 * result + description.hashCode();
+        result = 31 * result + price.hashCode();
+        result = 31 * result + duration.hashCode();
+        result = 31 * result + createDate.hashCode();
+        result = 31 * result + lastUpdateDate.hashCode();
+        return result;
+    }
 }

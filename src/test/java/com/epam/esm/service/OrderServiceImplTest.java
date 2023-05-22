@@ -89,12 +89,14 @@ class OrderServiceImplTest {
         OrderDTO orderDTO = new OrderDTO(
                 null,
                 new UserDTO(1L, "User", "Lastname", "user@example.com", "password"),
-                List.of(new GiftCertificateDTO(1L, "Certificate", "Description", 100D, 10, null, null)),
+                List.of(new GiftCertificateDTO(1L, "Certificate", "Description", 100D, 10,
+                        LocalDateTime.MIN, LocalDateTime.MIN)),
                 LocalDateTime.now(),
                 100D
         );
 
-        GiftCertificateEntity certificateEntity = new GiftCertificateEntity(1L, "Certificate", "Description", 100D, 10, null, null, new HashSet<>());
+        GiftCertificateEntity certificateEntity = new GiftCertificateEntity(1L, "Certificate", "Description",
+                100D, 10, LocalDateTime.MIN, LocalDateTime.MIN, new HashSet<>());
         UserEntity userEntity = new UserEntity(1L, "User", "Lastname", "user@example.com", "password");
 
         when(certificateRepository.getById(orderDTO.getCertificates().get(0).getId())).thenReturn(Optional.of(certificateEntity));
@@ -130,12 +132,12 @@ class OrderServiceImplTest {
         OrderDTO orderDTO = new OrderDTO(
                 null,
                 new UserDTO(1L, "User", "Lastname", "user@example.com", "password"),
-                List.of(new GiftCertificateDTO(1L, "Certificate", "Description", 100D, 10, null, null)),
+                List.of(new GiftCertificateDTO(1L, "Certificate", "Description", 100D, 10, LocalDateTime.MIN, LocalDateTime.MIN)),
                 LocalDateTime.now(),
                 100D
         );
 
-        GiftCertificateEntity certificateEntity = new GiftCertificateEntity(1L, "Certificate", "Description", 100D, 10, null, null, null);
+        GiftCertificateEntity certificateEntity = new GiftCertificateEntity(1L, "Certificate", "Description", 100D, 10, LocalDateTime.MIN, LocalDateTime.MIN, new HashSet<>());
 
         when(certificateRepository.getById(orderDTO.getCertificates().get(0).getId())).thenReturn(Optional.of(certificateEntity));
         when(userRepository.getById(orderDTO.getUser().getId())).thenReturn(Optional.empty());

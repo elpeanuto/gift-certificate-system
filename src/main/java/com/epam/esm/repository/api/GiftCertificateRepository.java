@@ -20,21 +20,5 @@ import java.util.List;
 public interface GiftCertificateRepository extends CRUDRepository<GiftCertificateEntity, Pagination>,
         Search<GiftCertificateEntity, GiftCertificateFilter> {
 
-    /**
-     * Retrieves a list of GiftCertificate entities with the specified IDs from the repository.
-     *
-     * @param idList The list of IDs of the GiftCertificate entities to retrieve.
-     * @return A list of GiftCertificate entities with the specified IDs.
-     */
-    List<GiftCertificateEntity> getByIdList(List<Long> idList);
-
-    /**
-     * Retrieves a list of GiftCertificate entities that contain the specified pattern in their name or description.
-     *
-     * @param pattern The pattern to search for in the GiftCertificate entities' name or description.
-     * @return A list of GiftCertificate entities that contain the specified pattern in their name or description.
-     */
-    List<GiftCertificateEntity> getByPartOfNameDescription(String pattern);
-
     boolean isCertificateOrdered(long id);
 }

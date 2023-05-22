@@ -5,6 +5,7 @@ import org.hibernate.envers.Audited;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Audited
@@ -104,5 +105,23 @@ public class OrderEntity {
 
     public void setPrice(Double price) {
         this.price = price;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        OrderEntity that = (OrderEntity) o;
+
+        if (!Objects.equals(createDate, that.createDate)) return false;
+        return Objects.equals(price, that.price);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = createDate != null ? createDate.hashCode() : 0;
+        result = 31 * result + (price != null ? price.hashCode() : 0);
+        return result;
     }
 }

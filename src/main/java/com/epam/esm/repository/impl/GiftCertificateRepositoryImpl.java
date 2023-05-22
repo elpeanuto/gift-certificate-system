@@ -132,16 +132,6 @@ public class GiftCertificateRepositoryImpl implements GiftCertificateRepository 
     }
 
     @Override
-    public List<GiftCertificateEntity> getByIdList(List<Long> idList) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public List<GiftCertificateEntity> getByPartOfNameDescription(String pattern) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
     public boolean isCertificateOrdered(long id) {
         Query query = manager.createQuery("SELECT COUNT(o) > 0 FROM OrderEntity o JOIN o.certificates c WHERE c.id = :certificateId");
         query.setParameter("certificateId", id);
