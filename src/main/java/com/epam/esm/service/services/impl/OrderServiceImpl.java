@@ -56,8 +56,6 @@ public class OrderServiceImpl implements CRUDService<OrderDTO, Pagination> {
     @Override
     @Transactional
     public OrderDTO create(OrderDTO orderDTO) {
-        System.out.println(orderDTO);
-
         Long userId = orderDTO.getUser().getId();
         List<GiftCertificateDTO> dtoList = orderDTO.getCertificates();
 
@@ -79,9 +77,7 @@ public class OrderServiceImpl implements CRUDService<OrderDTO, Pagination> {
                 certificateEntities,
                 LocalDateTime.now(),
                 totalPrice
-                );
-
-        System.out.println(orderEntity);
+        );
 
         return toDto(orderRepo.create(orderEntity));
     }

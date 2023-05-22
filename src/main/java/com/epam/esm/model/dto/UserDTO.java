@@ -1,7 +1,6 @@
 package com.epam.esm.model.dto;
 
 import com.epam.esm.controller.util.OrderValidationGroup;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;

@@ -2,7 +2,6 @@ package com.epam.esm.service.services.impl;
 
 import com.epam.esm.exception.exceptions.ResourceNotFoundException;
 import com.epam.esm.model.converter.OrderConverter;
-import com.epam.esm.model.converter.TagConverter;
 import com.epam.esm.model.converter.UserConverter;
 import com.epam.esm.model.dto.UserDTO;
 import com.epam.esm.model.dto.UserOrderDTO;
@@ -18,7 +17,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-import static com.epam.esm.model.converter.TagConverter.toEntity;
 import static com.epam.esm.model.converter.UserConverter.toDto;
 
 @Service

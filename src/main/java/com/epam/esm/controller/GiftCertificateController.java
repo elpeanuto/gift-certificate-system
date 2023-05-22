@@ -63,8 +63,6 @@ public class GiftCertificateController {
     public ResponseEntity<CollectionModel<GiftCertificateDTO>> search(
             @ModelAttribute GiftCertificateFilter giftCertificateFilter
     ) {
-        System.out.println(giftCertificateFilter);
-
         List<GiftCertificateDTO> certificate = service.doSearch(giftCertificateFilter);
 
         return ResponseEntity.ok(bindLinks(certificate));

@@ -65,7 +65,7 @@ public class UserController {
 
     @PostMapping()
     public ResponseEntity<UserDTO> create(@RequestBody @Valid UserDTO userDTO,
-                                                     BindingResult bindingResult) {
+                                          BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             List<String> errorMessages = new ArrayList<>();
             for (ObjectError error : bindingResult.getAllErrors()) {

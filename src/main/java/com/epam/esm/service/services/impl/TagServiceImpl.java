@@ -10,8 +10,6 @@ import com.epam.esm.repository.api.TagRepository;
 import com.epam.esm.service.services.api.CRDService;
 import com.epam.esm.service.services.api.TagService;
 import jakarta.transaction.Transactional;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,7 +27,6 @@ import static com.epam.esm.model.converter.TagConverter.toEntity;
 @Service
 public class TagServiceImpl implements TagService {
 
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
     private final TagRepository tagRepo;
 
     @Autowired

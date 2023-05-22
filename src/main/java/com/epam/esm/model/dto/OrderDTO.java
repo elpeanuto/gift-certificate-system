@@ -8,6 +8,7 @@ import org.springframework.hateoas.RepresentationModel;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 
 public class OrderDTO extends RepresentationModel<OrderDTO> implements DTO {
 
@@ -82,5 +83,25 @@ public class OrderDTO extends RepresentationModel<OrderDTO> implements DTO {
                 ", createDate=" + createDate +
                 ", totalPrice=" + totalPrice +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+
+        OrderDTO orderDTO = (OrderDTO) o;
+
+        if (!Objects.equals(createDate, orderDTO.createDate)) return false;
+        return Objects.equals(totalPrice, orderDTO.totalPrice);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + (createDate != null ? createDate.hashCode() : 0);
+        result = 31 * result + (totalPrice != null ? totalPrice.hashCode() : 0);
+        return result;
     }
 }

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.hateoas.RepresentationModel;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 public class UserOrderDTO extends RepresentationModel<UserOrderDTO> {
 
@@ -62,5 +63,25 @@ public class UserOrderDTO extends RepresentationModel<UserOrderDTO> {
                 ", createDate=" + createDate +
                 ", totalPrice=" + totalPrice +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+
+        UserOrderDTO that = (UserOrderDTO) o;
+
+        if (!Objects.equals(createDate, that.createDate)) return false;
+        return Objects.equals(totalPrice, that.totalPrice);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + (createDate != null ? createDate.hashCode() : 0);
+        result = 31 * result + (totalPrice != null ? totalPrice.hashCode() : 0);
+        return result;
     }
 }

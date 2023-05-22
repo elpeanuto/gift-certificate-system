@@ -86,7 +86,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     @Override
     @Transactional
     public GiftCertificateDTO delete(long id) {
-        if(certificateRepo.isCertificateOrdered(id))
+        if (certificateRepo.isCertificateOrdered(id))
             throw new DataIntegrityViolationException("This certificate is ordered");
 
         GiftCertificateEntity entity = certificateRepo.delete(id);
