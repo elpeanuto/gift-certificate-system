@@ -1,19 +1,24 @@
 package com.epam.esm.controller;
 
 import com.epam.esm.exception.exceptions.InvalidRequestBodyException;
-import com.epam.esm.model.impl.Tag;
-import com.epam.esm.service.api.CRDService;
-import com.epam.esm.service.impl.TagServiceImpl;
+import com.epam.esm.model.dto.TagDTO;
+import com.epam.esm.model.dto.filter.Pagination;
+import com.epam.esm.service.services.api.TagService;
 import jakarta.validation.Valid;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.epam.esm.model.hateoas.TagLinker.bindLinks;
 
 /**
  * A RestController class that handles API requests related to tags.
@@ -22,8 +27,8 @@ import java.util.List;
 @RequestMapping("/tags")
 public class TagController {
 
-    private final CRDService<Tag> service;
-    private final Logger logger = Logger.getLogger(this.getClass());
+    private final TagService service;
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     /**
      * Constructs an instance of TagController with the specified service.
@@ -31,7 +36,7 @@ public class TagController {
      * @param service the service used to perform CRUD operations on Tag objects
      */
     @Autowired
-    public TagController(TagServiceImpl service) {
+    public TagController(TagService service) {
         this.service = service;
     }
 
@@ -41,8 +46,12 @@ public class TagController {
      * @return a list of all Tag objects
      */
     @GetMapping()
-    public List<Tag> getAll() {
-        return service.getAll();
+    public ResponseEntity<CollectionModel<TagDTO>> getAll(
+            @ModelAttribute() Pagination pagination
+    ) {
+        List<TagDTO> tags = service.getAll(pagination);
+
+        return ResponseEntity.ok(bindLinks(tags));
     }
 
     /**
@@ -52,21 +61,38 @@ public class TagController {
      * @return the Tag object with the specified id
      */
     @GetMapping("/{id}")
-    public Tag getById(@PathVariable("id") int id) {
-        return service.getById(id);
+    public ResponseEntity<TagDTO> getById(@PathVariable("id") long id) {
+        TagDTO tag = service.getById(id);
+
+        bindLinks(tag);
+
+        return ResponseEntity.ok(tag);
+    }
+
+    /**
+     * Retrieves the most widely used Tag.
+     *
+     * @return a ResponseEntity containing a TagDTO object that represents the most widely used Tag
+     */
+    @GetMapping("/widelyUsedTag")
+    public ResponseEntity<TagDTO> getWidelyUsedTag() {
+        TagDTO tag = service.getWidelyUsedTag();
+
+        bindLinks(tag);
+
+        return ResponseEntity.ok(tag);
     }
 
     /**
      * Creates a new Tag object.
      *
-     * @param tag           the Tag object to create
+     * @param tagDTO        the Tag object to create
      * @param bindingResult the BindingResult object used to check for errors in the request body
      * @return the created Tag object
      * @throws InvalidRequestBodyException if there are errors in the request body
      */
     @PostMapping()
-    @ResponseStatus(HttpStatus.CREATED)
-    public Tag create(@RequestBody @Valid Tag tag, BindingResult bindingResult) {
+    public ResponseEntity<TagDTO> create(@RequestBody @Valid TagDTO tagDTO, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             List<String> errorMessages = new ArrayList<>();
             for (ObjectError error : bindingResult.getAllErrors()) {
@@ -75,11 +101,14 @@ public class TagController {
             String str = String.join(", ", errorMessages);
 
             logger.warn(str);
-            throw new InvalidRequestBodyException();
+            throw new InvalidRequestBodyException(str);
         }
 
-        service.create(tag);
-        return tag;
+        TagDTO tag = service.create(tagDTO);
+
+        bindLinks(tag);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(tag);
     }
 
     /**
@@ -89,7 +118,9 @@ public class TagController {
      * @return the deleted Tag object
      */
     @DeleteMapping("/{id}")
-    public Tag delete(@PathVariable("id") int id) {
-        return service.delete(id);
+    public ResponseEntity<TagDTO> delete(@PathVariable("id") long id) {
+        TagDTO tag = service.delete(id);
+
+        return ResponseEntity.ok(tag);
     }
 }

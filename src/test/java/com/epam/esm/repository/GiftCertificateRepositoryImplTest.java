@@ -1,121 +1,140 @@
 package com.epam.esm.repository;
 
-import com.epam.esm.config.TestAppConfig;
-import com.epam.esm.model.impl.GiftCertificate;
+import com.epam.esm.model.dto.filter.GiftCertificateFilter;
+import com.epam.esm.model.dto.filter.Pagination;
+import com.epam.esm.model.entity.GiftCertificateEntity;
 import com.epam.esm.repository.api.GiftCertificateRepository;
+import com.epam.esm.repository.configuration.Config;
+import jakarta.transaction.Transactional;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.jdbc.Sql;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
-@ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = TestAppConfig.class)
-@Sql(scripts = "/sql/setup.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-@ActiveProfiles("test")
+@SpringBootTest(classes = Config.class)
+@Transactional
 class GiftCertificateRepositoryImplTest {
 
     @Autowired
-    private GiftCertificateRepository<GiftCertificate> repository;
+    private GiftCertificateRepository giftCertificateRepository;
+    private List<GiftCertificateEntity> certificateList;
+
+    @BeforeEach
+    void setUp() {
+        certificateList = new ArrayList<>();
+
+        for (long i = 1; i < 6; i++) {
+            GiftCertificateEntity certificate = new GiftCertificateEntity();
+            certificate.setId(i);
+            certificate.setName("certificate" + i);
+            certificate.setDescription("description" + i);
+            certificate.setPrice(10D);
+            certificate.setDuration(10);
+            certificate.setCreateDate(LocalDateTime.parse("2022-01-01T00:00:00"));
+            certificate.setLastUpdateDate(LocalDateTime.parse("2022-01-01T00:00:00"));
+            certificateList.add(certificate);
+        }
+    }
 
     @Test
+    @Sql({"/sql/clear_tables.sql", "/sql/create_certificates.sql"})
     void testGetAll() {
-        List<GiftCertificate> requestList = new ArrayList<>();
-        requestList.add(new GiftCertificate(1, "Test", "Test Description", 1.0, 1, null, null));
-        requestList.add(new GiftCertificate(2, "Test", "Test Description", 1.0, 1, null, null));
-        requestList.add(new GiftCertificate(3, "Test", "Test Description", 1.0, 1, null, null));
-
-        requestList.forEach(certificate -> repository.create(certificate));
-
-        List<GiftCertificate> response = repository.getAll();
-
-        assertEquals(response, requestList);
+        List<GiftCertificateEntity> all = giftCertificateRepository.getAll(new Pagination(0, 10));
+        Assertions.assertEquals(certificateList, all);
     }
 
     @Test
+    @Sql({"/sql/clear_tables.sql"})
+    void testGetAllEmpty() {
+        List<GiftCertificateEntity> all = giftCertificateRepository.getAll(new Pagination(0, 10));
+        Assertions.assertTrue(all.isEmpty());
+    }
+
+    @Test
+    @Sql({"/sql/clear_tables.sql", "/sql/create_certificates.sql"})
     void testGetById() {
-        List<GiftCertificate> requestList = new ArrayList<>();
-        requestList.add(new GiftCertificate(1, "Test", "Test Description", 1.0, 1, null, null));
-        requestList.add(new GiftCertificate(2, "Test", "Test Description", 1.0, 1, null, null));
-        requestList.add(new GiftCertificate(3, "Test", "Test Description", 1.0, 1, null, null));
-
-        requestList.forEach(certificate -> repository.create(certificate));
-
-        assertEquals(repository.getById(1), requestList.get(0));
-        assertEquals(repository.getById(2), requestList.get(1));
-        assertEquals(repository.getById(3), requestList.get(2));
+        Optional<GiftCertificateEntity> certificate = giftCertificateRepository.getById(1L);
+        Assertions.assertTrue(certificate.isPresent());
+        Assertions.assertEquals(certificateList.get(0), certificate.get());
     }
 
     @Test
-    void testGetByIdList() {
-        List<GiftCertificate> requestList = new ArrayList<>();
-        requestList.add(new GiftCertificate(1, "Test", "Test Description", 1.0, 1, null, null));
-        requestList.add(new GiftCertificate(2, "Test", "Test Description", 1.0, 1, null, null));
-        requestList.add(new GiftCertificate(3, "Test", "Test Description", 1.0, 1, null, null));
-
-        requestList.forEach(certificate -> repository.create(certificate));
-
-        List<GiftCertificate> response = repository.getByIdList(List.of(1, 3));
-
-        assertEquals(response.get(0), requestList.get(0));
-        assertEquals(response.get(1), requestList.get(2));
+    @Sql({"/sql/clear_tables.sql", "/sql/create_certificates.sql"})
+    void testGetByIdNonExistent() {
+        Optional<GiftCertificateEntity> certificate = giftCertificateRepository.getById(10L);
+        Assertions.assertTrue(certificate.isEmpty());
     }
 
     @Test
-    void testGetByPartOfNameDescription() {
-        List<GiftCertificate> requestList = new ArrayList<>();
-        requestList.add(new GiftCertificate(1, "Test", "Test Description", 1.0, 1, null, null));
-        requestList.add(new GiftCertificate(2, "Rest", "Test Description", 1.0, 1, null, null));
-        requestList.add(new GiftCertificate(3, "Shopping", "Test Description", 1.0, 1, null, null));
-
-        requestList.forEach(certificate -> repository.create(certificate));
-
-        List<GiftCertificate> response = repository.getByPartOfNameDescription("Sho");
-        List<GiftCertificate> response2 = repository.getByPartOfNameDescription("desc");
-
-        assertEquals(response.get(0), requestList.get(2));
-        assertEquals(response2, requestList);
+    @Sql({"/sql/clear_tables.sql"})
+    void testGetByIdEmpty() {
+        Optional<GiftCertificateEntity> certificate = giftCertificateRepository.getById(1L);
+        Assertions.assertTrue(certificate.isEmpty());
     }
 
     @Test
-    void testUpdate() {
-        List<GiftCertificate> requestList = new ArrayList<>();
-        requestList.add(new GiftCertificate(1, "Test", "Test Description", 1.0, 1, null, null));
-        requestList.add(new GiftCertificate(2, "Rest", "Test Description", 1.0, 1, null, null));
-        requestList.add(new GiftCertificate(3, "Shopping", "Test Description", 1.0, 1, null, null));
+    @Sql({"/sql/clear_tables.sql"})
+    void testCreate() {
+        GiftCertificateEntity certificate = new GiftCertificateEntity();
+        certificate.setName("New Certificate");
+        certificate.setDescription("New Description");
+        certificate.setPrice(19.99);
+        certificate.setDuration(60);
+        certificate.setCreateDate(LocalDateTime.MIN);
+        certificate.setLastUpdateDate(LocalDateTime.MIN);
 
-        requestList.forEach(certificate -> repository.create(certificate));
+        GiftCertificateEntity createdCertificate = giftCertificateRepository.create(certificate);
 
-        GiftCertificate response = repository.update(1, requestList.get(2));
+        Optional<GiftCertificateEntity> retrievedCertificate = giftCertificateRepository.getById(createdCertificate.getId());
 
-        assertEquals(response, requestList.get(2));
-        assertEquals(response, requestList.get(2));
+        Assertions.assertTrue(retrievedCertificate.isPresent());
+        Assertions.assertEquals(createdCertificate, retrievedCertificate.get());
     }
 
     @Test
+    @Sql({"/sql/clear_tables.sql", "/sql/create_certificates.sql"})
     void testDelete() {
-        List<GiftCertificate> requestList = new ArrayList<>();
-        requestList.add(new GiftCertificate(1, "Test", "Test Description", 1.0, 1, null, null));
-        requestList.add(new GiftCertificate(2, "Rest", "Test Description", 1.0, 1, null, null));
-        requestList.add(new GiftCertificate(3, "Shopping", "Test Description", 1.0, 1, null, null));
+        long idToDelete = 1L;
 
-        requestList.forEach(certificate -> repository.create(certificate));
+        Optional<GiftCertificateEntity> certificateBeforeDeletion = giftCertificateRepository.getById(idToDelete);
+        Assertions.assertTrue(certificateBeforeDeletion.isPresent());
 
-        assertEquals(1, repository.delete(1));
-        assertEquals(1, repository.delete(2));
-        assertEquals(1, repository.delete(3));
-        assertEquals(0, repository.delete(4));
+        GiftCertificateEntity deletedCertificate = giftCertificateRepository.delete(idToDelete);
 
-        List<GiftCertificate> getAllResponse = repository.getAll();
+        Optional<GiftCertificateEntity> certificateAfterDeletion = giftCertificateRepository.getById(idToDelete);
+        Assertions.assertFalse(certificateAfterDeletion.isPresent());
+        Assertions.assertEquals(certificateBeforeDeletion.get(), deletedCertificate);
+    }
+    @Test
+    @Sql({"/sql/clear_tables.sql", "/sql/create_certificates.sql"})
+    void testUpdate() {
+        GiftCertificateEntity certificate = certificateList.get(0);
+        certificate.setDescription("Updated description");
+        GiftCertificateEntity updatedCertificate = giftCertificateRepository.update(certificate);
+        Assertions.assertEquals("Updated description", updatedCertificate.getDescription());
+    }
 
-        assertEquals(Collections.emptyList(), getAllResponse);
+    @Test
+    @Sql({"/sql/clear_tables.sql", "/sql/create_certificates.sql"})
+    void testDoSearch() {
+        GiftCertificateFilter filter = new GiftCertificateFilter(new HashSet<>(), "description1", null, 0, 10);
+        List<GiftCertificateEntity> result = giftCertificateRepository.doSearch(filter);
+
+        Assertions.assertEquals(1, result.size());
+    }
+
+    @Test
+    @Sql({"/sql/clear_tables.sql", "/sql/create_certificates.sql"})
+    void testIsCertificateOrdered() {
+        boolean ordered = giftCertificateRepository.isCertificateOrdered(1L);
+        Assertions.assertFalse(ordered);
     }
 }

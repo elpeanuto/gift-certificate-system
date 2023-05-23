@@ -9,7 +9,7 @@ public class ResourceNotFoundException extends RuntimeException {
         super(message);
     }
 
-    public ResourceNotFoundException(int id) {
+    public ResourceNotFoundException(long id) {
         super("Requested resource not found (id = " + id + ")");
     }
 
