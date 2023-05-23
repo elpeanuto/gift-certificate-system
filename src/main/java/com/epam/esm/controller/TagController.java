@@ -69,6 +69,11 @@ public class TagController {
         return ResponseEntity.ok(tag);
     }
 
+    /**
+     * Retrieves the most widely used Tag.
+     *
+     * @return a ResponseEntity containing a TagDTO object that represents the most widely used Tag
+     */
     @GetMapping("/widelyUsedTag")
     public ResponseEntity<TagDTO> getWidelyUsedTag() {
         TagDTO tag = service.getWidelyUsedTag();
