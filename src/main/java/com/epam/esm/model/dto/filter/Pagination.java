@@ -10,16 +10,16 @@ public class Pagination {
     protected Integer limit;
 
     public Pagination(Integer page, Integer limit) {
-        this.page = page != null ? page : DEFAULT_PAGE;
-        this.limit = limit != null ? Math.min(limit, MAX_LIMIT) : DEFAULT_LIMIT;
+        this.page = page != null && page > 0 ? page : DEFAULT_PAGE;
+        this.limit = limit != null && limit > 0 ? Math.min(limit, MAX_LIMIT) : DEFAULT_LIMIT;
     }
 
     public Integer getPage() {
-        return page != null ? page : DEFAULT_PAGE;
+        return page != null && page > 0 ? page : DEFAULT_PAGE;
     }
 
     public Integer getLimit() {
-        return limit != null ? Math.min(limit, MAX_LIMIT) : DEFAULT_LIMIT;
+        return limit != null && limit > 0 ? Math.min(limit, MAX_LIMIT) : DEFAULT_LIMIT;
     }
 
     @Override

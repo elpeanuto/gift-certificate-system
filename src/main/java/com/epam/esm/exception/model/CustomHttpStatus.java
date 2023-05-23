@@ -7,6 +7,7 @@ public enum CustomHttpStatus {
     INVALID_REQUEST_BODY(40001, HttpStatus.Series.CLIENT_ERROR, "Invalid request body"),
     NOT_READABLE(40002, HttpStatus.Series.CLIENT_ERROR, "Http message not readable"),
     ALREADY_EXISTS_ERROR(40003, HttpStatus.Series.CLIENT_ERROR, "Already Exists"),
+    INVALID_ARGUMENT_TYPE(40004, HttpStatus.Series.CLIENT_ERROR, "Invalid argument type"),
 
     RESOURCE_NOT_FOUND(40201, HttpStatus.Series.CLIENT_ERROR, "Resource not found"),
     DATA_INTEGRITY_VIOLATION(40901, HttpStatus.Series.CLIENT_ERROR, "Resource not found"),
