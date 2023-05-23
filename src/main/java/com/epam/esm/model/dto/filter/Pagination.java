@@ -2,9 +2,9 @@ package com.epam.esm.model.dto.filter;
 
 public class Pagination {
 
-    public final Integer DEFAULT_PAGE = 0;
-    public final Integer DEFAULT_LIMIT = 5;
-    public final Integer MAX_LIMIT = 10;
+    private static final Integer DEFAULT_PAGE = 0;
+    private static final Integer DEFAULT_LIMIT = 5;
+    private static final Integer MAX_LIMIT = 10;
 
     protected Integer page;
     protected Integer limit;
