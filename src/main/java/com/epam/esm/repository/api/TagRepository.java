@@ -30,5 +30,10 @@ public interface TagRepository extends CRDRepository<TagEntity, Pagination> {
      */
     TagEntity getByName(String name);
 
+    /**
+     * Retrieves an Optional<TagEntity> representing a widely used tag from the repository.
+     *
+     * @return An Optional containing the widely used Tag entity, or an empty Optional if no widely used tag was found.
+     */
     Optional<TagEntity> getWidelyUsedTag();
 }
