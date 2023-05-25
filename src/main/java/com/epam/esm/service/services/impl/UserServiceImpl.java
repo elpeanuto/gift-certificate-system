@@ -3,6 +3,7 @@ package com.epam.esm.service.services.impl;
 import com.epam.esm.exception.exceptions.ResourceNotFoundException;
 import com.epam.esm.model.converter.OrderConverter;
 import com.epam.esm.model.converter.UserConverter;
+import com.epam.esm.model.dto.OrderDTO;
 import com.epam.esm.model.dto.UserDTO;
 import com.epam.esm.model.dto.UserOrderDTO;
 import com.epam.esm.model.dto.filter.Pagination;
@@ -68,13 +69,23 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserOrderDTO> getOrders(long id, Pagination pagination) {
+    public UserOrderDTO getOrderInfo(long id, long orderId, Pagination pagination) {
+        UserEntity userEntity = userRepo.getById(id).orElseThrow(() -> new ResourceNotFoundException(id));
+        OrderEntity orderEntity = orderRepo.getById(orderId).orElseThrow(() -> new ResourceNotFoundException(id));
+
+        OrderEntity order = orderRepo.getByUserOrderId(userEntity.getId(), orderEntity.getId(), pagination);
+
+        return OrderConverter.orderToUserOrder(order);
+    }
+
+    @Override
+    public List<OrderDTO> getOrders(long id, Pagination pagination) {
         UserEntity userEntity = userRepo.getById(id).orElseThrow(() -> new ResourceNotFoundException(id));
 
         List<OrderEntity> orders = orderRepo.getByUserId(userEntity.getId(), pagination);
 
         return orders.stream()
-                .map(OrderConverter::orderToUserOrder)
+                .map(OrderConverter::toDto)
                 .toList();
     }
 }

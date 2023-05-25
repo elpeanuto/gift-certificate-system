@@ -36,11 +36,4 @@ public class OrderLinker {
         order.add(linkTo(methodOn(OrderController.class).getById(order.getOrderId())).withSelfRel());
         order.add(linkTo(methodOn(UserController.class).getById(order.getUserId())).withRel("user"));
     }
-
-    public static CollectionModel<UserOrderDTO> bindLinksForUserOrder(List<UserOrderDTO> orders) {
-        orders.forEach(OrderLinker::bindLinks);
-
-        return CollectionModel.of(orders,
-                linkTo(methodOn(UserController.class).getAll(null)).withSelfRel());
-    }
 }
