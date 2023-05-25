@@ -12,6 +12,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.jdbc.Sql;
 
 import java.util.ArrayList;
@@ -37,6 +38,18 @@ class UserRepositoryImplTest {
         for (long i = 1; i < 6; i++) {
             userList.add(new UserEntity(i, "name" + i, "surname" + i, "email" + i + "@example.com", "password" + i));
         }
+    }
+
+    @Test
+    @Sql({"/sql/clear_tables.sql"})
+    void testCreate() {
+        UserEntity newUser = new UserEntity(null, "John", "Doe", "john@example.com", "password");
+        UserEntity createdUser = userRepository.create(newUser);
+
+        Optional<UserEntity> retrievedUser = userRepository.getById(createdUser.getId());
+
+        Assertions.assertTrue(retrievedUser.isPresent());
+        Assertions.assertEquals(createdUser, retrievedUser.get());
     }
 
     @Test

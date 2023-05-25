@@ -69,11 +69,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserOrderDTO getOrderInfo(long id, long orderId, Pagination pagination) {
+    public UserOrderDTO getOrderInfo(long id, long orderId) {
         UserEntity userEntity = userRepo.getById(id).orElseThrow(() -> new ResourceNotFoundException(id));
         OrderEntity orderEntity = orderRepo.getById(orderId).orElseThrow(() -> new ResourceNotFoundException(id));
 
-        OrderEntity order = orderRepo.getByUserOrderId(userEntity.getId(), orderEntity.getId(), pagination);
+        OrderEntity order = orderRepo.getByUserOrderId(userEntity.getId(), orderEntity.getId());
 
         return OrderConverter.orderToUserOrder(order);
     }

@@ -79,7 +79,7 @@ public class OrderRepositoryImpl implements OrderRepository {
     }
 
     @Override
-    public OrderEntity getByUserOrderId(Long userId, Long orderId, Pagination pagination) {
+    public OrderEntity getByUserOrderId(Long userId, Long orderId) {
         CriteriaBuilder cb = manager.getCriteriaBuilder();
         CriteriaQuery<OrderEntity> query = cb.createQuery(OrderEntity.class);
         Root<OrderEntity> root = query.from(OrderEntity.class);
@@ -94,9 +94,6 @@ public class OrderRepositoryImpl implements OrderRepository {
         query.select(root);
 
         TypedQuery<OrderEntity> typedQuery = manager.createQuery(query);
-
-        typedQuery.setFirstResult(pagination.getPage() * pagination.getLimit());
-        typedQuery.setMaxResults(pagination.getLimit());
 
         return typedQuery.getSingleResult();
     }

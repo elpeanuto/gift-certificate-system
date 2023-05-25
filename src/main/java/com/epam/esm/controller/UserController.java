@@ -67,10 +67,9 @@ public class UserController {
     @GetMapping("/{userId}/orders/{orderId}")
     public ResponseEntity<UserOrderDTO> getOrderInfo(
             @PathVariable("userId") long userId,
-            @PathVariable("orderId") long orderId,
-            @ModelAttribute() Pagination pagination
+            @PathVariable("orderId") long orderId
     ) {
-        UserOrderDTO userOrder = service.getOrderInfo(userId, orderId, pagination);
+        UserOrderDTO userOrder = service.getOrderInfo(userId, orderId);
 
         OrderLinker.bindLinks(userOrder);
 

@@ -2,8 +2,10 @@ package com.epam.esm.repository;
 
 import com.epam.esm.model.dto.filter.Pagination;
 import com.epam.esm.model.entity.OrderEntity;
+import com.epam.esm.model.entity.UserEntity;
 import com.epam.esm.repository.api.OrderRepository;
 import com.epam.esm.repository.configuration.Config;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -55,6 +57,23 @@ class OrderRepositoryImplTest {
     }
 
     @Test
+    @Sql({"/sql/clear_tables.sql", "/sql/create_users.sql"})
+    void testCreate() {
+        UserEntity user = new UserEntity(1L, "name1", "surname1", "email1@example.com", "password1");
+
+        OrderEntity newOrder = new OrderEntity();
+        newOrder.setUser(user);
+        newOrder.setPrice(50D);
+
+        OrderEntity createdOrder = orderRepository.create(newOrder);
+
+        Optional<OrderEntity> retrievedOrder = orderRepository.getById(createdOrder.getId());
+
+        Assertions.assertTrue(retrievedOrder.isPresent());
+        Assertions.assertEquals(createdOrder, retrievedOrder.get());
+    }
+
+    @Test
     @Sql({"/sql/clear_tables.sql", "/sql/create_users.sql", "/sql/create_certificates.sql", "/sql/create_orders.sql"})
     void testGetByUserId() {
         long userId = 1L;
@@ -67,6 +86,20 @@ class OrderRepositoryImplTest {
         Assertions.assertEquals(1L, order.getId());
         Assertions.assertEquals(userId, order.getUser().getId());
         Assertions.assertEquals(10, order.getPrice());
+    }
+
+    @Test
+    @Sql({"/sql/clear_tables.sql", "/sql/create_users.sql", "/sql/create_certificates.sql", "/sql/create_orders.sql"})
+    void testGetByUserOrderId() {
+        long userId = 1L;
+        long orderId = 1L;
+
+        OrderEntity result = orderRepository.getByUserOrderId(userId, orderId);
+
+        Assertions.assertNotNull(result);
+        Assertions.assertEquals(orderId, result.getId());
+        Assertions.assertEquals(userId, result.getUser().getId());
+        Assertions.assertEquals(10, result.getPrice());
     }
 
 }

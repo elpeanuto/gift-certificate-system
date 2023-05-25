@@ -11,6 +11,6 @@ public interface UserService extends CRUDService<UserDTO, Pagination> {
 
     List<OrderDTO> getOrders(long id, Pagination pagination);
 
-    UserOrderDTO getOrderInfo(long id, long orderId, Pagination pagination);
+    UserOrderDTO getOrderInfo(long id, long orderId);
 }
 
