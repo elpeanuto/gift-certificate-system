@@ -10,6 +10,7 @@ public enum CustomHttpStatus {
     INVALID_ARGUMENT_TYPE(40004, HttpStatus.Series.CLIENT_ERROR, "Invalid argument type"),
 
     RESOURCE_NOT_FOUND(40201, HttpStatus.Series.CLIENT_ERROR, "Resource not found"),
+    NO_RESULT(40202, HttpStatus.Series.CLIENT_ERROR, "No result found"),
     DATA_INTEGRITY_VIOLATION(40901, HttpStatus.Series.CLIENT_ERROR, "Resource not found"),
 
     REPOSITORY_ERROR(50001, HttpStatus.Series.SERVER_ERROR, "Repository error");
