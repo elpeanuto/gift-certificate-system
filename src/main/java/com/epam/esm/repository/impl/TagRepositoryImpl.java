@@ -7,6 +7,7 @@ import com.epam.esm.model.entity.TagEntity;
 import com.epam.esm.repository.api.TagRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.Query;
 import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
@@ -83,23 +84,37 @@ public class TagRepositoryImpl implements TagRepository {
 
     @Override
     public Optional<TagEntity> getWidelyUsedTag() {
-        CriteriaBuilder cb = manager.getCriteriaBuilder();
-        CriteriaQuery<TagEntity> query = cb.createQuery(TagEntity.class);
-        Root<OrderEntity> orderRoot = query.from(OrderEntity.class);
-        Join<OrderEntity, GiftCertificateEntity> certificateJoin = orderRoot.join("certificates");
-        Join<GiftCertificateEntity, TagEntity> tagJoin = certificateJoin.join("tags");
+        String subQuery = "SELECT c.id " +
+                "FROM OrderEntity o " +
+                "JOIN o.certificates c " +
+                "WHERE o.user.id = ( " +
+                "    SELECT o.user.id " +
+                "    FROM OrderEntity o " +
+                "    GROUP BY o.user.id " +
+                "    ORDER BY SUM(o.price) DESC " +
+                "    LIMIT 1" +
+                ")";
 
-        query
-                .select(tagJoin)
-                .groupBy(tagJoin)
-                .orderBy(cb.desc(cb.count(tagJoin)));
+        String jpqlQuery = "SELECT t.id, t.name " +
+                "FROM GiftCertificateEntity gc " +
+                "JOIN gc.tags t " +
+                "WHERE gc.id IN (" + subQuery + ") " +
+                "GROUP BY t.id, t.name " +
+                "ORDER BY COUNT(t.id) DESC";
 
-        TypedQuery<TagEntity> typedQuery = manager.createQuery(query);
-        typedQuery.setMaxResults(1);
+        TypedQuery<Object[]> query = manager.createQuery(jpqlQuery, Object[].class);
+        query.setMaxResults(1);
 
-        return typedQuery.getResultList().stream().findFirst();
+        List<Object[]> resultList = query.getResultList();
+        if (!resultList.isEmpty()) {
+            Object[] result = resultList.get(0);
+            Long tagId = (Long) result[0];
+            String tagName = (String) result[1];
+            TagEntity tagEntity = new TagEntity(tagId, tagName);
+            return Optional.of(tagEntity);
+        } else {
+            return Optional.empty();
+        }
     }
-
-
 }
 

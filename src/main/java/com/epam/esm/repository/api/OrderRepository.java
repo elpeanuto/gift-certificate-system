@@ -22,5 +22,7 @@ public interface OrderRepository extends CRUDRepository<OrderEntity, Pagination>
      * @return a list of order entities
      */
     List<OrderEntity> getByUserId(Long userId, Pagination pagination);
+
+    OrderEntity getByUserOrderId(Long userId, Long orderId);
 }
 

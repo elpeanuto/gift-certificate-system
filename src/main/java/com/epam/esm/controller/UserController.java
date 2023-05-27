@@ -1,6 +1,7 @@
 package com.epam.esm.controller;
 
 import com.epam.esm.exception.exceptions.InvalidRequestBodyException;
+import com.epam.esm.model.dto.OrderDTO;
 import com.epam.esm.model.dto.UserDTO;
 import com.epam.esm.model.dto.UserOrderDTO;
 import com.epam.esm.model.dto.filter.Pagination;
@@ -81,13 +82,25 @@ public class UserController {
      * @return a ResponseEntity containing a CollectionModel of UserOrderDTO objects
      */
     @GetMapping("/{userId}/orders")
-    public ResponseEntity<CollectionModel<UserOrderDTO>> getOrders(
+    public ResponseEntity<CollectionModel<OrderDTO>> getOrders(
             @PathVariable("userId") long userId,
             @ModelAttribute() Pagination pagination
     ) {
-        List<UserOrderDTO> userOrders = service.getOrders(userId, pagination);
+        List<OrderDTO> userOrders = service.getOrders(userId, pagination);
 
-        return ResponseEntity.ok(OrderLinker.bindLinksForUserOrder(userOrders));
+        return ResponseEntity.ok(OrderLinker.bindLinks(userOrders));
+    }
+
+    @GetMapping("/{userId}/orders/{orderId}")
+    public ResponseEntity<UserOrderDTO> getOrderInfo(
+            @PathVariable("userId") long userId,
+            @PathVariable("orderId") long orderId
+    ) {
+        UserOrderDTO userOrder = service.getOrderInfo(userId, orderId);
+
+        OrderLinker.bindLinks(userOrder);
+
+        return ResponseEntity.ok(userOrder);
     }
 
     /**

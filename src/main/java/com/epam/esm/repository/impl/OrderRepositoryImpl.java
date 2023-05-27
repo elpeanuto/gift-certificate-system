@@ -77,4 +77,25 @@ public class OrderRepositoryImpl implements OrderRepository {
 
         return typedQuery.getResultList();
     }
+
+    @Override
+    public OrderEntity getByUserOrderId(Long userId, Long orderId) {
+        CriteriaBuilder cb = manager.getCriteriaBuilder();
+        CriteriaQuery<OrderEntity> query = cb.createQuery(OrderEntity.class);
+        Root<OrderEntity> root = query.from(OrderEntity.class);
+
+        query.where(
+                cb.and(
+                        cb.equal(root.get("user"), new UserEntity(userId)),
+                        cb.equal(root.get("id"), orderId)
+                )
+        );
+
+        query.select(root);
+
+        TypedQuery<OrderEntity> typedQuery = manager.createQuery(query);
+
+        return typedQuery.getSingleResult();
+    }
+
 }
