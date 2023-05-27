@@ -3,6 +3,7 @@ package com.epam.esm.service;
 import com.epam.esm.exception.exceptions.ResourceNotFoundException;
 import com.epam.esm.model.converter.OrderConverter;
 import com.epam.esm.model.converter.UserConverter;
+import com.epam.esm.model.dto.OrderDTO;
 import com.epam.esm.model.dto.UserDTO;
 import com.epam.esm.model.dto.UserOrderDTO;
 import com.epam.esm.model.dto.filter.Pagination;
@@ -13,6 +14,7 @@ import com.epam.esm.repository.api.OrderRepository;
 import com.epam.esm.service.services.impl.UserServiceImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -20,6 +22,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
@@ -85,8 +88,8 @@ class UserServiceImplTest {
     void getOrdersTest() {
         UserEntity entity = new UserEntity(1L, "John", "Doe", "john.doe@example.com", "password1");
         List<OrderEntity> orderEntityList = List.of(
-                new OrderEntity(1L, entity, null, null, 0.0),
-                new OrderEntity(2L, entity, null, null, 0.0)
+                new OrderEntity(1L, entity, new HashSet<>(), null, 0.0),
+                new OrderEntity(2L, entity, new HashSet<>(), null, 0.0)
         );
         long id = 1L;
         Pagination pagination = new Pagination(0, 5);
@@ -94,9 +97,37 @@ class UserServiceImplTest {
         when(userRepo.getById(id)).thenReturn(Optional.of(entity));
         when(orderRepo.getByUserId(entity.getId(), pagination)).thenReturn(orderEntityList);
         
-        List<UserOrderDTO> result = service.getOrders(id, pagination);
+        List<OrderDTO> result = service.getOrders(id, pagination);
         
-        Assertions.assertEquals(orderEntityList.stream().map(OrderConverter::orderToUserOrder).toList(), result);
+        Assertions.assertEquals(orderEntityList.stream().map(OrderConverter::toDto).toList(), result);
+    }
+
+    @Test
+    void getOrdersInfoTest() {
+        UserEntity entity = new UserEntity(1L, "John", "Doe", "john.doe@example.com", "password1");
+        OrderEntity orderEntity = new OrderEntity(1L, entity, new HashSet<>(), null, 0.0);
+
+        long id = 1L;
+        Pagination pagination = new Pagination(0, 5);
+
+        when(userRepo.getById(id)).thenReturn(Optional.of(entity));
+        when(orderRepo.getById(id)).thenReturn(Optional.of(orderEntity));
+        when(orderRepo.getByUserOrderId(entity.getId(), orderEntity.getId())).thenReturn(orderEntity);
+
+        UserOrderDTO result = service.getOrderInfo(id, id);
+
+        Assertions.assertEquals(OrderConverter.orderToUserOrder(orderEntity),  result);
+    }
+
+    @Test
+    void createUserTest() {
+        UserDTO userDTO = new UserDTO(1L, "John", "Doe", "john.doe@example.com", "password1");
+        UserEntity userEntity = UserConverter.toEntity(userDTO);
+
+        when(userRepo.create(userEntity)).thenReturn(userEntity);
+        UserDTO result = service.create(userDTO);
+
+        assertEquals(userDTO, result);
     }
 
     @Test

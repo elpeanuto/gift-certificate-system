@@ -7,11 +7,16 @@ import com.epam.esm.exception.exceptions.ResourceNotFoundException;
 import com.epam.esm.exception.model.CustomHttpStatus;
 import com.epam.esm.exception.model.ErrorResponse;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+
+import java.net.BindException;
 
 @RestControllerAdvice
 public class RestExceptionHandler {
@@ -76,5 +81,23 @@ public class RestExceptionHandler {
                 Integer.toString(status.getValue()));
 
         return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ErrorResponse> handleMethodArgumentNotValid(MethodArgumentNotValidException ex) {
+        CustomHttpStatus status = CustomHttpStatus.INVALID_ARGUMENT_TYPE;
+
+        ErrorResponse errorResponse = new ErrorResponse(status.getReasonPhrase(), Integer.toString(status.getValue()));
+
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(EmptyResultDataAccessException.class)
+    public ResponseEntity<ErrorResponse> handleMethodArgumentNotValid(EmptyResultDataAccessException ex) {
+        CustomHttpStatus status = CustomHttpStatus.NO_RESULT;
+
+        ErrorResponse errorResponse = new ErrorResponse(status.getReasonPhrase(), Integer.toString(status.getValue()));
+
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 }

@@ -14,5 +14,11 @@ import com.epam.esm.service.filter.Search;
 public interface GiftCertificateRepository extends CRUDRepository<GiftCertificateEntity, Pagination>,
         Search<GiftCertificateEntity, GiftCertificateFilter> {
 
+    /**
+     * Checks if a gift certificate with the specified ID is ordered.
+     *
+     * @param id the ID of the gift certificate
+     * @return true if the gift certificate is ordered, false otherwise
+     */
     boolean isCertificateOrdered(long id);
 }
