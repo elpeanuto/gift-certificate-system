@@ -23,6 +23,13 @@ public interface OrderRepository extends CRUDRepository<OrderEntity, Pagination>
      */
     List<OrderEntity> getByUserId(Long userId, Pagination pagination);
 
+    /**
+     * Retrieves the order entity associated with the specified user ID and order ID.
+     *
+     * @param userId  the ID of the user
+     * @param orderId the ID of the order
+     * @return the order entity, or null if not found
+     */
     OrderEntity getByUserOrderId(Long userId, Long orderId);
 }
 

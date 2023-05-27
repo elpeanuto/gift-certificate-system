@@ -1,5 +1,6 @@
 package com.epam.esm.service.services.api;
 
+import com.epam.esm.model.dto.OrderDTO;
 import com.epam.esm.model.dto.UserDTO;
 import com.epam.esm.model.dto.UserOrderDTO;
 import com.epam.esm.model.dto.filter.Pagination;
@@ -19,8 +20,15 @@ public interface UserService extends CRUDService<UserDTO, Pagination> {
      * @param pagination The pagination information for retrieving a subset of user orders.
      * @return A list of user order DTOs.
      */
-    List<UserOrderDTO> getOrders(long id, Pagination pagination);
+    List<OrderDTO> getOrders(long id, Pagination pagination);
 
+    /**
+     * Retrieves the user order DTO associated with the specified user ID and order ID.
+     *
+     * @param id      The ID of the user.
+     * @param orderId The ID of the order.
+     * @return The user order DTO, or null if not found.
+     */
     UserOrderDTO getOrderInfo(long id, long orderId);
 }
 

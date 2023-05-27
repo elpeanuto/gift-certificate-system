@@ -75,7 +75,7 @@ public class UserController {
     }
 
     /**
-     * Retrieves a list of UserOrder objects for the specified User ID.
+     * Retrieves a list of orders objects for the specified User ID.
      *
      * @param userId     an integer representing the ID of the User
      * @param pagination a Pagination object used for pagination of the results
@@ -91,6 +91,12 @@ public class UserController {
         return ResponseEntity.ok(OrderLinker.bindLinks(userOrders));
     }
 
+    /**
+     * Retrieves a UserOrder objects for the specified User ID.
+     *
+     * @param userId     an integer representing the ID of the User
+     * @return a ResponseEntity containing a CollectionModel of UserOrderDTO objects
+     */
     @GetMapping("/{userId}/orders/{orderId}")
     public ResponseEntity<UserOrderDTO> getOrderInfo(
             @PathVariable("userId") long userId,
