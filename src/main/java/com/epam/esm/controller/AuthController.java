@@ -5,7 +5,11 @@ import com.epam.esm.exception.exceptions.InvalidRequestBodyException;
 import com.epam.esm.model.dto.AuthenticationRequestDTO;
 import com.epam.esm.model.dto.UserDTO;
 import com.epam.esm.model.hateoas.UserLinker;
+import com.epam.esm.service.services.api.AuthService;
+import com.epam.esm.service.services.api.UserService;
 import jakarta.validation.Valid;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,17 +29,24 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/auth")
-public class Authentication {
+public class AuthController {
 
     private final AuthenticationManager authenticationManager;
     private final UserDetailsService userDetailsService;
     private final JwtUtils jwtUtils;
+    private final AuthService authService;
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
-    public Authentication(AuthenticationManager authenticationManager, UserDetailsService userDetailsService, JwtUtils jwtUtils) {
+    public AuthController(
+            AuthenticationManager authenticationManager,
+            UserDetailsService userDetailsService,
+            JwtUtils jwtUtils,
+            AuthService authService) {
         this.authenticationManager = authenticationManager;
         this.userDetailsService = userDetailsService;
         this.jwtUtils = jwtUtils;
+        this.authService = authService;
     }
 
     @PostMapping("/authenticate")
@@ -70,7 +81,7 @@ public class Authentication {
             throw new InvalidRequestBodyException(str);
         }
 
-        UserDTO body = service.create(userDTO);
+        UserDTO body = authService.registration(userDTO);
 
         UserLinker.bindLinks(body);
 

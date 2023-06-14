@@ -75,25 +75,4 @@ public class UserController {
 
         return ResponseEntity.ok(userOrder);
     }
-
-    @PostMapping()
-    public ResponseEntity<UserDTO> create(@RequestBody @Valid UserDTO userDTO,
-                                          BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            List<String> errorMessages = new ArrayList<>();
-            for (ObjectError error : bindingResult.getAllErrors()) {
-                errorMessages.add(error.getDefaultMessage());
-            }
-            String str = String.join(", ", errorMessages);
-
-            logger.warn(str);
-            throw new InvalidRequestBodyException(str);
-        }
-
-        UserDTO body = service.create(userDTO);
-
-        UserLinker.bindLinks(body);
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(body);
-    }
 }

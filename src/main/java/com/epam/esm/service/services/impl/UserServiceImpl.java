@@ -9,8 +9,8 @@ import com.epam.esm.model.dto.UserOrderDTO;
 import com.epam.esm.model.dto.filter.Pagination;
 import com.epam.esm.model.entity.OrderEntity;
 import com.epam.esm.model.entity.UserEntity;
-import com.epam.esm.repository.api.CRUDRepository;
 import com.epam.esm.repository.api.OrderRepository;
+import com.epam.esm.repository.api.UserRepository;
 import com.epam.esm.service.services.api.UserService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,11 +23,11 @@ import static com.epam.esm.model.converter.UserConverter.toDto;
 @Service
 public class UserServiceImpl implements UserService {
 
-    private final CRUDRepository<UserEntity, Pagination> userRepo;
+    private final UserRepository userRepo;
     private final OrderRepository orderRepo;
 
     @Autowired
-    public UserServiceImpl(CRUDRepository<UserEntity, Pagination> userRepo,
+    public UserServiceImpl(UserRepository userRepo,
                            OrderRepository orderRepo) {
         this.userRepo = userRepo;
         this.orderRepo = orderRepo;
@@ -76,6 +76,14 @@ public class UserServiceImpl implements UserService {
         OrderEntity order = orderRepo.getByUserOrderId(userEntity.getId(), orderEntity.getId());
 
         return OrderConverter.orderToUserOrder(order);
+    }
+
+    @Override
+    public UserDTO getByEmail(String email) {
+        UserEntity entity = userRepo.getByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException(email));
+
+        return toDto(entity);
     }
 
     @Override
