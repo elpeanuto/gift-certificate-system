@@ -1,5 +1,6 @@
 package com.epam.esm.model.converter;
 
+import com.epam.esm.model.constant.UserRole;
 import com.epam.esm.model.dto.UserDTO;
 import com.epam.esm.model.entity.RoleEntity;
 import com.epam.esm.model.entity.UserEntity;
@@ -16,7 +17,8 @@ public class UserConverter {
                 entity.getFirstName(),
                 entity.getLastName(),
                 entity.getEmail(),
-                null
+                entity.getPassword(),
+                UserRole.valueOf(entity.getRole().getName())
         );
     }
 

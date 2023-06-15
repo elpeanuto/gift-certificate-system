@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
@@ -46,6 +47,7 @@ public class TagController {
      * @return a list of all Tag objects
      */
     @GetMapping()
+    @PreAuthorize("hasAnyAuthority('USER_ROLE, ADMIN_ROLE')")
     public ResponseEntity<CollectionModel<TagDTO>> getAll(
             @ModelAttribute() Pagination pagination
     ) {
@@ -61,6 +63,7 @@ public class TagController {
      * @return the Tag object with the specified id
      */
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('USER_ROLE, ADMIN_ROLE')")
     public ResponseEntity<TagDTO> getById(@PathVariable("id") long id) {
         TagDTO tag = service.getById(id);
 
@@ -70,6 +73,7 @@ public class TagController {
     }
 
     @GetMapping("/widelyUsedTag")
+    @PreAuthorize("hasAnyAuthority('USER_ROLE, ADMIN_ROLE')")
     public ResponseEntity<TagDTO> getWidelyUsedTag() {
         TagDTO tag = service.getWidelyUsedTag();
 
@@ -87,6 +91,7 @@ public class TagController {
      * @throws InvalidRequestBodyException if there are errors in the request body
      */
     @PostMapping()
+    @PreAuthorize("hasAuthority('ADMIN_ROLE')")
     public ResponseEntity<TagDTO> create(@RequestBody @Valid TagDTO tagDTO, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             List<String> errorMessages = new ArrayList<>();
@@ -113,6 +118,7 @@ public class TagController {
      * @return the deleted Tag object
      */
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN_ROLE')")
     public ResponseEntity<TagDTO> delete(@PathVariable("id") long id) {
         TagDTO tag = service.delete(id);
 

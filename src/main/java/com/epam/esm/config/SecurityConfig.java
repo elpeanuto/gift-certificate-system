@@ -1,19 +1,22 @@
 package com.epam.esm.config;
 
+import com.epam.esm.exception.exceptions.ResourceNotFoundException;
+import com.epam.esm.model.dto.UserDTO;
+import com.epam.esm.model.dto.UserDetailsAdapter;
 import com.epam.esm.service.services.api.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -21,24 +24,30 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @EnableWebSecurity
 @Configuration
+@EnableMethodSecurity
 public class SecurityConfig {
 
     private final JwtAthFilter jwtAuthFilter;
     private final UserService userService;
+    private final JwtAuthEntryPoint jwtAuthEntryPoint;
 
     @Autowired
-    public SecurityConfig(JwtAthFilter jwtAuthFilter, UserService userService) {
+    public SecurityConfig(JwtAthFilter jwtAuthFilter, UserService userService, JwtAuthEntryPoint jwtAuthEntryPoint) {
         this.jwtAuthFilter = jwtAuthFilter;
         this.userService = userService;
+        this.jwtAuthEntryPoint = jwtAuthEntryPoint;
     }
-
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http, UserDetailsService userDetailsService) throws Exception {
-        http.cors().and().csrf().disable();
-        http.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
-        http.authorizeHttpRequests(requests -> requests
-                .anyRequest().permitAll())
+        http.cors().and().csrf().disable()
+                .exceptionHandling()
+                .authenticationEntryPoint(jwtAuthEntryPoint)
+                .and()
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+                .authorizeHttpRequests(requests -> requests
+                        .requestMatchers(HttpHeaders.ALLOW).permitAll()
+                        .anyRequest().permitAll())
                 .userDetailsService(userDetailsService)
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         return http.build();
@@ -66,10 +75,13 @@ public class SecurityConfig {
 
     @Bean
     public UserDetailsService userDetailsService() {
-//        return userService::getByEmail;
-        return new UserDetailsService() {
-            @Override
-            public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return username -> {
+            try {
+                UserDTO byEmail = userService.getByEmail(username);
+                System.out.println(byEmail);
+
+                return new UserDetailsAdapter(byEmail);
+            } catch (ResourceNotFoundException ex) {
                 return null;
             }
         };

@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
@@ -37,6 +38,7 @@ public class OrderController {
     }
 
     @GetMapping()
+    @PreAuthorize("hasAuthority('USER_ROLE')")
     public ResponseEntity<CollectionModel<OrderDTO>> getAll(
             @ModelAttribute() Pagination pagination
     ) {
@@ -46,6 +48,7 @@ public class OrderController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('USER_ROLE')")
     public ResponseEntity<OrderDTO> getById(@PathVariable("id") long id) {
         OrderDTO order = service.getById(id);
 
@@ -55,6 +58,7 @@ public class OrderController {
     }
 
     @PostMapping()
+    @PreAuthorize("hasAuthority('USER_ROLE')")
     public ResponseEntity<OrderDTO> create(@RequestBody @Validated(OrderValidationGroup.class) OrderDTO orderDTO, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             Set<String> errorMessages = new HashSet<>();
@@ -106,6 +110,7 @@ public class OrderController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN_ROLE')")
     public ResponseEntity<OrderDTO> delete(@PathVariable("id") long id) {
         return ResponseEntity.ok(service.delete(id));
     }

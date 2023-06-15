@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,6 +31,7 @@ public class UserController {
     }
 
     @GetMapping()
+    @PreAuthorize("hasAnyAuthority('USER_ROLE, ADMIN_ROLE')")
     public ResponseEntity<CollectionModel<UserDTO>> getAll(
             @ModelAttribute() Pagination pagination
     ) {
@@ -39,6 +41,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('USER_ROLE, ADMIN_ROLE')")
     public ResponseEntity<UserDTO> getById(@PathVariable("id") long id) {
         UserDTO user = service.getById(id);
 
@@ -48,6 +51,7 @@ public class UserController {
     }
 
     @GetMapping("/{userId}/orders")
+    @PreAuthorize("hasAnyAuthority('USER_ROLE, ADMIN_ROLE')")
     public ResponseEntity<CollectionModel<OrderDTO>> getOrders(
             @PathVariable("userId") long userId,
             @ModelAttribute() Pagination pagination
@@ -58,6 +62,7 @@ public class UserController {
     }
 
     @GetMapping("/{userId}/orders/{orderId}")
+    @PreAuthorize("hasAnyAuthority('USER_ROLE, ADMIN_ROLE')")
     public ResponseEntity<UserOrderDTO> getOrderInfo(
             @PathVariable("userId") long userId,
             @PathVariable("orderId") long orderId

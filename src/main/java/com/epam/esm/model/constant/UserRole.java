@@ -1,9 +1,10 @@
 package com.epam.esm.model.constant;
 
 public enum UserRole {
-    ADMIN("Administrator"),
-    MANAGER("Manager"),
-    USER("User");
+    GUEST_ROLE("GUEST_ROLE"),
+    ADMIN_ROLE("ADMIN_ROLE"),
+    MANAGER_ROLE("MANAGER_ROLE"),
+    USER_ROLE("USER_ROLE");
 
     private final String name;
 

@@ -61,8 +61,14 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public Optional<UserEntity> getByEmail(String email) {
-        UserEntity entity = manager.find(UserEntity.class, email);
+        CriteriaBuilder cb = manager.getCriteriaBuilder();
+        CriteriaQuery<UserEntity> query = cb.createQuery(UserEntity.class);
+        Root<UserEntity> root = query.from(UserEntity.class);
 
-        return Optional.ofNullable(entity);
+        query.select(root).where(cb.equal(root.get("email"), email));
+
+        TypedQuery<UserEntity> typedQuery = manager.createQuery(query);
+
+        return typedQuery.getResultList().stream().findFirst();
     }
 }

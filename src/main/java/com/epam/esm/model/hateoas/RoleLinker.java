@@ -5,7 +5,6 @@ import com.epam.esm.model.dto.RoleDTO;
 import org.springframework.hateoas.CollectionModel;
 
 import java.util.List;
-import java.util.Random;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;

@@ -16,28 +16,28 @@ import java.util.Objects;
 public class UserDTO extends RepresentationModel<UserDTO> implements DTO {
 
     @NotNull(message = "Id is missing", groups = OrderValidationGroup.class)
-    private Long id;
+    protected Long id;
 
     @Size(min = 2, max = 30, message = "firstName should be between 2 and 30 characters")
     @Pattern(regexp = "\\p{L}+", message = "First name should contain only characters")
-    private String firstName;
+    protected String firstName;
 
     @Size(min = 2, max = 30, message = "lastName should be between 2 and 30 characters")
     @Pattern(regexp = "\\p{L}+", message = "Last name should contain only characters")
-    private String lastName;
+    protected String lastName;
 
     @Email
     @NotNull(message = "Email is missing")
     @Size(min = 2, max = 30, message = "Email should be between 2 and 30 characters")
-    private String email;
+    protected String email;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @NotNull(message = "Password is missing")
     @Size(min = 2, max = 30, message = "Password should be between 2 and 30 characters")
-    private String password;
+    protected String password;
 
     @JsonIgnore
-    private UserRole role;
+    protected UserRole role = UserRole.GUEST_ROLE;
 
     public UserDTO() {
 
@@ -134,6 +134,7 @@ public class UserDTO extends RepresentationModel<UserDTO> implements DTO {
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
+                ", role=" + role +
                 '}';
     }
 }

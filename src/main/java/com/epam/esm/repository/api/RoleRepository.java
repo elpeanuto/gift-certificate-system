@@ -5,7 +5,7 @@ import com.epam.esm.model.entity.RoleEntity;
 
 import java.util.Optional;
 
-public interface RoleRepository extends CRDRepository<RoleEntity, Pagination>{
+public interface RoleRepository extends CRDRepository<RoleEntity, Pagination> {
 
     Optional<RoleEntity> getByName(String name);
 }

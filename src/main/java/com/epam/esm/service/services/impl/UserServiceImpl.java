@@ -95,6 +95,8 @@ public class UserServiceImpl implements UserService {
         UserEntity entity = userRepo.getByEmail(email)
                 .orElseThrow(() -> new ResourceNotFoundException(email));
 
+        System.out.println("entity: " + entity);
+
         return toDto(entity);
     }
 

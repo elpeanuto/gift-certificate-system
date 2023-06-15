@@ -15,7 +15,7 @@ import java.util.function.Function;
 @Component
 public class JwtUtils {
 
-    private String jwtSigningKey = "secret";
+    private final String jwtSigningKey = "secret";
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
@@ -25,18 +25,16 @@ public class JwtUtils {
         return extractClaim(token, Claims::getExpiration);
     }
 
-    public boolean hasClaims(String token, String claimName) {
-        final Claims claims = extractAllClaims(token);
-        return claims.get(claimName) != null;
-    }
-
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = extractAllClaims(token);
+
+        System.out.println(claims);
+
         return claimsResolver.apply(claims);
     }
 
     private Claims extractAllClaims(String token) {
-         return Jwts.parser().setSigningKey(token).parseClaimsJwt(token).getBody();
+        return Jwts.parser().setSigningKey(jwtSigningKey).parseClaimsJws(token).getBody();
     }
 
     private Boolean isTokenExpired(String token) {
@@ -45,10 +43,6 @@ public class JwtUtils {
 
     public String generateToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
-        return createToken(claims, userDetails);
-    }
-
-    public String generateToken(UserDetails userDetails, Map<String, Object> claims) {
         return createToken(claims, userDetails);
     }
 
@@ -66,5 +60,4 @@ public class JwtUtils {
 
         return (username.equals((userDetails.getUsername())) && !isTokenExpired(token));
     }
-
 }
