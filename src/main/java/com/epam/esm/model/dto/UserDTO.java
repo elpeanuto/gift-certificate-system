@@ -1,19 +1,19 @@
 package com.epam.esm.model.dto;
 
 import com.epam.esm.controller.util.OrderValidationGroup;
+import com.epam.esm.model.constant.UserRole;
+import com.epam.esm.model.dto.api.DTO;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import org.springframework.hateoas.RepresentationModel;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Collection;
 import java.util.Objects;
 
-public class UserDTO extends RepresentationModel<UserDTO> implements DTO, UserDetails {
+public class UserDTO extends RepresentationModel<UserDTO> implements DTO {
 
     @NotNull(message = "Id is missing", groups = OrderValidationGroup.class)
     private Long id;
@@ -36,12 +36,28 @@ public class UserDTO extends RepresentationModel<UserDTO> implements DTO, UserDe
     @Size(min = 2, max = 30, message = "Password should be between 2 and 30 characters")
     private String password;
 
+    @JsonIgnore
+    private UserRole role;
+
+    public UserDTO() {
+
+    }
+
     public UserDTO(Long id, String firstName, String lastName, String email, String password) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.password = password;
+    }
+
+    public UserDTO(Long id, String firstName, String lastName, String email, String password, UserRole role) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.password = password;
+        this.role = role;
     }
 
     public Long getId() {
@@ -76,42 +92,20 @@ public class UserDTO extends RepresentationModel<UserDTO> implements DTO, UserDe
         this.email = email;
     }
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getPassword() {
         return password;
     }
 
-    @Override
-    public String getUsername() {
-        return firstName;
+    public UserRole getRole() {
+        return role;
     }
 
-    @Override
-    public boolean isAccountNonExpired() {
-        return false;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return false;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return false;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return false;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
+    public void setRole(UserRole role) {
+        this.role = role;
     }
 
     @Override

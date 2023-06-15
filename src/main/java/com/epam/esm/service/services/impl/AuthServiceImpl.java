@@ -1,5 +1,6 @@
 package com.epam.esm.service.services.impl;
 
+import com.epam.esm.model.constant.UserRole;
 import com.epam.esm.model.dto.UserDTO;
 import com.epam.esm.service.services.api.AuthService;
 import com.epam.esm.service.services.api.UserService;
@@ -22,6 +23,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public UserDTO registration(UserDTO userDTO) {
         userDTO.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+        userDTO.setRole(UserRole.USER);
 
         return userService.create(userDTO);
     }

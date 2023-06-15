@@ -1,5 +1,6 @@
 package com.epam.esm.model.dto;
 
+import com.epam.esm.model.dto.api.DTO;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import org.springframework.hateoas.RepresentationModel;

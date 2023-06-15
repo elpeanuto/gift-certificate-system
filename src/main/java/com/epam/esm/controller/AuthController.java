@@ -6,7 +6,6 @@ import com.epam.esm.model.dto.AuthenticationRequestDTO;
 import com.epam.esm.model.dto.UserDTO;
 import com.epam.esm.model.hateoas.UserLinker;
 import com.epam.esm.service.services.api.AuthService;
-import com.epam.esm.service.services.api.UserService;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
