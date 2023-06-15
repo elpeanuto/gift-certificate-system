@@ -35,23 +35,23 @@ public class RoleController {
     public ResponseEntity<CollectionModel<RoleDTO>> getAll(
             @ModelAttribute() Pagination pagination
     ) {
-        List<RoleDTO> tags = service.getAll(pagination);
+        List<RoleDTO> roles = service.getAll(pagination);
 
-        return ResponseEntity.ok(bindLinks(tags));
+        return ResponseEntity.ok(bindLinks(roles));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<RoleDTO> getById(@PathVariable("id") long id) {
-        RoleDTO tag = service.getById(id);
+        RoleDTO role = service.getById(id);
 
-        bindLinks(tag);
+        bindLinks(role);
 
-        return ResponseEntity.ok(tag);
+        return ResponseEntity.ok(role);
     }
 
 
     @PostMapping()
-    public ResponseEntity<RoleDTO> create(@RequestBody @Valid RoleDTO tagDTO, BindingResult bindingResult) {
+    public ResponseEntity<RoleDTO> create(@RequestBody @Valid RoleDTO roleDTO, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             List<String> errorMessages = new ArrayList<>();
             for (ObjectError error : bindingResult.getAllErrors()) {
@@ -63,17 +63,17 @@ public class RoleController {
             throw new InvalidRequestBodyException(str);
         }
 
-        RoleDTO tag = service.create(tagDTO);
+        RoleDTO role = service.create(roleDTO);
 
-        bindLinks(tag);
+        bindLinks(role);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(tag);
+        return ResponseEntity.status(HttpStatus.CREATED).body(role);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<RoleDTO> delete(@PathVariable("id") long id) {
-        RoleDTO tag = service.delete(id);
+        RoleDTO role = service.delete(id);
 
-        return ResponseEntity.ok(tag);
+        return ResponseEntity.ok(role);
     }
 }

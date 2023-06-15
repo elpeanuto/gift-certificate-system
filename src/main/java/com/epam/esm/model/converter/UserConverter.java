@@ -27,7 +27,7 @@ public class UserConverter {
                 dto.getLastName(),
                 dto.getEmail(),
                 dto.getPassword(),
-                new RoleEntity(null, dto.getRole().name())
+                new RoleEntity(null, dto.getRole().getName())
         );
     }
 }

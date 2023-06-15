@@ -8,8 +8,10 @@ import com.epam.esm.model.dto.UserDTO;
 import com.epam.esm.model.dto.UserOrderDTO;
 import com.epam.esm.model.dto.filter.Pagination;
 import com.epam.esm.model.entity.OrderEntity;
+import com.epam.esm.model.entity.RoleEntity;
 import com.epam.esm.model.entity.UserEntity;
 import com.epam.esm.repository.api.OrderRepository;
+import com.epam.esm.repository.api.RoleRepository;
 import com.epam.esm.repository.api.UserRepository;
 import com.epam.esm.service.services.api.UserService;
 import jakarta.transaction.Transactional;
@@ -24,12 +26,15 @@ import static com.epam.esm.model.converter.UserConverter.toDto;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepo;
+    private final RoleRepository roleRepo;
     private final OrderRepository orderRepo;
 
     @Autowired
     public UserServiceImpl(UserRepository userRepo,
+                           RoleRepository roleRepo,
                            OrderRepository orderRepo) {
         this.userRepo = userRepo;
+        this.roleRepo = roleRepo;
         this.orderRepo = orderRepo;
     }
 
@@ -53,7 +58,14 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public UserDTO create(UserDTO userDTO) {
-        return UserConverter.toDto(userRepo.create(UserConverter.toEntity(userDTO)));
+        UserEntity entity = UserConverter.toEntity(userDTO);
+
+        RoleEntity userRole = roleRepo.getByName(entity.getRole().getName())
+                .orElseThrow(() -> new ResourceNotFoundException(entity.getRole().getName()));
+
+        entity.setRole(userRole);
+
+        return UserConverter.toDto(userRepo.create(entity));
     }
 
     @Override

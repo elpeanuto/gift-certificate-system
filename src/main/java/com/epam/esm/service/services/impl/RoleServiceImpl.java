@@ -51,7 +51,7 @@ public class RoleServiceImpl implements RoleService {
     @Override
     @Transactional
     public RoleDTO create(RoleDTO roleDTO) {
-        if (roleRepo.getByName(roleDTO.getName()) != null)
+        if (roleRepo.getByName(roleDTO.getName()).isPresent())
             throw new EntityAlreadyExistsException();
 
         return toDto(roleRepo.create(toEntity(roleDTO)));
