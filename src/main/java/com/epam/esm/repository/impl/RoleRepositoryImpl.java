@@ -62,10 +62,10 @@ public class RoleRepositoryImpl implements RoleRepository {
     }
 
     @Override
-    public RoleEntity getByName(String name) {
+    public Optional<RoleEntity> getByName(String name) {
         TypedQuery<RoleEntity> query = manager.createQuery("SELECT t FROM RoleEntity t WHERE t.name = :name", RoleEntity.class);
         query.setParameter("name", name);
         List<RoleEntity> tags = query.getResultList();
-        return tags.isEmpty() ? null : tags.get(0);
+        return Optional.ofNullable(tags.isEmpty() ? null : tags.get(0));
     }
 }

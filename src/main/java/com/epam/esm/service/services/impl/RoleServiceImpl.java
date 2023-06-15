@@ -3,12 +3,16 @@ package com.epam.esm.service.services.impl;
 import com.epam.esm.exception.exceptions.EntityAlreadyExistsException;
 import com.epam.esm.exception.exceptions.ResourceNotFoundException;
 import com.epam.esm.model.converter.RoleConverter;
+import com.epam.esm.model.converter.UserConverter;
 import com.epam.esm.model.dto.RoleDTO;
 import com.epam.esm.model.dto.filter.Pagination;
 import com.epam.esm.model.entity.RoleEntity;
+import com.epam.esm.model.entity.UserEntity;
 import com.epam.esm.repository.api.RoleRepository;
 import com.epam.esm.service.services.api.CRDService;
+import com.epam.esm.service.services.api.RoleService;
 import jakarta.transaction.Transactional;
+import org.apache.catalina.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +22,7 @@ import static com.epam.esm.model.converter.RoleConverter.toDto;
 import static com.epam.esm.model.converter.RoleConverter.toEntity;
 
 @Service
-public class RoleServiceImpl implements CRDService<RoleDTO, Pagination> {
+public class RoleServiceImpl implements RoleService {
 
     private final RoleRepository roleRepo;
 
@@ -62,5 +66,13 @@ public class RoleServiceImpl implements CRDService<RoleDTO, Pagination> {
             throw new ResourceNotFoundException(id);
 
         return toDto(entity);
+    }
+
+    @Override
+    public RoleDTO getByName(String name) {
+        RoleEntity entity = roleRepo.getByName(name)
+                .orElseThrow(() -> new ResourceNotFoundException(name));
+
+        return RoleConverter.toDto(entity);
     }
 }
