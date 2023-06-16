@@ -22,6 +22,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * A RestController class that handles API requests related to authentication.
+ */
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
@@ -29,12 +32,23 @@ public class AuthController {
     private final AuthService authService;
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
+    /**
+     * Constructor for AuthController class
+     *
+     * @param authService authentication service
+     */
     @Autowired
     public AuthController(
             AuthService authService) {
         this.authService = authService;
     }
 
+    /**
+     * Method which authenticate users
+     *
+     * @param request AuthenticationRequestDTO with email and password
+     * @return JWT
+     */
     @PostMapping("/authenticate")
     public ResponseEntity<String> authenticate(
             @RequestBody AuthenticationRequestDTO request
@@ -44,6 +58,13 @@ public class AuthController {
         return authentication.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.status(400).body("error"));
     }
 
+    /**
+     * Method which saves user info in db
+     *
+     * @param userDTO user info
+     * @param bindingResult binding results for validation
+     * @return registered user
+     */
     @PostMapping("/register")
     public ResponseEntity<UserDTO> registration(@RequestBody @Valid UserDTO userDTO,
                                                 BindingResult bindingResult) {
