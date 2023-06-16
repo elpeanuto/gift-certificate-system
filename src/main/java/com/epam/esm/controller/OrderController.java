@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
@@ -51,6 +52,7 @@ public class OrderController {
      * @return a ResponseEntity containing a CollectionModel of OrderDTO objects
      */
     @GetMapping()
+    @PreAuthorize("hasAnyAuthority('USER_ROLE', 'ADMIN_ROLE')")
     public ResponseEntity<CollectionModel<OrderDTO>> getAll(
             @ModelAttribute() Pagination pagination
     ) {
@@ -66,6 +68,7 @@ public class OrderController {
      * @return a ResponseEntity containing an OrderDTO object that matches the given ID
      */
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('USER_ROLE', 'ADMIN_ROLE')")
     public ResponseEntity<OrderDTO> getById(@PathVariable("id") long id) {
         OrderDTO order = service.getById(id);
 
@@ -83,6 +86,7 @@ public class OrderController {
      * @throws InvalidRequestBodyException if the provided data is not valid
      */
     @PostMapping()
+    @PreAuthorize("hasAnyAuthority('USER_ROLE', 'ADMIN_ROLE')")
     public ResponseEntity<OrderDTO> create(@RequestBody @Validated(OrderValidationGroup.class) OrderDTO orderDTO, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             Set<String> errorMessages = new HashSet<>();
@@ -140,6 +144,7 @@ public class OrderController {
      * @return a ResponseEntity containing an OrderDTO object that represents the deleted order
      */
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN_ROLE')")
     public ResponseEntity<OrderDTO> delete(@PathVariable("id") long id) {
         return ResponseEntity.ok(service.delete(id));
     }

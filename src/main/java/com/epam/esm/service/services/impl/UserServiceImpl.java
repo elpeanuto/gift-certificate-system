@@ -8,9 +8,11 @@ import com.epam.esm.model.dto.UserDTO;
 import com.epam.esm.model.dto.UserOrderDTO;
 import com.epam.esm.model.dto.filter.Pagination;
 import com.epam.esm.model.entity.OrderEntity;
+import com.epam.esm.model.entity.RoleEntity;
 import com.epam.esm.model.entity.UserEntity;
-import com.epam.esm.repository.api.CRUDRepository;
 import com.epam.esm.repository.api.OrderRepository;
+import com.epam.esm.repository.api.RoleRepository;
+import com.epam.esm.repository.api.UserRepository;
 import com.epam.esm.service.services.api.UserService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,13 +25,16 @@ import static com.epam.esm.model.converter.UserConverter.toDto;
 @Service
 public class UserServiceImpl implements UserService {
 
-    private final CRUDRepository<UserEntity, Pagination> userRepo;
+    private final UserRepository userRepo;
+    private final RoleRepository roleRepo;
     private final OrderRepository orderRepo;
 
     @Autowired
-    public UserServiceImpl(CRUDRepository<UserEntity, Pagination> userRepo,
+    public UserServiceImpl(UserRepository userRepo,
+                           RoleRepository roleRepo,
                            OrderRepository orderRepo) {
         this.userRepo = userRepo;
+        this.roleRepo = roleRepo;
         this.orderRepo = orderRepo;
     }
 
@@ -53,7 +58,14 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public UserDTO create(UserDTO userDTO) {
-        return UserConverter.toDto(userRepo.create(UserConverter.toEntity(userDTO)));
+        UserEntity entity = UserConverter.toEntity(userDTO);
+
+        RoleEntity userRole = roleRepo.getByName(entity.getRole().getName())
+                .orElseThrow(() -> new ResourceNotFoundException(entity.getRole().getName()));
+
+        entity.setRole(userRole);
+
+        return UserConverter.toDto(userRepo.create(entity));
     }
 
     @Override
@@ -76,6 +88,14 @@ public class UserServiceImpl implements UserService {
         OrderEntity order = orderRepo.getByUserOrderId(userEntity.getId(), orderEntity.getId());
 
         return OrderConverter.orderToUserOrder(order);
+    }
+
+    @Override
+    public UserDTO getByEmail(String email) {
+        UserEntity entity = userRepo.getByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException(email));
+
+        return toDto(entity);
     }
 
     @Override

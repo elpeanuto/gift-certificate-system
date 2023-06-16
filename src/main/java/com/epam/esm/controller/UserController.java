@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
@@ -51,6 +52,7 @@ public class UserController {
      * @return a ResponseEntity containing a CollectionModel of UserDTO objects
      */
     @GetMapping()
+    @PreAuthorize("hasAnyAuthority('USER_ROLE', 'ADMIN_ROLE')")
     public ResponseEntity<CollectionModel<UserDTO>> getAll(
             @ModelAttribute() Pagination pagination
     ) {
@@ -66,6 +68,7 @@ public class UserController {
      * @return a ResponseEntity containing a UserDTO object that matches the given ID
      */
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('USER_ROLE', 'ADMIN_ROLE')")
     public ResponseEntity<UserDTO> getById(@PathVariable("id") long id) {
         UserDTO user = service.getById(id);
 
@@ -82,6 +85,7 @@ public class UserController {
      * @return a ResponseEntity containing a CollectionModel of UserOrderDTO objects
      */
     @GetMapping("/{userId}/orders")
+    @PreAuthorize("hasAnyAuthority('USER_ROLE', 'ADMIN_ROLE')")
     public ResponseEntity<CollectionModel<OrderDTO>> getOrders(
             @PathVariable("userId") long userId,
             @ModelAttribute() Pagination pagination
@@ -98,6 +102,7 @@ public class UserController {
      * @return a ResponseEntity containing a CollectionModel of UserOrderDTO objects
      */
     @GetMapping("/{userId}/orders/{orderId}")
+    @PreAuthorize("hasAnyAuthority('USER_ROLE', 'ADMIN_ROLE')")
     public ResponseEntity<UserOrderDTO> getOrderInfo(
             @PathVariable("userId") long userId,
             @PathVariable("orderId") long orderId

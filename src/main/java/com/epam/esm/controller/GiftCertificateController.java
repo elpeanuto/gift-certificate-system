@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
@@ -104,6 +105,7 @@ public class GiftCertificateController {
      * @throws InvalidRequestBodyException if the provided data is not valid
      */
     @PostMapping()
+    @PreAuthorize("hasAuthority('ADMIN_ROLE')")
     public ResponseEntity<GiftCertificateDTO> create(@RequestBody @Validated(CreateValidationGroup.class) GiftCertificateDTO certificate,
                                                      BindingResult bindingResult) {
         validateGiftCertificate(certificate, bindingResult);
@@ -125,6 +127,7 @@ public class GiftCertificateController {
      * @throws InvalidRequestBodyException if the provided data is not valid
      */
     @PatchMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN_ROLE')")
     public ResponseEntity<GiftCertificateDTO> update(@PathVariable("id") long id,
                                                      @RequestBody @Validated(UpdateValidationGroup.class) GiftCertificateDTO certificate,
                                                      BindingResult bindingResult) {
@@ -144,6 +147,7 @@ public class GiftCertificateController {
      * @return a GiftCertificate object that represents the deleted gift certificate
      */
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN_ROLE')")
     public ResponseEntity<GiftCertificateDTO> delete(@PathVariable("id") long id) {
         return ResponseEntity.ok(service.delete(id));
     }

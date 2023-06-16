@@ -1,6 +1,7 @@
 package com.epam.esm.service;
 
 import com.epam.esm.exception.exceptions.ResourceNotFoundException;
+import com.epam.esm.model.constant.UserRole;
 import com.epam.esm.model.converter.OrderConverter;
 import com.epam.esm.model.dto.GiftCertificateDTO;
 import com.epam.esm.model.dto.OrderDTO;
@@ -8,6 +9,7 @@ import com.epam.esm.model.dto.UserDTO;
 import com.epam.esm.model.dto.filter.Pagination;
 import com.epam.esm.model.entity.GiftCertificateEntity;
 import com.epam.esm.model.entity.OrderEntity;
+import com.epam.esm.model.entity.RoleEntity;
 import com.epam.esm.model.entity.UserEntity;
 import com.epam.esm.repository.api.CRUDRepository;
 import com.epam.esm.repository.impl.GiftCertificateRepositoryImpl;
@@ -51,7 +53,7 @@ class OrderServiceImplTest {
 
     @Test
     void getAllTest() {
-        UserEntity userEntity = new UserEntity(1L, "User", "Lastname", "user@example.com", "password");
+        UserEntity userEntity = new UserEntity(1L, "User", "Lastname", "user@example.com", "password",  new RoleEntity(1L, "ADMIN_ROLE"));
         Pagination pagination = new Pagination(0, 5);
         List<OrderEntity> entityList = List.of(new OrderEntity(1L, userEntity, new HashSet<>(), null, null));
         when(orderRepository.getAll(pagination)).thenReturn(entityList);
@@ -64,11 +66,11 @@ class OrderServiceImplTest {
     @Test
     void getByIdTest() {
         long id = 1L;
-        UserEntity user = new UserEntity();
+        UserEntity userEntity = new UserEntity(1L, "User", "Lastname", "user@example.com", "password",  new RoleEntity(1L, "ADMIN_ROLE"));
         Set<GiftCertificateEntity> certificates = new HashSet<>();
         LocalDateTime createDate = LocalDateTime.now();
         double price = 100.0;
-        OrderEntity entity = new OrderEntity(id, user, certificates, createDate, price);
+        OrderEntity entity = new OrderEntity(id, userEntity, certificates, createDate, price);
         when(orderRepository.getById(id)).thenReturn(Optional.of(entity));
 
         OrderDTO result = service.getById(id);
@@ -97,7 +99,7 @@ class OrderServiceImplTest {
 
         GiftCertificateEntity certificateEntity = new GiftCertificateEntity(1L, "Certificate", "Description",
                 100D, 10, LocalDateTime.MIN, LocalDateTime.MIN, new HashSet<>());
-        UserEntity userEntity = new UserEntity(1L, "User", "Lastname", "user@example.com", "password");
+        UserEntity userEntity = new UserEntity(1L, "User", "Lastname", "user@example.com", "password",  new RoleEntity(1L, "ADMIN_ROLE"));
 
         when(certificateRepository.getById(orderDTO.getCertificates().get(0).getId())).thenReturn(Optional.of(certificateEntity));
         when(userRepository.getById(orderDTO.getUser().getId())).thenReturn(Optional.of(userEntity));
