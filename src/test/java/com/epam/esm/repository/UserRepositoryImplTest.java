@@ -36,14 +36,14 @@ class UserRepositoryImplTest {
         userList = new ArrayList<>();
 
         for (long i = 1; i < 6; i++) {
-            userList.add(new UserEntity(i, "name" + i, "surname" + i, "email" + i + "@example.com", "password" + i));
+            userList.add(new UserEntity(i, "name" + i, "surname" + i, "email" + i + "@example.com", "password" + i, null));
         }
     }
 
     @Test
     @Sql({"/sql/clear_tables.sql"})
     void testCreate() {
-        UserEntity newUser = new UserEntity(null, "John", "Doe", "john@example.com", "password");
+        UserEntity newUser = new UserEntity(null, "John", "Doe", "john@example.com", "password", null);
         UserEntity createdUser = userRepository.create(newUser);
 
         Optional<UserEntity> retrievedUser = userRepository.getById(createdUser.getId());
@@ -71,7 +71,7 @@ class UserRepositoryImplTest {
     void testGetById() {
         Optional<UserEntity> user = userRepository.getById(1L);
         Assertions.assertTrue(user.isPresent());
-        Assertions.assertEquals(new UserEntity(1L, "name1", "surname1", "email1@example.com", "password1"), user.get());
+        Assertions.assertEquals(new UserEntity(1L, "name1", "surname1", "email1@example.com", "password1", null), user.get());
     }
 
     @Test

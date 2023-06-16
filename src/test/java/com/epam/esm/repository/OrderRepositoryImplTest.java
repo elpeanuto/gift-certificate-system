@@ -59,7 +59,7 @@ class OrderRepositoryImplTest {
     @Test
     @Sql({"/sql/clear_tables.sql", "/sql/create_users.sql"})
     void testCreate() {
-        UserEntity user = new UserEntity(1L, "name1", "surname1", "email1@example.com", "password1");
+        UserEntity user = new UserEntity(1L, "name1", "surname1", "email1@example.com", "password1", null);
 
         OrderEntity newOrder = new OrderEntity();
         newOrder.setUser(user);
