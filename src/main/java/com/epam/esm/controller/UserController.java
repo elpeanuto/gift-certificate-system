@@ -6,8 +6,6 @@ import com.epam.esm.model.dto.UserOrderDTO;
 import com.epam.esm.model.dto.filter.Pagination;
 import com.epam.esm.model.hateoas.OrderLinker;
 import com.epam.esm.service.services.api.UserService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +21,6 @@ import static com.epam.esm.model.hateoas.UserLinker.bindLinks;
 public class UserController {
 
     private final UserService service;
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     public UserController(UserService service) {

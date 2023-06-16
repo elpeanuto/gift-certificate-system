@@ -11,6 +11,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -23,7 +24,7 @@ public class RestExceptionHandler {
         CustomHttpStatus status = CustomHttpStatus.REPOSITORY_ERROR;
 
         ErrorResponse errorResponse = new ErrorResponse(e.getMessage(),
-                Integer.toString(status.getValue()));
+               status.getValue());
 
         return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
@@ -33,7 +34,7 @@ public class RestExceptionHandler {
         CustomHttpStatus status = CustomHttpStatus.RESOURCE_NOT_FOUND;
 
         ErrorResponse errorResponse = new ErrorResponse(e.getMessage(),
-                Integer.toString(status.getValue()));
+               status.getValue());
 
         e.printStackTrace();
 
@@ -44,8 +45,10 @@ public class RestExceptionHandler {
     public ResponseEntity<ErrorResponse> handler(EntityAlreadyExistsException e) {
         CustomHttpStatus status = CustomHttpStatus.RESOURCE_NOT_FOUND;
 
+        e.printStackTrace();
+
         ErrorResponse errorResponse = new ErrorResponse(e.getMessage(),
-                Integer.toString(status.getValue()));
+               status.getValue());
 
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
@@ -55,7 +58,7 @@ public class RestExceptionHandler {
         CustomHttpStatus status = CustomHttpStatus.NOT_READABLE;
 
         ErrorResponse errorResponse = new ErrorResponse(status.getReasonPhrase(),
-                Integer.toString(status.getValue()));
+               status.getValue());
 
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
@@ -65,7 +68,7 @@ public class RestExceptionHandler {
         CustomHttpStatus status = CustomHttpStatus.INVALID_REQUEST_BODY;
 
         ErrorResponse errorResponse = new ErrorResponse(status.getReasonPhrase() + ": " + ex.getMessage(),
-                Integer.toString(status.getValue()));
+               status.getValue());
 
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
@@ -75,26 +78,35 @@ public class RestExceptionHandler {
         CustomHttpStatus status = CustomHttpStatus.DATA_INTEGRITY_VIOLATION;
 
         ErrorResponse errorResponse = new ErrorResponse(ex.getMessage(),
-                Integer.toString(status.getValue()));
+               status.getValue());
 
         return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ErrorResponse> handleMethodArgumentNotValid(MethodArgumentNotValidException ex) {
+    public ResponseEntity<ErrorResponse> handle(MethodArgumentNotValidException ex) {
         CustomHttpStatus status = CustomHttpStatus.INVALID_ARGUMENT_TYPE;
 
-        ErrorResponse errorResponse = new ErrorResponse(status.getReasonPhrase(), Integer.toString(status.getValue()));
+        ErrorResponse errorResponse = new ErrorResponse(status.getReasonPhrase(),status.getValue());
 
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(EmptyResultDataAccessException.class)
-    public ResponseEntity<ErrorResponse> handleMethodArgumentNotValid(EmptyResultDataAccessException ex) {
+    public ResponseEntity<ErrorResponse> handle(EmptyResultDataAccessException ex) {
         CustomHttpStatus status = CustomHttpStatus.NO_RESULT;
 
-        ErrorResponse errorResponse = new ErrorResponse(status.getReasonPhrase(), Integer.toString(status.getValue()));
+        ErrorResponse errorResponse = new ErrorResponse(status.getReasonPhrase(),status.getValue());
 
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ErrorResponse> handle(AccessDeniedException ex) {
+        CustomHttpStatus status = CustomHttpStatus.ACCESS_DENIED;
+
+        ErrorResponse errorResponse = new ErrorResponse(status.getReasonPhrase(),status.getValue());
+
+        return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
     }
 }

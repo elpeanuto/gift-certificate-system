@@ -78,7 +78,6 @@ public class SecurityConfig {
         return username -> {
             try {
                 UserDTO byEmail = userService.getByEmail(username);
-                System.out.println(byEmail);
 
                 return new UserDetailsAdapter(byEmail);
             } catch (ResourceNotFoundException ex) {

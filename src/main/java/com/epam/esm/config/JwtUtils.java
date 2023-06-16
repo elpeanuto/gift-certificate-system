@@ -28,8 +28,6 @@ public class JwtUtils {
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = extractAllClaims(token);
 
-        System.out.println(claims);
-
         return claimsResolver.apply(claims);
     }
 

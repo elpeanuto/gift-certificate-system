@@ -1,12 +1,18 @@
 package com.epam.esm.config;
 
+import com.epam.esm.exception.model.CustomHttpStatus;
+import com.epam.esm.exception.model.ErrorResponse;
 import com.epam.esm.model.dto.UserDetailsAdapter;
 import com.epam.esm.service.services.api.UserService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -45,20 +51,37 @@ public class JwtAthFilter extends OncePerRequestFilter {
         }
 
         jwtToken = authHeader.substring(7);
-        userEmail = jwtUtils.extractUsername(jwtToken);
 
-        if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails userDetails = new UserDetailsAdapter(userService.getByEmail(userEmail));
+        try {
+            userEmail = jwtUtils.extractUsername(jwtToken);
 
-            if (jwtUtils.isTokenValid(jwtToken, userDetails)) {
-                System.out.println(123);
-                UsernamePasswordAuthenticationToken authToken =
-                        new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-                authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                SecurityContextHolder.getContext().setAuthentication(authToken);
+            if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+                UserDetails userDetails = new UserDetailsAdapter(userService.getByEmail(userEmail));
+
+                if (jwtUtils.isTokenValid(jwtToken, userDetails)) {
+
+                    UsernamePasswordAuthenticationToken authToken =
+                            new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                    authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                    SecurityContextHolder.getContext().setAuthentication(authToken);
+                }
             }
+        } catch (JwtException e) {
+            ErrorResponse errorResponse = new ErrorResponse(
+                    CustomHttpStatus.WRONG_TOKEN_ERROR.getReasonPhrase(),
+                    CustomHttpStatus.WRONG_TOKEN_ERROR.getValue()
+            );
+
+            ObjectMapper objectMapper = new ObjectMapper();
+            String jsonResponse = objectMapper.writeValueAsString(errorResponse);
+
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+            response.getOutputStream().write(jsonResponse.getBytes());
+            return;
         }
 
         filterChain.doFilter(request, response);
     }
+
 }
