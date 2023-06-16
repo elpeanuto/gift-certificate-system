@@ -32,7 +32,7 @@ public class RoleController {
     }
 
     @GetMapping()
-    @PreAuthorize("hasAnyAuthority('USER_ROLE, ADMIN_ROLE')")
+    @PreAuthorize("hasAnyAuthority('USER_ROLE', 'ADMIN_ROLE')")
     public ResponseEntity<CollectionModel<RoleDTO>> getAll(
             @ModelAttribute() Pagination pagination
     ) {
@@ -42,7 +42,7 @@ public class RoleController {
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAnyAuthority('USER_ROLE, ADMIN_ROLE')")
+    @PreAuthorize("hasAnyAuthority('USER_ROLE', 'ADMIN_ROLE')")
     public ResponseEntity<RoleDTO> getById(@PathVariable("id") long id) {
         RoleDTO role = service.getById(id);
 

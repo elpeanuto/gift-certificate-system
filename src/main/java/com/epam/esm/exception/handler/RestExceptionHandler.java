@@ -104,7 +104,7 @@ public class RestExceptionHandler {
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<ErrorResponse> handle(AccessDeniedException ex) {
         CustomHttpStatus status = CustomHttpStatus.ACCESS_DENIED;
-
+        ex.printStackTrace();
         ErrorResponse errorResponse = new ErrorResponse(status.getReasonPhrase(),status.getValue());
 
         return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);

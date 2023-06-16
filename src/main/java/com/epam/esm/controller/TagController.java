@@ -47,7 +47,7 @@ public class TagController {
      * @return a list of all Tag objects
      */
     @GetMapping()
-    @PreAuthorize("hasAnyAuthority('USER_ROLE, ADMIN_ROLE')")
+    @PreAuthorize("hasAnyAuthority('USER_ROLE', 'ADMIN_ROLE')")
     public ResponseEntity<CollectionModel<TagDTO>> getAll(
             @ModelAttribute() Pagination pagination
     ) {
@@ -63,7 +63,7 @@ public class TagController {
      * @return the Tag object with the specified id
      */
     @GetMapping("/{id}")
-    @PreAuthorize("hasAnyAuthority('USER_ROLE, ADMIN_ROLE')")
+    @PreAuthorize("hasAnyAuthority('USER_ROLE', 'ADMIN_ROLE')")
     public ResponseEntity<TagDTO> getById(@PathVariable("id") long id) {
         TagDTO tag = service.getById(id);
 
@@ -73,7 +73,7 @@ public class TagController {
     }
 
     @GetMapping("/widelyUsedTag")
-    @PreAuthorize("hasAnyAuthority('USER_ROLE, ADMIN_ROLE')")
+    @PreAuthorize("hasAnyAuthority('USER_ROLE', 'ADMIN_ROLE')")
     public ResponseEntity<TagDTO> getWidelyUsedTag() {
         TagDTO tag = service.getWidelyUsedTag();
 

@@ -38,7 +38,7 @@ public class OrderController {
     }
 
     @GetMapping()
-    @PreAuthorize("hasAuthority('USER_ROLE')")
+    @PreAuthorize("hasAnyAuthority('USER_ROLE', 'ADMIN_ROLE')")
     public ResponseEntity<CollectionModel<OrderDTO>> getAll(
             @ModelAttribute() Pagination pagination
     ) {
@@ -48,7 +48,7 @@ public class OrderController {
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAuthority('USER_ROLE')")
+    @PreAuthorize("hasAnyAuthority('USER_ROLE', 'ADMIN_ROLE')")
     public ResponseEntity<OrderDTO> getById(@PathVariable("id") long id) {
         OrderDTO order = service.getById(id);
 
@@ -58,7 +58,7 @@ public class OrderController {
     }
 
     @PostMapping()
-    @PreAuthorize("hasAuthority('USER_ROLE')")
+    @PreAuthorize("hasAnyAuthority('USER_ROLE', 'ADMIN_ROLE')")
     public ResponseEntity<OrderDTO> create(@RequestBody @Validated(OrderValidationGroup.class) OrderDTO orderDTO, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             Set<String> errorMessages = new HashSet<>();
