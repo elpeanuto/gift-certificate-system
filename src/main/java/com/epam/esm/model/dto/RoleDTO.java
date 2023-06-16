@@ -1,13 +1,10 @@
 package com.epam.esm.model.dto;
 
-import com.epam.esm.model.dto.api.DTO;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import org.springframework.hateoas.RepresentationModel;
 
-import java.util.Objects;
-
-public class TagDTO extends RepresentationModel<TagDTO> implements DTO {
+public class RoleDTO extends RepresentationModel<RoleDTO> {
 
     private Long id;
 
@@ -15,10 +12,11 @@ public class TagDTO extends RepresentationModel<TagDTO> implements DTO {
     @Size(min = 2, max = 30, message = "Name should be between 2 and 30 characters")
     private String name;
 
-    public TagDTO() {
+    public RoleDTO() {
+
     }
 
-    public TagDTO(Long id, String name) {
+    public RoleDTO(Long id, String name) {
         this.id = id;
         this.name = name;
     }
@@ -41,7 +39,7 @@ public class TagDTO extends RepresentationModel<TagDTO> implements DTO {
 
     @Override
     public String toString() {
-        return "Tag{" +
+        return "RoleDTO{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 '}';
@@ -51,14 +49,17 @@ public class TagDTO extends RepresentationModel<TagDTO> implements DTO {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
 
-        TagDTO tagDTO = (TagDTO) o;
+        RoleDTO roleDTO = (RoleDTO) o;
 
-        return Objects.equals(name, tagDTO.name);
+        return name.equals(roleDTO.name);
     }
 
     @Override
     public int hashCode() {
-        return name != null ? name.hashCode() : 0;
+        int result = super.hashCode();
+        result = 31 * result + name.hashCode();
+        return result;
     }
 }

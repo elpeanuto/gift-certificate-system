@@ -3,13 +3,13 @@ package com.epam.esm.exception.model;
 public class ErrorResponse {
 
     private String errorMessage;
-    private String errorCode;
+    private int errorCode;
 
     public ErrorResponse() {
 
     }
 
-    public ErrorResponse(String errorMessage, String errorCode) {
+    public ErrorResponse(String errorMessage, int errorCode) {
         this.errorMessage = errorMessage;
         this.errorCode = errorCode;
     }
@@ -22,11 +22,11 @@ public class ErrorResponse {
         this.errorMessage = errorMessage;
     }
 
-    public String getErrorCode() {
+    public int getErrorCode() {
         return errorCode;
     }
 
-    public void setErrorCode(String errorCode) {
+    public void setErrorCode(int errorCode) {
         this.errorCode = errorCode;
     }
 }

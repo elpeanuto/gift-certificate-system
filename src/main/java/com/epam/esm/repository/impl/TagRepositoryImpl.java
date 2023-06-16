@@ -1,17 +1,13 @@
 package com.epam.esm.repository.impl;
 
 import com.epam.esm.model.dto.filter.Pagination;
-import com.epam.esm.model.entity.GiftCertificateEntity;
-import com.epam.esm.model.entity.OrderEntity;
 import com.epam.esm.model.entity.TagEntity;
 import com.epam.esm.repository.api.TagRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import jakarta.persistence.Query;
 import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
-import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.Root;
 import org.springframework.stereotype.Repository;
 

@@ -2,7 +2,7 @@ package com.epam.esm.repository.impl;
 
 import com.epam.esm.model.dto.filter.Pagination;
 import com.epam.esm.model.entity.UserEntity;
-import com.epam.esm.repository.api.CRUDRepository;
+import com.epam.esm.repository.api.UserRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public class UserRepositoryImpl implements CRUDRepository<UserEntity, Pagination> {
+public class UserRepositoryImpl implements UserRepository {
 
     @PersistenceContext
     private EntityManager manager;
@@ -57,5 +57,18 @@ public class UserRepositoryImpl implements CRUDRepository<UserEntity, Pagination
     @Override
     public UserEntity update(UserEntity userEntity) {
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public Optional<UserEntity> getByEmail(String email) {
+        CriteriaBuilder cb = manager.getCriteriaBuilder();
+        CriteriaQuery<UserEntity> query = cb.createQuery(UserEntity.class);
+        Root<UserEntity> root = query.from(UserEntity.class);
+
+        query.select(root).where(cb.equal(root.get("email"), email));
+
+        TypedQuery<UserEntity> typedQuery = manager.createQuery(query);
+
+        return typedQuery.getResultList().stream().findFirst();
     }
 }

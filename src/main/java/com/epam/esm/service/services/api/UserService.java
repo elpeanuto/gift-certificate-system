@@ -30,5 +30,7 @@ public interface UserService extends CRUDService<UserDTO, Pagination> {
      * @return The user order DTO, or null if not found.
      */
     UserOrderDTO getOrderInfo(long id, long orderId);
+
+    UserDTO getByEmail(String email);
 }
 
