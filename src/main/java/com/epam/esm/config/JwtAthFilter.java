@@ -4,7 +4,6 @@ import com.epam.esm.exception.model.CustomHttpStatus;
 import com.epam.esm.exception.model.ErrorResponse;
 import com.epam.esm.model.dto.UserDetailsAdapter;
 import com.epam.esm.service.services.api.UserService;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
