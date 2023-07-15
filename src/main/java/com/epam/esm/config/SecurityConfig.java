@@ -52,6 +52,11 @@ public class SecurityConfig {
                         .anyRequest().permitAll())
                 .userDetailsService(userDetailsService)
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+//
+//        http.authorizeRequests()
+//                .anyRequest().authenticated()
+//                .and().oauth2Login();
+
         return http.build();
     }
 
