@@ -95,7 +95,9 @@ public class AuthServiceImpl implements AuthService {
             if (userEmail != null) {
                 UserDetails userDetails = new UserDetailsAdapter(userService.getByEmail(userEmail));
 
-                if (jwtUtils.isRefreshTokenValid(refreshToken, userDetails)) {
+                boolean refreshTokenValid = jwtUtils.isRefreshTokenValid(refreshToken, userDetails);
+
+                if (refreshTokenValid) {
                     String accessToken = jwtUtils.generateAccessToken(userDetails);
                     JwtResponseDTO authResponse = new JwtResponseDTO(
                             accessToken,
