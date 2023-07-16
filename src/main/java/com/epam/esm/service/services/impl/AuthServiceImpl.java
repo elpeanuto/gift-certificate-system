@@ -109,7 +109,6 @@ public class AuthServiceImpl implements AuthService {
                 }
             }
         } catch (JwtException e) {
-            e.printStackTrace();
             ErrorResponse errorResponse = new ErrorResponse(
                     CustomHttpStatus.WRONG_TOKEN_ERROR.getReasonPhrase(),
                     CustomHttpStatus.WRONG_TOKEN_ERROR.getValue()
