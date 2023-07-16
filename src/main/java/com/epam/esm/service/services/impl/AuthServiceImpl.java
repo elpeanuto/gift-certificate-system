@@ -8,9 +8,6 @@ import com.epam.esm.model.dto.AuthenticationRequestDTO;
 import com.epam.esm.model.dto.JwtResponseDTO;
 import com.epam.esm.model.dto.UserDTO;
 import com.epam.esm.model.dto.UserDetailsAdapter;
-import com.epam.esm.model.dto.filter.Pagination;
-import com.epam.esm.model.entity.RefreshTokenEntity;
-import com.epam.esm.repository.api.CRUDRepository;
 import com.epam.esm.service.services.api.AuthService;
 import com.epam.esm.service.services.api.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -26,9 +23,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.security.sasl.AuthenticationException;
 import java.io.IOException;
-import java.nio.file.AccessDeniedException;
 import java.util.Optional;
 
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
@@ -41,8 +36,6 @@ public class AuthServiceImpl implements AuthService {
     private final AuthenticationManager authenticationManager;
     private final UserDetailsService userDetailsService;
     private final JwtUtils jwtUtils;
-    private final CRUDRepository<RefreshTokenEntity, Pagination> refreshTokenRepository;
-
 
     @Autowired
     public AuthServiceImpl(
@@ -50,13 +43,12 @@ public class AuthServiceImpl implements AuthService {
             PasswordEncoder passwordEncoder,
             AuthenticationManager authenticationManager,
             UserDetailsService userDetailsService,
-            JwtUtils jwtUtils, CRUDRepository<RefreshTokenEntity, Pagination> refreshTokenRepository) {
+            JwtUtils jwtUtils) {
         this.userService = userService;
         this.passwordEncoder = passwordEncoder;
         this.authenticationManager = authenticationManager;
         this.userDetailsService = userDetailsService;
         this.jwtUtils = jwtUtils;
-        this.refreshTokenRepository = refreshTokenRepository;
     }
 
     @Override
