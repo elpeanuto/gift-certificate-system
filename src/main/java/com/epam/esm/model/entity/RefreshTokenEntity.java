@@ -3,7 +3,7 @@ package com.epam.esm.model.entity;
 import jakarta.persistence.*;
 import org.hibernate.envers.Audited;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
 
 @Audited
 @Entity
@@ -34,7 +34,7 @@ public class RefreshTokenEntity {
     @Column(
             name = "expirationDate"
     )
-    private Instant expirationDate;
+    private LocalDateTime expirationDate;
 
     @OneToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
@@ -44,7 +44,7 @@ public class RefreshTokenEntity {
 
     }
 
-    public RefreshTokenEntity(int id, String token, Instant expirationDate, UserEntity user) {
+    public RefreshTokenEntity(String token, LocalDateTime expirationDate, UserEntity user) {
         this.id = id;
         this.token = token;
         this.expirationDate = expirationDate;
@@ -67,11 +67,11 @@ public class RefreshTokenEntity {
         this.token = token;
     }
 
-    public Instant getExpirationDate() {
+    public LocalDateTime getExpirationDate() {
         return expirationDate;
     }
 
-    public void setExpirationDate(Instant expirationDate) {
+    public void setExpirationDate(LocalDateTime expirationDate) {
         this.expirationDate = expirationDate;
     }
 

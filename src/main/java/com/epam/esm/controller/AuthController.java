@@ -2,9 +2,12 @@ package com.epam.esm.controller;
 
 import com.epam.esm.exception.exceptions.InvalidRequestBodyException;
 import com.epam.esm.model.dto.AuthenticationRequestDTO;
+import com.epam.esm.model.dto.JwtResponseDTO;
 import com.epam.esm.model.dto.UserDTO;
 import com.epam.esm.model.hateoas.UserLinker;
 import com.epam.esm.service.services.api.AuthService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -36,12 +40,20 @@ public class AuthController {
     }
 
     @PostMapping("/authenticate")
-    public ResponseEntity<String> authenticate(
+    public ResponseEntity<JwtResponseDTO> authenticate(
             @RequestBody AuthenticationRequestDTO request
     ) {
-        Optional<String> authentication = authService.authentication(request);
+        Optional<JwtResponseDTO> authentication = authService.authentication(request);
 
-        return authentication.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.status(400).body("error"));
+        return authentication.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.status(400).body(new JwtResponseDTO()));
+    }
+
+    @PostMapping("/refreshToken")
+    public void refreshToken(
+            HttpServletRequest request,
+            HttpServletResponse response
+    ) throws IOException {
+       authService.refreshToken(request, response);
     }
 
     @PostMapping("/register")

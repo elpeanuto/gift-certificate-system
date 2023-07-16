@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -36,16 +37,12 @@ public class RestExceptionHandler {
         ErrorResponse errorResponse = new ErrorResponse(e.getMessage(),
                status.getValue());
 
-        e.printStackTrace();
-
         return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(EntityAlreadyExistsException.class)
     public ResponseEntity<ErrorResponse> handler(EntityAlreadyExistsException e) {
         CustomHttpStatus status = CustomHttpStatus.RESOURCE_NOT_FOUND;
-
-        e.printStackTrace();
 
         ErrorResponse errorResponse = new ErrorResponse(e.getMessage(),
                status.getValue());
@@ -104,7 +101,7 @@ public class RestExceptionHandler {
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<ErrorResponse> handle(AccessDeniedException ex) {
         CustomHttpStatus status = CustomHttpStatus.ACCESS_DENIED;
-        ex.printStackTrace();
+
         ErrorResponse errorResponse = new ErrorResponse(status.getReasonPhrase(),status.getValue());
 
         return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
