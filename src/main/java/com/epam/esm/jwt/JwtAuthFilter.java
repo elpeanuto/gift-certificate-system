@@ -1,5 +1,6 @@
 package com.epam.esm.jwt;
 
+import com.epam.esm.config.JwtUtils;
 import com.epam.esm.exception.model.CustomHttpStatus;
 import com.epam.esm.exception.model.ErrorResponse;
 import com.epam.esm.model.dto.UserDetailsAdapter;

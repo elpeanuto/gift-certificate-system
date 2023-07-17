@@ -22,14 +22,20 @@ public interface AuthService {
      */
     UserDTO registration(UserDTO userDTO);
 
-    Optional<JwtResponseDTO> authentication(AuthenticationRequestDTO requestDTO);
-
+    /**
+     * Refreshes the JWT token.
+     *
+     * @param request  the HTTP servlet request
+     * @param response the HTTP servlet response
+     * @throws IOException if an I/O error occurs while refreshing the token
+     */
     void refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException;
+
     /**
      * Authenticate user if data is correct
      *
      * @param requestDTO Email and password
      * @return JWT
      */
-    Optional<String> authentication(AuthenticationRequestDTO requestDTO);
+    Optional<JwtResponseDTO> authentication(AuthenticationRequestDTO requestDTO);
 }

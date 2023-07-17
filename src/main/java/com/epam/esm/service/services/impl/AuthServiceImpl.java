@@ -1,14 +1,15 @@
 package com.epam.esm.service.services.impl;
 
+import com.epam.esm.config.JwtUtils;
 import com.epam.esm.exception.model.CustomHttpStatus;
 import com.epam.esm.exception.model.ErrorResponse;
-import com.epam.esm.jwt.JwtUtils;
 import com.epam.esm.model.constant.UserRole;
 import com.epam.esm.model.dto.AuthenticationRequestDTO;
 import com.epam.esm.model.dto.JwtResponseDTO;
 import com.epam.esm.model.dto.UserDTO;
 import com.epam.esm.model.dto.UserDetailsAdapter;
 import com.epam.esm.service.services.api.AuthService;
+import com.epam.esm.service.services.api.GiftCertificateService;
 import com.epam.esm.service.services.api.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.JwtException;
@@ -28,6 +29,12 @@ import java.util.Optional;
 
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
+/**
+ * This class provides implementation of AuthService interface.
+ * It performs operations related to Authentication and authorization.
+ *
+ * @see AuthService
+ */
 @Service
 public class AuthServiceImpl implements AuthService {
 
