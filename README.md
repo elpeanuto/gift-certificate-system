@@ -24,3 +24,9 @@ User Permissions:
      - Administrator (can be added only via database call):
         * All operations, including addition and modification of entities.
 
+To access the Jenkins instance associated with this project, you will need the following credentials:
+
+- **Username**: developer
+- **Password/API Token**: developer
+
+Please use these credentials to log in to Jenkins and perform necessary actions, such as building jobs or canceling builds.
