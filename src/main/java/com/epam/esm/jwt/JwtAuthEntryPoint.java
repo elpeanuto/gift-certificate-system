@@ -1,4 +1,4 @@
-package com.epam.esm.config;
+package com.epam.esm.jwt;
 
 import com.epam.esm.exception.model.CustomHttpStatus;
 import com.epam.esm.exception.model.ErrorResponse;

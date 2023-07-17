@@ -1,5 +1,6 @@
-package com.epam.esm.config;
+package com.epam.esm.jwt;
 
+import com.epam.esm.config.JwtUtils;
 import com.epam.esm.exception.model.CustomHttpStatus;
 import com.epam.esm.exception.model.ErrorResponse;
 import com.epam.esm.model.dto.UserDetailsAdapter;
@@ -24,13 +25,13 @@ import java.io.IOException;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 @Component
-public class JwtAthFilter extends OncePerRequestFilter {
+public class JwtAuthFilter extends OncePerRequestFilter {
 
     private final JwtUtils jwtUtils;
     private final UserService userService;
 
     @Autowired
-    public JwtAthFilter(JwtUtils jwtUtils, UserService userService) {
+    public JwtAuthFilter(JwtUtils jwtUtils, UserService userService) {
         this.jwtUtils = jwtUtils;
         this.userService = userService;
     }
@@ -57,7 +58,9 @@ public class JwtAthFilter extends OncePerRequestFilter {
             if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                 UserDetails userDetails = new UserDetailsAdapter(userService.getByEmail(userEmail));
 
-                if (jwtUtils.isTokenValid(jwtToken, userDetails)) {
+                boolean accessTokenValid = jwtUtils.isAccessTokenValid(jwtToken, userDetails);
+
+                if (accessTokenValid) {
 
                     UsernamePasswordAuthenticationToken authToken =
                             new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
@@ -66,7 +69,6 @@ public class JwtAthFilter extends OncePerRequestFilter {
                 }
             }
         } catch (JwtException e) {
-            e.printStackTrace();
             ErrorResponse errorResponse = new ErrorResponse(
                     CustomHttpStatus.WRONG_TOKEN_ERROR.getReasonPhrase(),
                     CustomHttpStatus.WRONG_TOKEN_ERROR.getValue()
