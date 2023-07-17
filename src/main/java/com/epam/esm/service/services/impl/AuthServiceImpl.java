@@ -1,12 +1,21 @@
 package com.epam.esm.service.services.impl;
 
-import com.epam.esm.config.JwtUtils;
+import com.epam.esm.exception.model.CustomHttpStatus;
+import com.epam.esm.exception.model.ErrorResponse;
+import com.epam.esm.jwt.JwtUtils;
 import com.epam.esm.model.constant.UserRole;
 import com.epam.esm.model.dto.AuthenticationRequestDTO;
+import com.epam.esm.model.dto.JwtResponseDTO;
 import com.epam.esm.model.dto.UserDTO;
+import com.epam.esm.model.dto.UserDetailsAdapter;
 import com.epam.esm.service.services.api.AuthService;
 import com.epam.esm.service.services.api.UserService;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import io.jsonwebtoken.JwtException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,7 +23,10 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.Optional;
+
+import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 @Service
 public class AuthServiceImpl implements AuthService {
@@ -24,7 +36,6 @@ public class AuthServiceImpl implements AuthService {
     private final AuthenticationManager authenticationManager;
     private final UserDetailsService userDetailsService;
     private final JwtUtils jwtUtils;
-
 
     @Autowired
     public AuthServiceImpl(
@@ -49,7 +60,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public Optional<String> authentication(AuthenticationRequestDTO requestDTO) {
+    public Optional<JwtResponseDTO> authentication(AuthenticationRequestDTO requestDTO) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(requestDTO.getEmail(), requestDTO.getPassword())
         );
@@ -57,9 +68,60 @@ public class AuthServiceImpl implements AuthService {
         UserDetails user = userDetailsService.loadUserByUsername(requestDTO.getEmail());
 
         if (user != null) {
-            return Optional.of(jwtUtils.generateToken(user));
+            JwtResponseDTO jwtResponse = new JwtResponseDTO(jwtUtils.generateAccessToken(user),
+                    jwtUtils.generateRefreshToken(user));
+
+            return Optional.of(jwtResponse);
         }
 
         return Optional.empty();
+    }
+
+    @Override
+    public void refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        final String authHeader = request.getHeader(AUTHORIZATION);
+        final String userEmail;
+        final String refreshToken;
+
+        if (authHeader == null || !authHeader.startsWith("Bearer")) {
+            return;
+        }
+
+        refreshToken = authHeader.substring(7);
+
+        try {
+            userEmail = jwtUtils.extractUsername(refreshToken);
+
+            if (userEmail != null) {
+                UserDetails userDetails = new UserDetailsAdapter(userService.getByEmail(userEmail));
+
+                boolean refreshTokenValid = jwtUtils.isRefreshTokenValid(refreshToken, userDetails);
+
+                if (refreshTokenValid) {
+                    String accessToken = jwtUtils.generateAccessToken(userDetails);
+                    JwtResponseDTO authResponse = new JwtResponseDTO(
+                            accessToken,
+                            refreshToken
+                    );
+
+                    new ObjectMapper().writeValue(response.getOutputStream(), authResponse);
+                }
+                else {
+                    throw new JwtException("Wrong jwt");
+                }
+            }
+        } catch (JwtException e) {
+            ErrorResponse errorResponse = new ErrorResponse(
+                    CustomHttpStatus.WRONG_TOKEN_ERROR.getReasonPhrase(),
+                    CustomHttpStatus.WRONG_TOKEN_ERROR.getValue()
+            );
+
+            ObjectMapper objectMapper = new ObjectMapper();
+            String jsonResponse = objectMapper.writeValueAsString(errorResponse);
+
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+            response.getOutputStream().write(jsonResponse.getBytes());
+        }
     }
 }
