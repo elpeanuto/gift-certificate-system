@@ -9,7 +9,6 @@ import com.epam.esm.model.dto.JwtResponseDTO;
 import com.epam.esm.model.dto.UserDTO;
 import com.epam.esm.model.dto.UserDetailsAdapter;
 import com.epam.esm.service.services.api.AuthService;
-import com.epam.esm.service.services.api.GiftCertificateService;
 import com.epam.esm.service.services.api.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.JwtException;
