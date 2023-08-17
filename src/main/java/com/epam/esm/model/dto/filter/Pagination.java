@@ -4,7 +4,7 @@ public class Pagination {
 
     private static final Integer DEFAULT_PAGE = 0;
     private static final Integer DEFAULT_LIMIT = 5;
-    private static final Integer MAX_LIMIT = 10;
+    private static final Integer MAX_LIMIT = 50;
 
     protected Integer page;
     protected Integer limit;
