@@ -5,6 +5,8 @@ import com.epam.esm.model.dto.filter.Pagination;
 import com.epam.esm.model.entity.GiftCertificateEntity;
 import com.epam.esm.service.filter.Search;
 
+import java.util.List;
+
 /**
  * The GiftCertificateRepository interface extends the CRUDRepository interface, which extends the CRDRepository interface.
  * The CRUDRepository interface provides CRUD (Create, Read, Update, Delete) operations for a specific entity type T, and
@@ -15,8 +17,13 @@ import com.epam.esm.service.filter.Search;
  * @see CRUDRepository
  * @see CRDRepository
  */
-public interface GiftCertificateRepository extends CRUDRepository<GiftCertificateEntity, Pagination>,
-        Search<GiftCertificateEntity, GiftCertificateFilter> {
+public interface GiftCertificateRepository extends CRUDRepository<GiftCertificateEntity, Pagination> {
+
+    List<GiftCertificateEntity> doSearch(GiftCertificateFilter filter);
+
+    long getTotalCount();
+
+    long getFilterCount(GiftCertificateFilter filter);
 
     boolean isCertificateOrdered(long id);
 }

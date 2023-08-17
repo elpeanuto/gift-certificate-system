@@ -4,6 +4,7 @@ import com.epam.esm.exception.exceptions.ResourceNotFoundException;
 import com.epam.esm.model.converter.OrderConverter;
 import com.epam.esm.model.converter.UserConverter;
 import com.epam.esm.model.dto.OrderDTO;
+import com.epam.esm.model.dto.PaginatedResponse;
 import com.epam.esm.model.dto.UserDTO;
 import com.epam.esm.model.dto.UserOrderDTO;
 import com.epam.esm.model.dto.filter.Pagination;
@@ -40,10 +41,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public List<UserDTO> getAll(Pagination pagination) {
-        return userRepo.getAll(pagination).stream()
+    public PaginatedResponse<UserDTO> getAll(Pagination pagination) {
+        List<UserDTO> userDTOS = userRepo.getAll(pagination).stream()
                 .map(UserConverter::toDto)
                 .toList();
+
+        return new PaginatedResponse<>(userDTOS, null);
     }
 
     @Override

@@ -46,8 +46,18 @@ public class GiftCertificateRepositoryImpl implements GiftCertificateRepository 
     }
 
     @Override
-    public List<GiftCertificateEntity> doSearch(GiftCertificateFilter filter) {
+    public long getTotalCount() {
         CriteriaBuilder cb = manager.getCriteriaBuilder();
+        CriteriaQuery<Long> countQuery = cb.createQuery(Long.class);
+        Root<GiftCertificateEntity> root = countQuery.from(GiftCertificateEntity.class);
+        countQuery.select(cb.count(root));
+
+        TypedQuery<Long> typedQuery = manager.createQuery(countQuery);
+
+        return typedQuery.getSingleResult();
+    }
+
+    private CriteriaQuery<GiftCertificateEntity> createBaseQuery(CriteriaBuilder cb, GiftCertificateFilter filter) {
         CriteriaQuery<GiftCertificateEntity> query = cb.createQuery(GiftCertificateEntity.class);
         Root<GiftCertificateEntity> root = query.from(GiftCertificateEntity.class);
         query.select(root);
@@ -86,13 +96,31 @@ public class GiftCertificateRepositoryImpl implements GiftCertificateRepository 
 
         query.where(predicate.toArray(new Predicate[0]));
 
-        if (filter.getSortOrder() != null) {
-            if (filter.getSortOrder().equalsIgnoreCase("desc")) {
-                query.orderBy(cb.desc(root.get("createDate")));
-            } else if (filter.getSortOrder().equalsIgnoreCase("asc")) {
-                query.orderBy(cb.asc(root.get("createDate")));
-            }
+        return query;
+    }
+
+    @Override
+    public long getFilterCount(GiftCertificateFilter filter) {
+        CriteriaBuilder cb = manager.getCriteriaBuilder();
+        CriteriaQuery<GiftCertificateEntity> query = createBaseQuery(cb, filter);
+
+        CriteriaQuery<Long> countQuery = cb.createQuery(Long.class);
+        Root<?> root = countQuery.from(query.getResultType());
+        countQuery.select(cb.count(root));
+
+        Expression<Boolean> restriction = query.getRestriction();
+        if (restriction != null) {
+            countQuery.where(restriction);
         }
+
+        return manager.createQuery(countQuery).getSingleResult();
+    }
+
+    @Override
+    public List<GiftCertificateEntity> doSearch(GiftCertificateFilter filter) {
+        CriteriaBuilder cb = manager.getCriteriaBuilder();
+
+        CriteriaQuery<GiftCertificateEntity> query = createBaseQuery(cb, filter);
 
         TypedQuery<GiftCertificateEntity> typedQuery = manager.createQuery(query);
 

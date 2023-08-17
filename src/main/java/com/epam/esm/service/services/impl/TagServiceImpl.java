@@ -3,6 +3,7 @@ package com.epam.esm.service.services.impl;
 import com.epam.esm.exception.exceptions.EntityAlreadyExistsException;
 import com.epam.esm.exception.exceptions.ResourceNotFoundException;
 import com.epam.esm.model.converter.TagConverter;
+import com.epam.esm.model.dto.PaginatedResponse;
 import com.epam.esm.model.dto.TagDTO;
 import com.epam.esm.model.dto.filter.Pagination;
 import com.epam.esm.model.entity.TagEntity;
@@ -36,10 +37,12 @@ public class TagServiceImpl implements TagService {
 
     @Override
     @Transactional
-    public List<TagDTO> getAll(Pagination pagination) {
-        return tagRepo.getAll(pagination).stream()
+    public PaginatedResponse<TagDTO> getAll(Pagination pagination) {
+        List<TagDTO> list = tagRepo.getAll(pagination).stream()
                 .map(TagConverter::toDto)
                 .toList();
+
+        return new PaginatedResponse<>(list, null);
     }
 
     @Override

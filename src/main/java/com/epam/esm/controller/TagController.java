@@ -51,7 +51,7 @@ public class TagController {
     public ResponseEntity<CollectionModel<TagDTO>> getAll(
             @ModelAttribute() Pagination pagination
     ) {
-        List<TagDTO> tags = service.getAll(pagination);
+        List<TagDTO> tags = service.getAll(pagination).getResponseList();
 
         return ResponseEntity.ok(bindLinks(tags));
     }

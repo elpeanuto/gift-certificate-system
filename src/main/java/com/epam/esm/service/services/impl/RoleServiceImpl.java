@@ -3,6 +3,7 @@ package com.epam.esm.service.services.impl;
 import com.epam.esm.exception.exceptions.EntityAlreadyExistsException;
 import com.epam.esm.exception.exceptions.ResourceNotFoundException;
 import com.epam.esm.model.converter.RoleConverter;
+import com.epam.esm.model.dto.PaginatedResponse;
 import com.epam.esm.model.dto.RoleDTO;
 import com.epam.esm.model.dto.filter.Pagination;
 import com.epam.esm.model.entity.RoleEntity;
@@ -29,10 +30,12 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     @Transactional
-    public List<RoleDTO> getAll(Pagination pagination) {
-        return roleRepo.getAll(pagination).stream()
+    public PaginatedResponse<RoleDTO> getAll(Pagination pagination) {
+        List<RoleDTO> roleDTOS = roleRepo.getAll(pagination).stream()
                 .map(RoleConverter::toDto)
                 .toList();
+
+        return new PaginatedResponse<>(roleDTOS, null);
     }
 
     @Override

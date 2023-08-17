@@ -36,7 +36,7 @@ public class RoleController {
     public ResponseEntity<CollectionModel<RoleDTO>> getAll(
             @ModelAttribute() Pagination pagination
     ) {
-        List<RoleDTO> roles = service.getAll(pagination);
+        List<RoleDTO> roles = service.getAll(pagination).getResponseList();
 
         return ResponseEntity.ok(bindLinks(roles));
     }

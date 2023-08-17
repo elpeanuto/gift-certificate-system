@@ -42,7 +42,7 @@ public class OrderController {
     public ResponseEntity<CollectionModel<OrderDTO>> getAll(
             @ModelAttribute() Pagination pagination
     ) {
-        List<OrderDTO> orders = service.getAll(pagination);
+        List<OrderDTO> orders = service.getAll(pagination).getResponseList();
 
         return ResponseEntity.ok(bindLinks(orders));
     }

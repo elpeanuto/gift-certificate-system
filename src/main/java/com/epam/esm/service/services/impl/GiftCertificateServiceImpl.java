@@ -4,6 +4,7 @@ import com.epam.esm.exception.exceptions.ResourceNotFoundException;
 import com.epam.esm.model.converter.GiftCertificateConverter;
 import com.epam.esm.model.converter.TagConverter;
 import com.epam.esm.model.dto.GiftCertificateDTO;
+import com.epam.esm.model.dto.PaginatedResponse;
 import com.epam.esm.model.dto.TagDTO;
 import com.epam.esm.model.dto.filter.GiftCertificateFilter;
 import com.epam.esm.model.dto.filter.Pagination;
@@ -46,18 +47,26 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
 
     @Override
     @Transactional
-    public List<GiftCertificateDTO> getAll(Pagination pagination) {
-        return certificateRepo.getAll(pagination).stream()
+    public PaginatedResponse<GiftCertificateDTO> getAll(Pagination pagination) {
+        List<GiftCertificateDTO> dtoList = certificateRepo.getAll(pagination).stream()
                 .map(GiftCertificateConverter::toDto)
                 .toList();
+
+        long total = certificateRepo.getTotalCount();
+
+        return new PaginatedResponse<>(dtoList, total);
     }
 
     @Override
     @Transactional
-    public List<GiftCertificateDTO> doSearch(GiftCertificateFilter filter) {
-        return certificateRepo.doSearch(filter).stream()
+    public PaginatedResponse<GiftCertificateDTO> doSearch(GiftCertificateFilter filter) {
+        List<GiftCertificateDTO> dtoList = certificateRepo.doSearch(filter).stream()
                 .map(GiftCertificateConverter::toDto)
                 .toList();
+
+        long total = certificateRepo.getFilterCount(filter);
+
+        return new PaginatedResponse<>(dtoList, total);
     }
 
     @Override

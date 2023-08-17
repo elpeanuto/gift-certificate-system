@@ -37,11 +37,6 @@ public class AuthController {
         this.authService = authService;
     }
 
-    @GetMapping("/oauth2")
-    public Object currentUser(OAuth2AuthenticationToken  oAuth2AuthenticationToken) {
-        return oAuth2AuthenticationToken.getPrincipal().getAttributes();
-    }
-
     @PostMapping("/authenticate")
     public ResponseEntity<JwtResponseDTO> authenticate(
             @RequestBody AuthenticationRequestDTO request

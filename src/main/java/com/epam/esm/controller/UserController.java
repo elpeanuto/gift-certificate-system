@@ -32,7 +32,7 @@ public class UserController {
     public ResponseEntity<CollectionModel<UserDTO>> getAll(
             @ModelAttribute() Pagination pagination
     ) {
-        List<UserDTO> users = service.getAll(pagination);
+        List<UserDTO> users = service.getAll(pagination).getResponseList();
 
         return ResponseEntity.ok(bindLinks(users));
     }

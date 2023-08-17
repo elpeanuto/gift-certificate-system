@@ -4,6 +4,7 @@ import com.epam.esm.controller.util.CreateValidationGroup;
 import com.epam.esm.controller.util.UpdateValidationGroup;
 import com.epam.esm.exception.exceptions.InvalidRequestBodyException;
 import com.epam.esm.model.dto.GiftCertificateDTO;
+import com.epam.esm.model.dto.PaginatedResponse;
 import com.epam.esm.model.dto.TagDTO;
 import com.epam.esm.model.dto.filter.GiftCertificateFilter;
 import com.epam.esm.model.dto.filter.Pagination;
@@ -22,9 +23,7 @@ import org.springframework.validation.Validator;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static com.epam.esm.model.hateoas.GiftCertificateLinker.bindLinks;
 
@@ -52,19 +51,24 @@ public class GiftCertificateController {
     }
 
     @GetMapping()
-    public ResponseEntity<CollectionModel<GiftCertificateDTO>> getAll(
+    public ResponseEntity<Map<String, Object>> getAll(
             @ModelAttribute Pagination pagination
     ) {
-        List<GiftCertificateDTO> list = service.getAll(pagination);
+        PaginatedResponse<GiftCertificateDTO> all = service.getAll(pagination);
+        List<GiftCertificateDTO> list = all.getResponseList();
 
-        return ResponseEntity.ok(bindLinks(list));
+        Map<String, Object> response = new HashMap<>();
+        response.put("total", all.getTotalCount());
+        response.put("giftCertificates", bindLinks(list));
+
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/search")
     public ResponseEntity<CollectionModel<GiftCertificateDTO>> search(
             @ModelAttribute GiftCertificateFilter giftCertificateFilter
     ) {
-        List<GiftCertificateDTO> certificate = service.doSearch(giftCertificateFilter);
+        List<GiftCertificateDTO> certificate = service.doSearch(giftCertificateFilter).getResponseList();
 
         return ResponseEntity.ok(bindLinks(certificate));
     }
