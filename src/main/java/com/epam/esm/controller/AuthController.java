@@ -46,7 +46,7 @@ public class AuthController {
         return authentication.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.status(400).body(new JwtResponseDTO()));
     }
 
-    @PostMapping("/refreshToken")
+    @GetMapping("/refreshToken")
     public void refreshToken(
             HttpServletRequest request,
             HttpServletResponse response

@@ -46,7 +46,7 @@ public class JwtUtils {
         claims.put("type", "access");
 
         return createToken(claims, userDetails,
-                new Date(System.currentTimeMillis() + TimeUnit.HOURS.toMillis(1)));
+                new Date(System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(5)));
     }
 
     public String generateRefreshToken(UserDetails userDetails) {
