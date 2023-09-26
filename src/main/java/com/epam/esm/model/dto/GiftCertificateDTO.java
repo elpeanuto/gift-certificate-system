@@ -3,7 +3,6 @@ package com.epam.esm.model.dto;
 import com.epam.esm.controller.util.CreateValidationGroup;
 import com.epam.esm.controller.util.OrderValidationGroup;
 import com.epam.esm.controller.util.UpdateValidationGroup;
-import com.epam.esm.model.dto.api.DTO;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
@@ -17,8 +16,7 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
-public class GiftCertificateDTO extends RepresentationModel<GiftCertificateDTO>
-        implements DTO, Comparator<GiftCertificateDTO> {
+public class GiftCertificateDTO extends RepresentationModel<GiftCertificateDTO> implements Comparator<GiftCertificateDTO> {
 
     private static final String DATE_TIME_PATTERN = "yyyy-MM-dd'T'HH:mm:ss.SSS";
 

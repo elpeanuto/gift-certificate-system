@@ -23,6 +23,12 @@ import java.util.stream.Collectors;
 
 import static com.epam.esm.model.converter.OrderConverter.toDto;
 
+/**
+ * Implementation of the CRUDService interface for managing Order objects.
+ * Provides methods for retrieving, creating, updating and deleting orders.
+ *
+ * @see CRUDService
+ */
 @Service
 public class OrderServiceImpl implements CRUDService<OrderDTO, Pagination> {
 

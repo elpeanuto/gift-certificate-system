@@ -9,6 +9,11 @@ import java.util.List;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
+/**
+ * The GiftCertificateLinker class provides static methods for adding HATEOAS links to GiftCertificateDTO objects
+ * and generating a collection of linked gift certificates. It is used to enrich gift certificate DTOs with
+ * self-links, update links, delete links, and links for associated tags.
+ */
 public class GiftCertificateLinker {
 
     private GiftCertificateLinker() {

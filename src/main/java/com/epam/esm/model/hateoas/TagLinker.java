@@ -9,6 +9,10 @@ import java.util.List;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
+/**
+ * The TagLinker class provides static methods for adding HATEOAS links to TagDTO objects and generating a
+ * collection of linked tag DTOs. It is used to enrich tag DTOs with self-links and delete links.
+ */
 public class TagLinker {
 
     private TagLinker() {

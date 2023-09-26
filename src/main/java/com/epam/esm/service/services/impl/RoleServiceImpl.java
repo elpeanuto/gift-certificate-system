@@ -9,6 +9,7 @@ import com.epam.esm.model.dto.filter.Pagination;
 import com.epam.esm.model.entity.RoleEntity;
 import com.epam.esm.repository.api.RoleRepository;
 import com.epam.esm.service.services.api.RoleService;
+import com.epam.esm.service.services.api.UserService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,12 @@ import java.util.List;
 import static com.epam.esm.model.converter.RoleConverter.toDto;
 import static com.epam.esm.model.converter.RoleConverter.toEntity;
 
+/**
+ * Implementation of the RoleService interface for managing Role objects.
+ * Provides methods for retrieving, creating, and deleting roles.
+ *
+ * @see RoleService
+ */
 @Service
 public class RoleServiceImpl implements RoleService {
 

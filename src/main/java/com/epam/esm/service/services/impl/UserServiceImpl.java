@@ -14,6 +14,7 @@ import com.epam.esm.model.entity.UserEntity;
 import com.epam.esm.repository.api.OrderRepository;
 import com.epam.esm.repository.api.RoleRepository;
 import com.epam.esm.repository.api.UserRepository;
+import com.epam.esm.service.services.api.CRDService;
 import com.epam.esm.service.services.api.UserService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,12 @@ import java.util.List;
 
 import static com.epam.esm.model.converter.UserConverter.toDto;
 
+/**
+ * Implementation of the UserService interface for managing User objects.
+ * Provides methods for retrieving, creating, updating and deleting users.
+ *
+ * @see UserService
+ */
 @Service
 public class UserServiceImpl implements UserService {
 
