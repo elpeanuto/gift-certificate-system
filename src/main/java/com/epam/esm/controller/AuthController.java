@@ -65,14 +65,16 @@ public class AuthController {
      * Authenticates a user and returns a JWT response.
      *
      * @param request the authentication request
-     * Return the JWT response if the authentication is successful, or a default JWT response with status 400 if authentication fails
+     * @return the JWT response if the authentication is successful, or a default JWT response with status 400 if authentication fails
      */
     @GetMapping("/refreshToken")
-    public void refreshToken(
+    public ResponseEntity<JwtResponseDTO> refreshToken(
             HttpServletRequest request,
             HttpServletResponse response
     ) throws IOException {
-        authService.refreshToken(request, response);
+        Optional<JwtResponseDTO> jwtResponseDTO = authService.refreshToken(request, response);
+
+        return jwtResponseDTO.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.status(400).body(new JwtResponseDTO()));
     }
 
     /**
