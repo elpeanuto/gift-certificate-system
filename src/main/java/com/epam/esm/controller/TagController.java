@@ -72,6 +72,11 @@ public class TagController {
         return ResponseEntity.ok(tag);
     }
 
+    /**
+     * Retrieves the most widely used Tag.
+     *
+     * @return a ResponseEntity containing a TagDTO object that represents the most widely used Tag
+     */
     @GetMapping("/widelyUsedTag")
     @PreAuthorize("hasAnyAuthority('USER_ROLE', 'ADMIN_ROLE')")
     public ResponseEntity<TagDTO> getWidelyUsedTag() {

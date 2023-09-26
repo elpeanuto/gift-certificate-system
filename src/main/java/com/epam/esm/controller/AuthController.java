@@ -24,6 +24,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * A RestController class that handles API requests related to authentication.
+ */
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
@@ -31,12 +34,23 @@ public class AuthController {
     final AuthService authService;
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
+    /**
+     * Constructor for AuthController class
+     *
+     * @param authService authentication service
+     */
     @Autowired
     public AuthController(
             AuthService authService) {
         this.authService = authService;
     }
 
+    /**
+     * Authenticates a user and returns a JWT response.
+     *
+     * @param request the authentication request
+     * @return the JWT response if the authentication is successful, or a default JWT response with status 400 if authentication fails
+     */
     @PostMapping("/authenticate")
     public ResponseEntity<JwtResponseDTO> authenticate(
             @RequestBody AuthenticationRequestDTO request
@@ -46,6 +60,13 @@ public class AuthController {
         return authentication.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.status(400).body(new JwtResponseDTO()));
     }
 
+
+    /**
+     * Authenticates a user and returns a JWT response.
+     *
+     * @param request the authentication request
+     * @return the JWT response if the authentication is successful, or a default JWT response with status 400 if authentication fails
+     */
     @GetMapping("/refreshToken")
     public void refreshToken(
             HttpServletRequest request,
@@ -54,6 +75,13 @@ public class AuthController {
        authService.refreshToken(request, response);
     }
 
+    /**
+     * Method which saves user info in db
+     *
+     * @param userDTO user info
+     * @param bindingResult binding results for validation
+     * @return registered user
+     */
     @PostMapping("/register")
     public ResponseEntity<UserDTO> registration(@RequestBody @Valid UserDTO userDTO,
                                                 BindingResult bindingResult) {

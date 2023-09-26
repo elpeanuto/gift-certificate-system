@@ -14,8 +14,7 @@ public interface CRUDRepository<T, F extends Pagination> extends CRDRepository<T
     /**
      * Updates an existing entity of type T with the specified ID in the repository.
      *
-     * @param id The ID of the entity to update.
-     * @param t  The updated entity to replace the old entity with.
+     * @param t The updated entity to replace the old entity with.
      * @return The updated entity of type T.
      */
     T update(T t);

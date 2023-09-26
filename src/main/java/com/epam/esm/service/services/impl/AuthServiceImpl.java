@@ -28,6 +28,12 @@ import java.util.Optional;
 
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
+/**
+ * This class provides implementation of AuthService interface.
+ * It performs operations related to Authentication and authorization.
+ *
+ * @see AuthService
+ */
 @Service
 public class AuthServiceImpl implements AuthService {
 

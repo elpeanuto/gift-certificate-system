@@ -8,14 +8,10 @@ import com.epam.esm.service.filter.Search;
 import java.util.List;
 
 /**
- * The GiftCertificateRepository interface extends the CRUDRepository interface, which extends the CRDRepository interface.
- * The CRUDRepository interface provides CRUD (Create, Read, Update, Delete) operations for a specific entity type T, and
- * the CRDRepository interface provides Read and Delete operations for the same entity type.This interface provides additional
- * methods to retrieve a list of GiftCertificate entities by ID list or by part of their name or description.
+ * The GiftCertificateRepository interface provides methods for CRUD operations and searching on gift certificate entities.
+ * It extends the CRUDRepository interface for basic CRUD operations and the Search interface for searching operations.
  *
- * @param <T> The entity type that this repository operates on, which must extend the GiftCertificate class.
  * @see CRUDRepository
- * @see CRDRepository
  */
 public interface GiftCertificateRepository extends CRUDRepository<GiftCertificateEntity, Pagination> {
 
@@ -25,5 +21,11 @@ public interface GiftCertificateRepository extends CRUDRepository<GiftCertificat
 
     long getFilterCount(GiftCertificateFilter filter);
 
+    /**
+     * Checks if a gift certificate with the specified ID is ordered.
+     *
+     * @param id the ID of the gift certificate
+     * @return true if the gift certificate is ordered, false otherwise
+     */
     boolean isCertificateOrdered(long id);
 }

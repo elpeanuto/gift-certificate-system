@@ -9,11 +9,33 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Optional;
 
+/**
+ *  This interface represents an auth service.
+ */
 public interface AuthService {
 
+    /**
+     * Register user if data is correct
+     *
+     * @param userDTO User info
+     * @return Registered user
+     */
     UserDTO registration(UserDTO userDTO);
 
-    Optional<JwtResponseDTO> authentication(AuthenticationRequestDTO requestDTO);
-
+    /**
+     * Refreshes the JWT token.
+     *
+     * @param request  the HTTP servlet request
+     * @param response the HTTP servlet response
+     * @throws IOException if an I/O error occurs while refreshing the token
+     */
     void refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException;
+
+    /**
+     * Authenticate user if data is correct
+     *
+     * @param requestDTO Email and password
+     * @return JWT
+     */
+    Optional<JwtResponseDTO> authentication(AuthenticationRequestDTO requestDTO);
 }

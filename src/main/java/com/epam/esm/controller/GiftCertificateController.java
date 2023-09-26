@@ -49,6 +49,12 @@ public class GiftCertificateController {
         this.service = service;
     }
 
+    /**
+     * Retrieves all gift certificates.
+     *
+     * @param pagination a Pagination object used for pagination of the results
+     * @return a ResponseEntity containing a CollectionModel of GiftCertificateDTO objects
+     */
     @GetMapping()
     public ResponseEntity<Map<String, Object>> getAll(
             @ModelAttribute Pagination pagination
@@ -63,6 +69,12 @@ public class GiftCertificateController {
         return ResponseEntity.ok(response);
     }
 
+    /**
+     * Searches for gift certificates based on the provided filter.
+     *
+     * @param giftCertificateFilter a GiftCertificateFilter object used to filter the search results
+     * @return a ResponseEntity containing a CollectionModel of GiftCertificateDTO objects
+     */
     @GetMapping("/search")
     public ResponseEntity<Map<String, Object>> search(
             @ModelAttribute GiftCertificateFilter giftCertificateFilter

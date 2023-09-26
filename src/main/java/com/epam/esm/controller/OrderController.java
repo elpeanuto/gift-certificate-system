@@ -25,6 +25,9 @@ import java.util.Set;
 
 import static com.epam.esm.model.hateoas.OrderLinker.bindLinks;
 
+/**
+ * A RestController class that handles API requests related to orders.
+ */
 @RestController
 @RequestMapping("/orders")
 public class OrderController {
@@ -32,11 +35,22 @@ public class OrderController {
     private final CRUDService<OrderDTO, Pagination> service;
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
+    /**
+     * Constructor for OrderController class.
+     *
+     * @param service a CRUDService object used to interact with order data in the database
+     */
     @Autowired
     public OrderController(CRUDService<OrderDTO, Pagination> service) {
         this.service = service;
     }
 
+    /**
+     * Retrieves all orders.
+     *
+     * @param pagination a Pagination object used for pagination of the results
+     * @return a ResponseEntity containing a CollectionModel of OrderDTO objects
+     */
     @GetMapping()
     @PreAuthorize("hasAnyAuthority('USER_ROLE', 'ADMIN_ROLE')")
     public ResponseEntity<CollectionModel<OrderDTO>> getAll(
@@ -47,6 +61,12 @@ public class OrderController {
         return ResponseEntity.ok(bindLinks(orders));
     }
 
+    /**
+     * Retrieves an order by its ID.
+     *
+     * @param id an integer representing the ID of the order
+     * @return a ResponseEntity containing an OrderDTO object that matches the given ID
+     */
     @GetMapping("/{id}")
     @PreAuthorize("hasAnyAuthority('USER_ROLE', 'ADMIN_ROLE')")
     public ResponseEntity<OrderDTO> getById(@PathVariable("id") long id) {
@@ -57,6 +77,14 @@ public class OrderController {
         return ResponseEntity.ok(order);
     }
 
+    /**
+     * Creates a new order with the provided data.
+     *
+     * @param orderDTO      an OrderDTO object representing the new order to be created
+     * @param bindingResult a BindingResult object that holds the result of the validation process
+     * @return a ResponseEntity containing an OrderDTO object that represents the newly created order
+     * @throws InvalidRequestBodyException if the provided data is not valid
+     */
     @PostMapping()
     @PreAuthorize("hasAnyAuthority('USER_ROLE', 'ADMIN_ROLE')")
     public ResponseEntity<OrderDTO> create(@RequestBody @Validated(OrderValidationGroup.class) OrderDTO orderDTO, BindingResult bindingResult) {
@@ -109,6 +137,12 @@ public class OrderController {
         return ResponseEntity.status(HttpStatus.CREATED).body(order);
     }
 
+    /**
+     * Deletes an order with the provided ID.
+     *
+     * @param id an integer representing the ID of the order to be deleted
+     * @return a ResponseEntity containing an OrderDTO object that represents the deleted order
+     */
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAuthority('ADMIN_ROLE')")
     public ResponseEntity<OrderDTO> delete(@PathVariable("id") long id) {
