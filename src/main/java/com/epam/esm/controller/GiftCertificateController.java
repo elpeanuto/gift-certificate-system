@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 
+import static com.epam.esm.controller.util.Util.bindingResultCheck;
 import static com.epam.esm.model.hateoas.GiftCertificateLinker.bindLinks;
 
 /**
@@ -162,16 +163,7 @@ public class GiftCertificateController {
     }
 
     private void validateGiftCertificate(GiftCertificateDTO certificate, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            Set<String> errorMessages = new HashSet<>();
-            for (ObjectError error : bindingResult.getAllErrors()) {
-                errorMessages.add(error.getDefaultMessage());
-            }
-            String str = String.join(", ", errorMessages);
-
-            logger.warn(str);
-            throw new InvalidRequestBodyException(str);
-        }
+        bindingResultCheck(bindingResult);
 
         int i = 1;
         for (TagDTO tag : certificate.getTags()) {

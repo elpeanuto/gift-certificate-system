@@ -65,20 +65,20 @@ public class AuthController {
      * Authenticates a user and returns a JWT response.
      *
      * @param request the authentication request
-     * @return the JWT response if the authentication is successful, or a default JWT response with status 400 if authentication fails
+     * Return the JWT response if the authentication is successful, or a default JWT response with status 400 if authentication fails
      */
     @GetMapping("/refreshToken")
     public void refreshToken(
             HttpServletRequest request,
             HttpServletResponse response
     ) throws IOException {
-       authService.refreshToken(request, response);
+        authService.refreshToken(request, response);
     }
 
     /**
      * Method which saves user info in db
      *
-     * @param userDTO user info
+     * @param userDTO       user info
      * @param bindingResult binding results for validation
      * @return registered user
      */
@@ -103,6 +103,11 @@ public class AuthController {
         return ResponseEntity.status(HttpStatus.CREATED).body(body);
     }
 
+    /**
+     * Method to check if the user has an admin role.
+     *
+     * @return true if the user is an admin, false if not.
+     */
     @PreAuthorize("hasAuthority('ADMIN_ROLE')")
     @GetMapping("/isAdmin")
     public boolean isAdmin() {

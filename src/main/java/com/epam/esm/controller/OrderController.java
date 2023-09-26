@@ -23,6 +23,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import static com.epam.esm.controller.util.Util.bindingResultCheck;
 import static com.epam.esm.model.hateoas.OrderLinker.bindLinks;
 
 /**
@@ -88,29 +89,11 @@ public class OrderController {
     @PostMapping()
     @PreAuthorize("hasAnyAuthority('USER_ROLE', 'ADMIN_ROLE')")
     public ResponseEntity<OrderDTO> create(@RequestBody @Validated(OrderValidationGroup.class) OrderDTO orderDTO, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            Set<String> errorMessages = new HashSet<>();
-            for (ObjectError error : bindingResult.getAllErrors()) {
-                errorMessages.add(error.getDefaultMessage());
-            }
-            String str = String.join(", ", errorMessages);
-
-            logger.warn(str);
-            throw new InvalidRequestBodyException(str);
-        }
+        bindingResultCheck(bindingResult);
 
         BindingResult userBindingResult = new BeanPropertyBindingResult(orderDTO.getUser(), "user");
 
-        if (userBindingResult.hasErrors()) {
-            Set<String> errorMessages = new HashSet<>();
-            for (ObjectError error : userBindingResult.getAllErrors()) {
-                errorMessages.add(error.getDefaultMessage());
-            }
-            String str = String.join(", ", errorMessages);
-
-            logger.warn(str);
-            throw new InvalidRequestBodyException(str);
-        }
+        bindingResultCheck(userBindingResult);
 
         int i = 1;
         for (GiftCertificateDTO certificate : orderDTO.getCertificates()) {

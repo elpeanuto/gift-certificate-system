@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.util.Optional;
 
 /**
- *  This interface represents an auth service.
+ * This interface represents an auth service.
  */
 public interface AuthService {
 

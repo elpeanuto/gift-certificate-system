@@ -1,23 +1,19 @@
 package com.epam.esm.controller;
 
-import com.epam.esm.exception.exceptions.InvalidRequestBodyException;
 import com.epam.esm.model.dto.RoleDTO;
 import com.epam.esm.model.dto.filter.Pagination;
 import com.epam.esm.service.services.api.CRDService;
 import jakarta.validation.Valid;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
+import static com.epam.esm.controller.util.Util.bindingResultCheck;
 import static com.epam.esm.model.hateoas.RoleLinker.bindLinks;
 
 /**
@@ -28,7 +24,6 @@ import static com.epam.esm.model.hateoas.RoleLinker.bindLinks;
 public class RoleController {
 
     private final CRDService<RoleDTO, Pagination> service;
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     /**
      * Role Controller constructor
@@ -56,7 +51,7 @@ public class RoleController {
     }
 
     /**
-     * Retrieves an role by its ID.
+     * Retrieves a role by its ID.
      *
      * @param id n integer representing the ID of the role
      * @return a ResponseEntity containing an RoleDTO object that matches the given ID
@@ -74,23 +69,14 @@ public class RoleController {
     /**
      * Creates a new role with the provided data.
      *
-     * @param roleDTO an RoleDTO object representing the new role to be created
+     * @param roleDTO       an RoleDTO object representing the new role to be created
      * @param bindingResult a BindingResult object that holds the result of the validation process
      * @return a ResponseEntity containing an RoleDTO object that represents the newly created role
      */
     @PostMapping()
     @PreAuthorize("hasAuthority('ADMIN_ROLE')")
     public ResponseEntity<RoleDTO> create(@RequestBody @Valid RoleDTO roleDTO, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            List<String> errorMessages = new ArrayList<>();
-            for (ObjectError error : bindingResult.getAllErrors()) {
-                errorMessages.add(error.getDefaultMessage());
-            }
-            String str = String.join(", ", errorMessages);
-
-            logger.warn(str);
-            throw new InvalidRequestBodyException(str);
-        }
+        bindingResultCheck(bindingResult);
 
         RoleDTO role = service.create(roleDTO);
 
@@ -100,7 +86,7 @@ public class RoleController {
     }
 
     /**
-     * Deletes an role with the provided ID.
+     * Deletes a role with the provided ID.
      *
      * @param id an integer representing the ID of the role to be deleted
      * @return a ResponseEntity containing an RoleDTO object that represents the deleted role

@@ -3,8 +3,6 @@ package com.epam.esm.service.services.api;
 import com.epam.esm.model.dto.PaginatedResponse;
 import com.epam.esm.model.dto.filter.Pagination;
 
-import java.util.List;
-
 /**
  * This interface represents a CRD service for entities of type T.
  *

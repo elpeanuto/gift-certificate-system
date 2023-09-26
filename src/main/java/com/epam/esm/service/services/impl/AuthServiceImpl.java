@@ -111,8 +111,7 @@ public class AuthServiceImpl implements AuthService {
                     );
 
                     new ObjectMapper().writeValue(response.getOutputStream(), authResponse);
-                }
-                else {
+                } else {
                     throw new JwtException("Wrong jwt");
                 }
             }
