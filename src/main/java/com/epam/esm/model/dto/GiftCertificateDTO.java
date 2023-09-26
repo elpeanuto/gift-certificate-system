@@ -26,12 +26,12 @@ public class GiftCertificateDTO extends RepresentationModel<GiftCertificateDTO>
     private Long id;
 
     @NotNull(message = "Name is missing", groups = CreateValidationGroup.class)
-    @Size(min = 2, max = 30, message = "Name should be between 2 and 30 characters",
+    @Size(min = 6, max = 30, message = "Name should be between 6 and 30 characters",
             groups = {CreateValidationGroup.class, UpdateValidationGroup.class})
     private String name;
 
     @NotNull(message = "Description is missing", groups = CreateValidationGroup.class)
-    @Size(min = 2, max = 30, message = "Description should be between 2 and 30 characters",
+    @Size(min = 12, max = 1000, message = "Description should be between 12 and 1000 characters",
             groups = {CreateValidationGroup.class, UpdateValidationGroup.class})
     private String description;
 

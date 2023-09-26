@@ -12,7 +12,6 @@ import com.epam.esm.service.services.api.GiftCertificateService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -65,12 +64,18 @@ public class GiftCertificateController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<CollectionModel<GiftCertificateDTO>> search(
+    public ResponseEntity<Map<String, Object>> search(
             @ModelAttribute GiftCertificateFilter giftCertificateFilter
     ) {
-        List<GiftCertificateDTO> certificate = service.doSearch(giftCertificateFilter).getResponseList();
+        PaginatedResponse<GiftCertificateDTO> all = service.doSearch(giftCertificateFilter);
 
-        return ResponseEntity.ok(bindLinks(certificate));
+        List<GiftCertificateDTO> list = all.getResponseList();
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("total", all.getTotalCount());
+        response.put("giftCertificates", bindLinks(list));
+
+        return ResponseEntity.ok(response);
     }
 
     /**

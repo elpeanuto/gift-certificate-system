@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
@@ -28,7 +28,7 @@ import java.util.Optional;
 @RequestMapping("/auth")
 public class AuthController {
 
-    private final AuthService authService;
+    final AuthService authService;
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
@@ -73,6 +73,12 @@ public class AuthController {
         UserLinker.bindLinks(body);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(body);
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN_ROLE')")
+    @GetMapping("/isAdmin")
+    public boolean isAdmin() {
+        return true;
     }
 
 }

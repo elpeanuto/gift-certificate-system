@@ -12,7 +12,7 @@ public class TagDTO extends RepresentationModel<TagDTO> implements DTO {
     private Long id;
 
     @NotNull(message = "Name is missing")
-    @Size(min = 2, max = 30, message = "Name should be between 2 and 30 characters")
+    @Size(min = 3, max = 15, message = "Name should be between 2 and 30 characters")
     private String name;
 
     public TagDTO() {
