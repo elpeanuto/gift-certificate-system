@@ -14,10 +14,27 @@ import java.util.List;
  */
 public interface GiftCertificateRepository extends CRUDRepository<GiftCertificateEntity, Pagination> {
 
+    /**
+     * Searches for gift certificates based on the provided filter.
+     *
+     * @param filter the filter criteria to apply to the search
+     * @return a list of gift certificates that match the filter criteria
+     */
     List<GiftCertificateEntity> doSearch(GiftCertificateFilter filter);
 
+    /**
+     * Retrieves the total count of gift certificates in the repository.
+     *
+     * @return the total count of gift certificates
+     */
     long getTotalCount();
 
+    /**
+     * Retrieves the count of gift certificates that match the provided filter.
+     *
+     * @param filter the filter criteria to apply to the count
+     * @return the count of gift certificates that match the filter criteria
+     */
     long getFilterCount(GiftCertificateFilter filter);
 
     /**
