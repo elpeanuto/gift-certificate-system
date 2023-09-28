@@ -15,11 +15,11 @@ public class GiftCertificateFilter extends Pagination {
     /**
      * Constructs a GiftCertificateFilter object with the specified filter parameters.
      *
-     * @param tags                 The set of tags to filter by.
+     * @param tags                  The set of tags to filter by.
      * @param partOfNameDescription A part of the name or description to search for.
-     * @param sortOrder            The sorting order ("asc" or "desc").
-     * @param page                 The page number (greater than 0).
-     * @param limit                The maximum number of items per page (between 1 and MAX_LIMIT).
+     * @param sortOrder             The sorting order ("asc" or "desc").
+     * @param page                  The page number (greater than 0).
+     * @param limit                 The maximum number of items per page (between 1 and MAX_LIMIT).
      */
     public GiftCertificateFilter(Set<String> tags, String partOfNameDescription,
                                  String sortOrder, Integer page, Integer limit) {

@@ -43,7 +43,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     /**
      * Constructs a JwtAuthFilter with the required dependencies.
      *
-     * @param jwtUtils   The utility class for JWT-related operations.
+     * @param jwtUtils    The utility class for JWT-related operations.
      * @param userService The service responsible for user-related operations.
      */
     @Autowired

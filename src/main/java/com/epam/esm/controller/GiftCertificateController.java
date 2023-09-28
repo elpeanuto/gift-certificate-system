@@ -9,20 +9,19 @@ import com.epam.esm.model.dto.TagDTO;
 import com.epam.esm.model.dto.filter.GiftCertificateFilter;
 import com.epam.esm.model.dto.filter.Pagination;
 import com.epam.esm.service.services.api.GiftCertificateService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
 import org.springframework.validation.Validator;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static com.epam.esm.controller.util.Util.bindingResultCheck;
 import static com.epam.esm.model.hateoas.GiftCertificateLinker.bindLinks;
@@ -36,7 +35,6 @@ public class GiftCertificateController {
 
     private final Validator validator;
     private final GiftCertificateService service;
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     /**
      * Constructor for GiftCertificateController class.
@@ -170,16 +168,7 @@ public class GiftCertificateController {
             BindingResult tagBindingResult = new BeanPropertyBindingResult(tag, "tag" + i);
             validator.validate(tag, tagBindingResult);
 
-            if (tagBindingResult.hasErrors()) {
-                Set<String> errorMessages = new HashSet<>();
-                for (ObjectError error : tagBindingResult.getAllErrors()) {
-                    errorMessages.add(error.getDefaultMessage());
-                }
-                String str = "Tag #" + i + ": " + String.join(", ", errorMessages);
-
-                logger.warn(str);
-                throw new InvalidRequestBodyException(str);
-            }
+            bindingResultCheck(tagBindingResult);
 
             i++;
         }

@@ -9,8 +9,9 @@ import com.epam.esm.model.dto.filter.Pagination;
 import com.epam.esm.model.entity.RoleEntity;
 import com.epam.esm.repository.api.RoleRepository;
 import com.epam.esm.service.services.api.RoleService;
-import com.epam.esm.service.services.api.UserService;
 import jakarta.transaction.Transactional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +30,7 @@ import static com.epam.esm.model.converter.RoleConverter.toEntity;
 public class RoleServiceImpl implements RoleService {
 
     private final RoleRepository roleRepo;
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     public RoleServiceImpl(RoleRepository roleRepo) {
@@ -49,7 +51,10 @@ public class RoleServiceImpl implements RoleService {
     @Transactional
     public RoleDTO getById(long id) {
         RoleEntity entity = roleRepo.getById(id)
-                .orElseThrow(() -> new ResourceNotFoundException(id));
+                .orElseThrow(() -> {
+                    logger.error("Role with ID {} not found.", id);
+                    throw new ResourceNotFoundException(id);
+                });
 
         return toDto(entity);
     }
@@ -57,9 +62,10 @@ public class RoleServiceImpl implements RoleService {
     @Override
     @Transactional
     public RoleDTO create(RoleDTO roleDTO) {
-        if (roleRepo.getByName(roleDTO.getName()).isPresent())
+        if (roleRepo.getByName(roleDTO.getName()).isPresent()) {
+            logger.error("Role with name {} already exists.", roleDTO.getName());
             throw new EntityAlreadyExistsException();
-
+        }
         return toDto(roleRepo.create(toEntity(roleDTO)));
     }
 
@@ -68,16 +74,22 @@ public class RoleServiceImpl implements RoleService {
     public RoleDTO delete(long id) {
         RoleEntity entity = roleRepo.delete(id);
 
-        if (entity == null)
+        if (entity == null) {
+            logger.error("Role with ID {} not found.", id);
             throw new ResourceNotFoundException(id);
+        }
 
         return toDto(entity);
     }
 
     @Override
+    @Transactional
     public RoleDTO getByName(String name) {
         RoleEntity entity = roleRepo.getByName(name)
-                .orElseThrow(() -> new ResourceNotFoundException(name));
+                .orElseThrow(() -> {
+                    logger.error("Role with name {} not found.", name);
+                    return new ResourceNotFoundException(name);
+                });
 
         return RoleConverter.toDto(entity);
     }

@@ -1,6 +1,8 @@
 package com.epam.esm.controller.util;
 
 import com.epam.esm.exception.exceptions.InvalidRequestBodyException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 
@@ -11,6 +13,8 @@ import java.util.Set;
  * Util class for Controller group
  */
 public class Util {
+
+    private static final Logger logger = LoggerFactory.getLogger(Util.class);
 
     private Util() {
 
@@ -35,6 +39,7 @@ public class Util {
             }
             String str = String.join(", ", errorMessages);
 
+            logger.warn("Invalid request body: {}", str);
             throw new InvalidRequestBodyException(str);
         }
     }

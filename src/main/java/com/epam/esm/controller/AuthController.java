@@ -40,8 +40,7 @@ public class AuthController {
      * @param authService authentication service
      */
     @Autowired
-    public AuthController(
-            AuthService authService) {
+    public AuthController(AuthService authService) {
         this.authService = authService;
     }
 

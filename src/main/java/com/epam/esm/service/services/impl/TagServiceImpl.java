@@ -11,6 +11,8 @@ import com.epam.esm.repository.api.TagRepository;
 import com.epam.esm.service.services.api.CRDService;
 import com.epam.esm.service.services.api.TagService;
 import jakarta.transaction.Transactional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +31,7 @@ import static com.epam.esm.model.converter.TagConverter.toEntity;
 public class TagServiceImpl implements TagService {
 
     private final TagRepository tagRepo;
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     public TagServiceImpl(TagRepository tagRepo) {
@@ -49,16 +52,20 @@ public class TagServiceImpl implements TagService {
     @Transactional
     public TagDTO getById(long id) {
         TagEntity entity = tagRepo.getById(id)
-                .orElseThrow(() -> new ResourceNotFoundException(id));
-
+                .orElseThrow(() -> {
+                    logger.error("Tag with ID {} not found.", id);
+                    return new ResourceNotFoundException(id);
+                });
         return toDto(entity);
     }
 
     @Override
     @Transactional
     public TagDTO create(TagDTO tagDTO) {
-        if (tagRepo.getByName(tagDTO.getName()) != null)
+        if (tagRepo.getByName(tagDTO.getName()) != null) {
+            logger.error("Tag with name {} already exists.", tagDTO.getName());
             throw new EntityAlreadyExistsException();
+        }
 
         return toDto(tagRepo.create(toEntity(tagDTO)));
     }
@@ -68,17 +75,20 @@ public class TagServiceImpl implements TagService {
     public TagDTO delete(long id) {
         TagEntity entity = tagRepo.delete(id);
 
-        if (entity == null)
+        if (entity == null) {
+            logger.error("Tag with ID {} not found.", id);
             throw new ResourceNotFoundException(id);
-
+        }
         return toDto(entity);
     }
 
     @Override
     public TagDTO getWidelyUsedTag() {
         TagEntity widelyUsedTag = tagRepo.getWidelyUsedTag()
-                .orElseThrow(() -> new ResourceNotFoundException("Cant find widely used tag"));
-
+                .orElseThrow(() -> {
+                    logger.error("Can't find widely used tag.");
+                    throw new ResourceNotFoundException("Can't find widely used tag");
+                });
         return toDto(widelyUsedTag);
     }
 }

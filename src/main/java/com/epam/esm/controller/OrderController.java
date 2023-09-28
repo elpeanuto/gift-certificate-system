@@ -15,13 +15,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import static com.epam.esm.controller.util.Util.bindingResultCheck;
 import static com.epam.esm.model.hateoas.OrderLinker.bindLinks;
@@ -98,17 +95,7 @@ public class OrderController {
         int i = 1;
         for (GiftCertificateDTO certificate : orderDTO.getCertificates()) {
             BindingResult certificateBindingResult = new BeanPropertyBindingResult(certificate, "certificate" + i);
-
-            if (certificateBindingResult.hasErrors()) {
-                Set<String> errorMessages = new HashSet<>();
-                for (ObjectError error : certificateBindingResult.getAllErrors()) {
-                    errorMessages.add(error.getDefaultMessage());
-                }
-                String str = "Certificate #" + i + ": " + String.join(", ", errorMessages);
-
-                logger.warn(str);
-                throw new InvalidRequestBodyException(str);
-            }
+            bindingResultCheck(certificateBindingResult);
 
             i++;
         }
