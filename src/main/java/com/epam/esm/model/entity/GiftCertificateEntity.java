@@ -16,7 +16,8 @@ public class GiftCertificateEntity {
     @SequenceGenerator(
             name = "certificate_sequence",
             sequenceName = "certificate_sequence",
-            allocationSize = 1
+            allocationSize = 1,
+            initialValue = 100
     )
     @GeneratedValue(
             strategy = GenerationType.SEQUENCE,
