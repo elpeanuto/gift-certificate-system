@@ -21,7 +21,8 @@ public class TagEntity {
     @SequenceGenerator(
             name = "tag_sequence",
             sequenceName = "tag_sequence",
-            allocationSize = 1
+            allocationSize = 1,
+            initialValue = 100
     )
     @GeneratedValue(
             strategy = GenerationType.SEQUENCE,
