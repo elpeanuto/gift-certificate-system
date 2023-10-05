@@ -65,7 +65,7 @@ class UserServiceImplTest {
         Pagination pagination = new Pagination(0, 5);
         when(userRepo.getAll(pagination)).thenReturn(entityList);
         
-        List<UserDTO> result = service.getAll(pagination);
+        List<UserDTO> result = service.getAll(pagination).getResponseList();
         
         Assertions.assertEquals(dtoList, result);
     }

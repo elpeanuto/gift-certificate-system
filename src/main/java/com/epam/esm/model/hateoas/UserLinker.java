@@ -9,6 +9,10 @@ import java.util.List;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
+/**
+ * The UserLinker class provides static methods for adding HATEOAS links to UserDTO objects and generating a
+ * collection of linked user DTOs. It is used to enrich user DTOs with self-links and links to associated orders.
+ */
 public class UserLinker {
 
     private UserLinker() {

@@ -5,6 +5,10 @@ import com.epam.esm.model.entity.GiftCertificateEntity;
 
 import java.util.stream.Collectors;
 
+/**
+ * The GiftCertificateConverter class provides static methods for converting between
+ * GiftCertificateEntity and GiftCertificateDTO objects.
+ */
 public class GiftCertificateConverter {
 
     private GiftCertificateConverter() {

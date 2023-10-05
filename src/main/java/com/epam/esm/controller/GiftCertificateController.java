@@ -4,28 +4,26 @@ import com.epam.esm.controller.util.CreateValidationGroup;
 import com.epam.esm.controller.util.UpdateValidationGroup;
 import com.epam.esm.exception.exceptions.InvalidRequestBodyException;
 import com.epam.esm.model.dto.GiftCertificateDTO;
+import com.epam.esm.model.dto.PaginatedResponse;
 import com.epam.esm.model.dto.TagDTO;
 import com.epam.esm.model.dto.filter.GiftCertificateFilter;
 import com.epam.esm.model.dto.filter.Pagination;
 import com.epam.esm.service.services.api.GiftCertificateService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
 import org.springframework.validation.Validator;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
 
+import static com.epam.esm.controller.util.Util.bindingResultCheck;
 import static com.epam.esm.model.hateoas.GiftCertificateLinker.bindLinks;
 
 /**
@@ -37,7 +35,6 @@ public class GiftCertificateController {
 
     private final Validator validator;
     private final GiftCertificateService service;
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     /**
      * Constructor for GiftCertificateController class.
@@ -58,12 +55,17 @@ public class GiftCertificateController {
      * @return a ResponseEntity containing a CollectionModel of GiftCertificateDTO objects
      */
     @GetMapping()
-    public ResponseEntity<CollectionModel<GiftCertificateDTO>> getAll(
+    public ResponseEntity<Map<String, Object>> getAll(
             @ModelAttribute Pagination pagination
     ) {
-        List<GiftCertificateDTO> list = service.getAll(pagination);
+        PaginatedResponse<GiftCertificateDTO> all = service.getAll(pagination);
+        List<GiftCertificateDTO> list = all.getResponseList();
 
-        return ResponseEntity.ok(bindLinks(list));
+        Map<String, Object> response = new HashMap<>();
+        response.put("total", all.getTotalCount());
+        response.put("giftCertificates", bindLinks(list));
+
+        return ResponseEntity.ok(response);
     }
 
     /**
@@ -73,12 +75,18 @@ public class GiftCertificateController {
      * @return a ResponseEntity containing a CollectionModel of GiftCertificateDTO objects
      */
     @GetMapping("/search")
-    public ResponseEntity<CollectionModel<GiftCertificateDTO>> search(
+    public ResponseEntity<Map<String, Object>> search(
             @ModelAttribute GiftCertificateFilter giftCertificateFilter
     ) {
-        List<GiftCertificateDTO> certificate = service.doSearch(giftCertificateFilter);
+        PaginatedResponse<GiftCertificateDTO> all = service.doSearch(giftCertificateFilter);
 
-        return ResponseEntity.ok(bindLinks(certificate));
+        List<GiftCertificateDTO> list = all.getResponseList();
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("total", all.getTotalCount());
+        response.put("giftCertificates", bindLinks(list));
+
+        return ResponseEntity.ok(response);
     }
 
     /**
@@ -153,32 +161,14 @@ public class GiftCertificateController {
     }
 
     private void validateGiftCertificate(GiftCertificateDTO certificate, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            Set<String> errorMessages = new HashSet<>();
-            for (ObjectError error : bindingResult.getAllErrors()) {
-                errorMessages.add(error.getDefaultMessage());
-            }
-            String str = String.join(", ", errorMessages);
-
-            logger.warn(str);
-            throw new InvalidRequestBodyException(str);
-        }
+        bindingResultCheck(bindingResult);
 
         int i = 1;
         for (TagDTO tag : certificate.getTags()) {
             BindingResult tagBindingResult = new BeanPropertyBindingResult(tag, "tag" + i);
             validator.validate(tag, tagBindingResult);
 
-            if (tagBindingResult.hasErrors()) {
-                Set<String> errorMessages = new HashSet<>();
-                for (ObjectError error : tagBindingResult.getAllErrors()) {
-                    errorMessages.add(error.getDefaultMessage());
-                }
-                String str = "Tag #" + i + ": " + String.join(", ", errorMessages);
-
-                logger.warn(str);
-                throw new InvalidRequestBodyException(str);
-            }
+            bindingResultCheck(tagBindingResult);
 
             i++;
         }

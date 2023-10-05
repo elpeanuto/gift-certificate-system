@@ -2,7 +2,6 @@ package com.epam.esm.model.dto;
 
 import com.epam.esm.controller.util.OrderValidationGroup;
 import com.epam.esm.model.constant.UserRole;
-import com.epam.esm.model.dto.api.DTO;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.Email;
@@ -13,7 +12,7 @@ import org.springframework.hateoas.RepresentationModel;
 
 import java.util.Objects;
 
-public class UserDTO extends RepresentationModel<UserDTO> implements DTO {
+public class UserDTO extends RepresentationModel<UserDTO> {
 
     @NotNull(message = "Id is missing", groups = OrderValidationGroup.class)
     protected Long id;

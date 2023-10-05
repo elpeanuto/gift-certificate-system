@@ -12,6 +12,11 @@ import java.util.List;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
+/**
+ * The OrderLinker class provides static methods for adding HATEOAS links to OrderDTO and UserOrderDTO objects,
+ * as well as generating a collection of linked orders. It is used to enrich order DTOs with self-links, links to
+ * associated users, certificates, and the order itself.
+ */
 public class OrderLinker {
 
     private OrderLinker() {

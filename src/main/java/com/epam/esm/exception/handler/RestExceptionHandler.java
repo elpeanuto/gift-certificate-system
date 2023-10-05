@@ -24,7 +24,7 @@ public class RestExceptionHandler {
         CustomHttpStatus status = CustomHttpStatus.REPOSITORY_ERROR;
 
         ErrorResponse errorResponse = new ErrorResponse(e.getMessage(),
-               status.getValue());
+                status.getValue());
 
         return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
@@ -34,7 +34,7 @@ public class RestExceptionHandler {
         CustomHttpStatus status = CustomHttpStatus.RESOURCE_NOT_FOUND;
 
         ErrorResponse errorResponse = new ErrorResponse(e.getMessage(),
-               status.getValue());
+                status.getValue());
 
         return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
     }
@@ -44,7 +44,7 @@ public class RestExceptionHandler {
         CustomHttpStatus status = CustomHttpStatus.RESOURCE_NOT_FOUND;
 
         ErrorResponse errorResponse = new ErrorResponse(e.getMessage(),
-               status.getValue());
+                status.getValue());
 
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
@@ -54,7 +54,7 @@ public class RestExceptionHandler {
         CustomHttpStatus status = CustomHttpStatus.NOT_READABLE;
 
         ErrorResponse errorResponse = new ErrorResponse(status.getReasonPhrase(),
-               status.getValue());
+                status.getValue());
 
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
@@ -64,7 +64,7 @@ public class RestExceptionHandler {
         CustomHttpStatus status = CustomHttpStatus.INVALID_REQUEST_BODY;
 
         ErrorResponse errorResponse = new ErrorResponse(status.getReasonPhrase() + ": " + ex.getMessage(),
-               status.getValue());
+                status.getValue());
 
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
@@ -74,7 +74,7 @@ public class RestExceptionHandler {
         CustomHttpStatus status = CustomHttpStatus.DATA_INTEGRITY_VIOLATION;
 
         ErrorResponse errorResponse = new ErrorResponse(ex.getMessage(),
-               status.getValue());
+                status.getValue());
 
         return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
     }
@@ -83,7 +83,7 @@ public class RestExceptionHandler {
     public ResponseEntity<ErrorResponse> handle(MethodArgumentNotValidException ex) {
         CustomHttpStatus status = CustomHttpStatus.INVALID_ARGUMENT_TYPE;
 
-        ErrorResponse errorResponse = new ErrorResponse(status.getReasonPhrase(),status.getValue());
+        ErrorResponse errorResponse = new ErrorResponse(status.getReasonPhrase(), status.getValue());
 
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
@@ -92,7 +92,7 @@ public class RestExceptionHandler {
     public ResponseEntity<ErrorResponse> handle(EmptyResultDataAccessException ex) {
         CustomHttpStatus status = CustomHttpStatus.NO_RESULT;
 
-        ErrorResponse errorResponse = new ErrorResponse(status.getReasonPhrase(),status.getValue());
+        ErrorResponse errorResponse = new ErrorResponse(status.getReasonPhrase(), status.getValue());
 
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
@@ -101,7 +101,7 @@ public class RestExceptionHandler {
     public ResponseEntity<ErrorResponse> handle(AccessDeniedException ex) {
         CustomHttpStatus status = CustomHttpStatus.ACCESS_DENIED;
 
-        ErrorResponse errorResponse = new ErrorResponse(status.getReasonPhrase(),status.getValue());
+        ErrorResponse errorResponse = new ErrorResponse(status.getReasonPhrase(), status.getValue());
 
         return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
     }

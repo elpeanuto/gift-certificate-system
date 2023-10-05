@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.util.Optional;
 
 /**
- *  This interface represents an auth service.
+ * This interface represents an auth service.
  */
 public interface AuthService {
 
@@ -29,7 +29,7 @@ public interface AuthService {
      * @param response the HTTP servlet response
      * @throws IOException if an I/O error occurs while refreshing the token
      */
-    void refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException;
+    Optional<JwtResponseDTO> refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException;
 
     /**
      * Authenticate user if data is correct

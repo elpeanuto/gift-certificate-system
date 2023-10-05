@@ -79,7 +79,7 @@ class GiftCertificateServiceImplTest {
         Pagination pagination = new Pagination(0, 5);
         when(repository.getAll(pagination)).thenReturn(entityList);
 
-        List<GiftCertificateDTO> result = service.getAll(pagination);
+        List<GiftCertificateDTO> result = service.getAll(pagination).getResponseList();
 
         assertEquals(dtoList, result);
     }
@@ -88,7 +88,7 @@ class GiftCertificateServiceImplTest {
     void doSearchTest() {
         when(repository.doSearch(null)).thenReturn(entityList);
 
-        List<GiftCertificateDTO> result = service.doSearch(null);
+        List<GiftCertificateDTO> result = service.doSearch(null).getResponseList();
 
         assertEquals(dtoList, result);
     }

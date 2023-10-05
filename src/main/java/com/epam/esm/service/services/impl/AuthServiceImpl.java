@@ -84,13 +84,13 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public void refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public Optional<JwtResponseDTO> refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
         final String authHeader = request.getHeader(AUTHORIZATION);
         final String userEmail;
         final String refreshToken;
 
         if (authHeader == null || !authHeader.startsWith("Bearer")) {
-            return;
+            return Optional.empty();
         }
 
         refreshToken = authHeader.substring(7);
@@ -110,9 +110,8 @@ public class AuthServiceImpl implements AuthService {
                             refreshToken
                     );
 
-                    new ObjectMapper().writeValue(response.getOutputStream(), authResponse);
-                }
-                else {
+                    return Optional.of(authResponse);
+                } else {
                     throw new JwtException("Wrong jwt");
                 }
             }
@@ -129,5 +128,7 @@ public class AuthServiceImpl implements AuthService {
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
             response.getOutputStream().write(jsonResponse.getBytes());
         }
+
+        return Optional.empty();
     }
 }
