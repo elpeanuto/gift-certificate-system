@@ -4,7 +4,7 @@ WORKDIR /app
 COPY ./pom.xml .
 RUN mvn dependency:go-offline
 COPY . .
-RUN mvn clean package -DskipTests
+RUN mvn clean package
 FROM openjdk:17-jdk-slim-buster
 WORKDIR /app
 COPY --from=build /app/target/gift-certificate-system-0.0.1-SNAPSHOT.war app.jar
