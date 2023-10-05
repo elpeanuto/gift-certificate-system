@@ -14,12 +14,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -33,7 +31,7 @@ import java.util.Optional;
 @RequestMapping("/auth")
 public class AuthController {
 
-    private final AuthService authService;
+    final AuthService authService;
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     /**
@@ -42,8 +40,7 @@ public class AuthController {
      * @param authService authentication service
      */
     @Autowired
-    public AuthController(
-            AuthService authService) {
+    public AuthController(AuthService authService) {
         this.authService = authService;
     }
 
@@ -62,24 +59,27 @@ public class AuthController {
         return authentication.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.status(400).body(new JwtResponseDTO()));
     }
 
+
     /**
      * Authenticates a user and returns a JWT response.
      *
      * @param request the authentication request
      * @return the JWT response if the authentication is successful, or a default JWT response with status 400 if authentication fails
      */
-    @PostMapping("/refreshToken")
-    public void refreshToken(
+    @GetMapping("/refreshToken")
+    public ResponseEntity<JwtResponseDTO> refreshToken(
             HttpServletRequest request,
             HttpServletResponse response
     ) throws IOException {
-       authService.refreshToken(request, response);
+        Optional<JwtResponseDTO> jwtResponseDTO = authService.refreshToken(request, response);
+
+        return jwtResponseDTO.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.status(400).body(new JwtResponseDTO()));
     }
 
     /**
      * Method which saves user info in db
      *
-     * @param userDTO user info
+     * @param userDTO       user info
      * @param bindingResult binding results for validation
      * @return registered user
      */
@@ -102,6 +102,17 @@ public class AuthController {
         UserLinker.bindLinks(body);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(body);
+    }
+
+    /**
+     * Method to check if the user has an admin role.
+     *
+     * @return true if the user is an admin, false if not.
+     */
+    @PreAuthorize("hasAuthority('ADMIN_ROLE')")
+    @GetMapping("/isAdmin")
+    public boolean isAdmin() {
+        return true;
     }
 
 }

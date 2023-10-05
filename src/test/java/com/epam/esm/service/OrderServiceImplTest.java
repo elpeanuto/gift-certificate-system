@@ -58,7 +58,7 @@ class OrderServiceImplTest {
         List<OrderEntity> entityList = List.of(new OrderEntity(1L, userEntity, new HashSet<>(), null, null));
         when(orderRepository.getAll(pagination)).thenReturn(entityList);
 
-        List<OrderDTO> result = service.getAll(pagination);
+        List<OrderDTO> result = service.getAll(pagination).getResponseList();
 
         assertEquals(entityList.size(), result.size());
     }

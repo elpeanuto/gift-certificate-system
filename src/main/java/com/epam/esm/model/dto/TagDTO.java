@@ -1,18 +1,17 @@
 package com.epam.esm.model.dto;
 
-import com.epam.esm.model.dto.api.DTO;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import org.springframework.hateoas.RepresentationModel;
 
 import java.util.Objects;
 
-public class TagDTO extends RepresentationModel<TagDTO> implements DTO {
+public class TagDTO extends RepresentationModel<TagDTO> {
 
     private Long id;
 
     @NotNull(message = "Name is missing")
-    @Size(min = 2, max = 30, message = "Name should be between 2 and 30 characters")
+    @Size(min = 3, max = 15, message = "Name should be between 2 and 30 characters")
     private String name;
 
     public TagDTO() {

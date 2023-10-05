@@ -5,6 +5,10 @@ import com.epam.esm.model.dto.UserDTO;
 import com.epam.esm.model.entity.RoleEntity;
 import com.epam.esm.model.entity.UserEntity;
 
+/**
+ * The UserConverter class provides static methods for converting between
+ * UserEntity and UserDTO objects.
+ */
 public class UserConverter {
 
     private UserConverter() {

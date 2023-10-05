@@ -6,6 +6,10 @@ import com.epam.esm.model.entity.OrderEntity;
 
 import java.util.stream.Collectors;
 
+/**
+ * The OrderConverter class provides static methods for converting between
+ * OrderEntity and OrderDTO objects.
+ */
 public class OrderConverter {
 
     private OrderConverter() {

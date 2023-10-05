@@ -54,7 +54,7 @@ class TagServiceImplTest {
         Pagination pagination = new Pagination(0, 5);
         when(repository.getAll(pagination)).thenReturn(entityList);
 
-        List<TagDTO> result = service.getAll(pagination);
+        List<TagDTO> result = service.getAll(pagination).getResponseList();
 
         Assertions.assertEquals(dtoList, result);
     }

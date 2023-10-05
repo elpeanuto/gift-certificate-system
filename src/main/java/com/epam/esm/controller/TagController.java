@@ -5,20 +5,17 @@ import com.epam.esm.model.dto.TagDTO;
 import com.epam.esm.model.dto.filter.Pagination;
 import com.epam.esm.service.services.api.TagService;
 import jakarta.validation.Valid;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
+import static com.epam.esm.controller.util.Util.bindingResultCheck;
 import static com.epam.esm.model.hateoas.TagLinker.bindLinks;
 
 /**
@@ -29,7 +26,6 @@ import static com.epam.esm.model.hateoas.TagLinker.bindLinks;
 public class TagController {
 
     private final TagService service;
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     /**
      * Constructs an instance of TagController with the specified service.
@@ -51,7 +47,7 @@ public class TagController {
     public ResponseEntity<CollectionModel<TagDTO>> getAll(
             @ModelAttribute() Pagination pagination
     ) {
-        List<TagDTO> tags = service.getAll(pagination);
+        List<TagDTO> tags = service.getAll(pagination).getResponseList();
 
         return ResponseEntity.ok(bindLinks(tags));
     }
@@ -98,16 +94,7 @@ public class TagController {
     @PostMapping()
     @PreAuthorize("hasAuthority('ADMIN_ROLE')")
     public ResponseEntity<TagDTO> create(@RequestBody @Valid TagDTO tagDTO, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            List<String> errorMessages = new ArrayList<>();
-            for (ObjectError error : bindingResult.getAllErrors()) {
-                errorMessages.add(error.getDefaultMessage());
-            }
-            String str = String.join(", ", errorMessages);
-
-            logger.warn(str);
-            throw new InvalidRequestBodyException(str);
-        }
+        bindingResultCheck(bindingResult);
 
         TagDTO tag = service.create(tagDTO);
 

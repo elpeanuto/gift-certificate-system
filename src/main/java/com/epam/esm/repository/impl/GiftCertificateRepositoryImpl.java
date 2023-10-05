@@ -46,7 +46,71 @@ public class GiftCertificateRepositoryImpl implements GiftCertificateRepository 
     }
 
     @Override
+    public long getTotalCount() {
+        CriteriaBuilder cb = manager.getCriteriaBuilder();
+        CriteriaQuery<Long> countQuery = cb.createQuery(Long.class);
+        Root<GiftCertificateEntity> root = countQuery.from(GiftCertificateEntity.class);
+        countQuery.select(cb.count(root));
+
+        TypedQuery<Long> typedQuery = manager.createQuery(countQuery);
+
+        return typedQuery.getSingleResult();
+    }
+
+    @Override
+    public long getFilterCount(GiftCertificateFilter filter) {
+        return configureTypedQuery(filter).getResultList().size();
+    }
+
+
+    @Override
     public List<GiftCertificateEntity> doSearch(GiftCertificateFilter filter) {
+        TypedQuery<GiftCertificateEntity> typedQuery = configureTypedQuery(filter);
+
+        typedQuery.setFirstResult(filter.getPage() * filter.getLimit());
+        typedQuery.setMaxResults(filter.getLimit());
+
+        return typedQuery.getResultList();
+    }
+
+    @Override
+    public Optional<GiftCertificateEntity> getById(long id) {
+        GiftCertificateEntity entity = manager.find(GiftCertificateEntity.class, id);
+
+        return Optional.ofNullable(entity);
+    }
+
+    @Override
+    public GiftCertificateEntity create(GiftCertificateEntity certificate) {
+        manager.persist(certificate);
+        return certificate;
+    }
+
+    @Override
+    public GiftCertificateEntity delete(long id) {
+        GiftCertificateEntity entity = manager.find(GiftCertificateEntity.class, id);
+
+        if (entity != null) {
+            manager.remove(entity);
+        }
+
+        return entity;
+    }
+
+    @Override
+    public GiftCertificateEntity update(GiftCertificateEntity certificate) {
+        return manager.merge(certificate);
+    }
+
+    @Override
+    public boolean isCertificateOrdered(long id) {
+        Query query = manager.createQuery("SELECT COUNT(o) > 0 FROM OrderEntity o JOIN o.certificates c WHERE c.id = :certificateId");
+        query.setParameter("certificateId", id);
+
+        return (boolean) query.getSingleResult();
+    }
+
+    private TypedQuery<GiftCertificateEntity> configureTypedQuery(GiftCertificateFilter filter) {
         CriteriaBuilder cb = manager.getCriteriaBuilder();
         CriteriaQuery<GiftCertificateEntity> query = cb.createQuery(GiftCertificateEntity.class);
         Root<GiftCertificateEntity> root = query.from(GiftCertificateEntity.class);
@@ -94,48 +158,6 @@ public class GiftCertificateRepositoryImpl implements GiftCertificateRepository 
             }
         }
 
-        TypedQuery<GiftCertificateEntity> typedQuery = manager.createQuery(query);
-
-        typedQuery.setFirstResult(filter.getPage() * filter.getLimit());
-        typedQuery.setMaxResults(filter.getLimit());
-
-        return typedQuery.getResultList();
-    }
-
-    @Override
-    public Optional<GiftCertificateEntity> getById(long id) {
-        GiftCertificateEntity entity = manager.find(GiftCertificateEntity.class, id);
-
-        return Optional.ofNullable(entity);
-    }
-
-    @Override
-    public GiftCertificateEntity create(GiftCertificateEntity certificate) {
-        manager.persist(certificate);
-        return certificate;
-    }
-
-    @Override
-    public GiftCertificateEntity delete(long id) {
-        GiftCertificateEntity entity = manager.find(GiftCertificateEntity.class, id);
-
-        if (entity != null) {
-            manager.remove(entity);
-        }
-
-        return entity;
-    }
-
-    @Override
-    public GiftCertificateEntity update(GiftCertificateEntity certificate) {
-        return manager.merge(certificate);
-    }
-
-    @Override
-    public boolean isCertificateOrdered(long id) {
-        Query query = manager.createQuery("SELECT COUNT(o) > 0 FROM OrderEntity o JOIN o.certificates c WHERE c.id = :certificateId");
-        query.setParameter("certificateId", id);
-
-        return (boolean) query.getSingleResult();
+        return manager.createQuery(query);
     }
 }

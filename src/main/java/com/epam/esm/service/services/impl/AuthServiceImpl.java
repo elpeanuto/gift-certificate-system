@@ -1,15 +1,14 @@
 package com.epam.esm.service.services.impl;
 
-import com.epam.esm.config.JwtUtils;
 import com.epam.esm.exception.model.CustomHttpStatus;
 import com.epam.esm.exception.model.ErrorResponse;
+import com.epam.esm.jwt.JwtUtils;
 import com.epam.esm.model.constant.UserRole;
 import com.epam.esm.model.dto.AuthenticationRequestDTO;
 import com.epam.esm.model.dto.JwtResponseDTO;
 import com.epam.esm.model.dto.UserDTO;
 import com.epam.esm.model.dto.UserDetailsAdapter;
 import com.epam.esm.service.services.api.AuthService;
-import com.epam.esm.service.services.api.GiftCertificateService;
 import com.epam.esm.service.services.api.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.JwtException;
@@ -85,13 +84,13 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public void refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public Optional<JwtResponseDTO> refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
         final String authHeader = request.getHeader(AUTHORIZATION);
         final String userEmail;
         final String refreshToken;
 
         if (authHeader == null || !authHeader.startsWith("Bearer")) {
-            return;
+            return Optional.empty();
         }
 
         refreshToken = authHeader.substring(7);
@@ -111,9 +110,8 @@ public class AuthServiceImpl implements AuthService {
                             refreshToken
                     );
 
-                    new ObjectMapper().writeValue(response.getOutputStream(), authResponse);
-                }
-                else {
+                    return Optional.of(authResponse);
+                } else {
                     throw new JwtException("Wrong jwt");
                 }
             }
@@ -130,5 +128,7 @@ public class AuthServiceImpl implements AuthService {
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
             response.getOutputStream().write(jsonResponse.getBytes());
         }
+
+        return Optional.empty();
     }
 }

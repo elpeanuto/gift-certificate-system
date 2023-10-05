@@ -1,5 +1,9 @@
 package com.epam.esm.model.constant;
 
+/**
+ * The UserRole enum represents different roles that users can have in the application.
+ * Each role has a unique name associated with it.
+ */
 public enum UserRole {
     GUEST_ROLE("GUEST_ROLE"),
     ADMIN_ROLE("ADMIN_ROLE"),

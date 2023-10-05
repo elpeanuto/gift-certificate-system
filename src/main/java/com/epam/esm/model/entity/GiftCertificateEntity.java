@@ -16,7 +16,8 @@ public class GiftCertificateEntity {
     @SequenceGenerator(
             name = "certificate_sequence",
             sequenceName = "certificate_sequence",
-            allocationSize = 1
+            allocationSize = 1,
+            initialValue = 100
     )
     @GeneratedValue(
             strategy = GenerationType.SEQUENCE,
@@ -63,8 +64,7 @@ public class GiftCertificateEntity {
     @Column(
             name = "last_update_date",
             columnDefinition = "TIMESTAMP",
-            nullable = false,
-            updatable = false
+            nullable = false
     )
     private LocalDateTime lastUpdateDate;
 

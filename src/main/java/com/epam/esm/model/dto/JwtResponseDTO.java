@@ -4,24 +4,24 @@ import java.util.Objects;
 
 public class JwtResponseDTO {
 
-    private String accessesToken;
+    private String access;
     private String refreshToken;
 
     public JwtResponseDTO() {
 
     }
 
-    public JwtResponseDTO(String accessesToken, String refreshToken) {
-        this.accessesToken = accessesToken;
+    public JwtResponseDTO(String access, String refreshToken) {
+        this.access = access;
         this.refreshToken = refreshToken;
     }
 
-    public String getAccessesToken() {
-        return accessesToken;
+    public String getAccessToken() {
+        return access;
     }
 
-    public void setAccessesToken(String accessesToken) {
-        this.accessesToken = accessesToken;
+    public void setAccessToken(String access) {
+        this.access = access;
     }
 
     public String getRefreshToken() {
@@ -33,28 +33,20 @@ public class JwtResponseDTO {
     }
 
     @Override
-    public String toString() {
-        return "JwtResponseDTO{" +
-                "accessesToken='" + accessesToken + '\'' +
-                ", refreshToken='" + refreshToken + '\'' +
-                '}';
-    }
-
-    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
         JwtResponseDTO that = (JwtResponseDTO) o;
 
-        if (!Objects.equals(accessesToken, that.accessesToken))
+        if (!Objects.equals(access, that.access))
             return false;
         return Objects.equals(refreshToken, that.refreshToken);
     }
 
     @Override
     public int hashCode() {
-        int result = accessesToken != null ? accessesToken.hashCode() : 0;
+        int result = access != null ? access.hashCode() : 0;
         result = 31 * result + (refreshToken != null ? refreshToken.hashCode() : 0);
         return result;
     }

@@ -4,6 +4,7 @@ import com.epam.esm.exception.exceptions.ResourceNotFoundException;
 import com.epam.esm.model.converter.GiftCertificateConverter;
 import com.epam.esm.model.converter.TagConverter;
 import com.epam.esm.model.dto.GiftCertificateDTO;
+import com.epam.esm.model.dto.PaginatedResponse;
 import com.epam.esm.model.dto.TagDTO;
 import com.epam.esm.model.dto.filter.GiftCertificateFilter;
 import com.epam.esm.model.dto.filter.Pagination;
@@ -13,6 +14,8 @@ import com.epam.esm.repository.api.GiftCertificateRepository;
 import com.epam.esm.repository.api.TagRepository;
 import com.epam.esm.service.services.api.GiftCertificateService;
 import jakarta.transaction.Transactional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
@@ -37,6 +40,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
 
     private final GiftCertificateRepository certificateRepo;
     private final TagRepository tagRepo;
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     public GiftCertificateServiceImpl(GiftCertificateRepository certificateRepo, TagRepository tagRepo) {
@@ -46,26 +50,36 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
 
     @Override
     @Transactional
-    public List<GiftCertificateDTO> getAll(Pagination pagination) {
-        return certificateRepo.getAll(pagination).stream()
+    public PaginatedResponse<GiftCertificateDTO> getAll(Pagination pagination) {
+        List<GiftCertificateDTO> dtoList = certificateRepo.getAll(pagination).stream()
                 .map(GiftCertificateConverter::toDto)
                 .toList();
+
+        long total = certificateRepo.getTotalCount();
+
+        return new PaginatedResponse<>(dtoList, total);
     }
 
     @Override
     @Transactional
-    public List<GiftCertificateDTO> doSearch(GiftCertificateFilter filter) {
-        return certificateRepo.doSearch(filter).stream()
+    public PaginatedResponse<GiftCertificateDTO> doSearch(GiftCertificateFilter filter) {
+        List<GiftCertificateDTO> dtoList = certificateRepo.doSearch(filter).stream()
                 .map(GiftCertificateConverter::toDto)
                 .toList();
+
+        long total = certificateRepo.getFilterCount(filter);
+
+        return new PaginatedResponse<>(dtoList, total);
     }
 
     @Override
     @Transactional
     public GiftCertificateDTO getById(long id) {
         GiftCertificateEntity entity = certificateRepo.getById(id)
-                .orElseThrow(() -> new ResourceNotFoundException(id));
-
+                .orElseThrow(() -> {
+                    logger.error("Gift Certificate with ID {} not found.", id);
+                    throw new ResourceNotFoundException(id);
+                });
         return toDto(entity);
     }
 
@@ -86,14 +100,16 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     @Override
     @Transactional
     public GiftCertificateDTO delete(long id) {
-        if (certificateRepo.isCertificateOrdered(id))
+        if (certificateRepo.isCertificateOrdered(id)) {
+            logger.error("Attempted to delete a certificate (ID: {}) that is ordered.", id);
             throw new DataIntegrityViolationException("This certificate is ordered");
-
+        }
         GiftCertificateEntity entity = certificateRepo.delete(id);
 
-        if (entity == null)
+        if (entity == null) {
+            logger.error("Failed to delete certificate with ID: {}. Certificate not found.", id);
             throw new ResourceNotFoundException(id);
-
+        }
         return toDto(entity);
     }
 
@@ -101,8 +117,10 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     @Transactional
     public GiftCertificateDTO update(long id, GiftCertificateDTO giftCertificateDTO) {
         GiftCertificateEntity entity = certificateRepo.getById(id)
-                .orElseThrow(() -> new ResourceNotFoundException(id));
-
+                .orElseThrow(() -> {
+                    logger.error("Gift Certificate with ID {} not found.", id);
+                    throw new ResourceNotFoundException(id);
+                });
         entity.setLastUpdateDate(LocalDateTime.now());
 
         if (giftCertificateDTO.getName() != null) {
