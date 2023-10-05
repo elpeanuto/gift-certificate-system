@@ -6,8 +6,6 @@ import com.epam.esm.model.dto.GiftCertificateDTO;
 import com.epam.esm.model.dto.OrderDTO;
 import com.epam.esm.model.dto.filter.Pagination;
 import com.epam.esm.service.services.api.CRUDService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
@@ -31,7 +29,6 @@ import static com.epam.esm.model.hateoas.OrderLinker.bindLinks;
 public class OrderController {
 
     private final CRUDService<OrderDTO, Pagination> service;
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     /**
      * Constructor for OrderController class.
