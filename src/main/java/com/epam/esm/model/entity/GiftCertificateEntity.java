@@ -64,8 +64,7 @@ public class GiftCertificateEntity {
     @Column(
             name = "last_update_date",
             columnDefinition = "TIMESTAMP",
-            nullable = false,
-            updatable = false
+            nullable = false
     )
     private LocalDateTime lastUpdateDate;
 
