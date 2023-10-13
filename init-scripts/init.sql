@@ -240,6 +240,9 @@ alter sequence user_sequence owner to postgres;
 INSERT INTO role (id, name)
 VALUES (1, 'ADMIN_ROLE');
 
+INSERT INTO role (id, name)
+VALUES (2, 'USER_ROLE');
+
 INSERT INTO users (id, first_name, last_name, email, password, role_id)
 VALUES (1, 'John', 'Doe', 'admin@gmail.com', '$2a$10$HMyJUv0VPwmJ2b3EUPPaKeL2VLjynfLU8Tb3Zqc02U1R5Led.BB02', 1);
 
