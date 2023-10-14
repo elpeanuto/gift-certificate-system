@@ -66,35 +66,24 @@ here: [Module Requirements](#module-requirements)<br><br>
 To set up and run this project, follow these steps:
 
 1. Open your preferred command-line interface.
-2. Create a dedicated folder for your project. Use the following command:
 
-```
-  mkdir gift-certificate-system-app
-```
+2. Clone the project repository from the main branch using the following command:
 
-3. Change your current working directory to the newly created folder:
+   ```
+     git clone -b main https://github.com/elpeanuto/gift-certificate-system.git
+   ```
 
-```
-  cd gift-certificate-system-app
-```
+3. Enter the cloned repository directory:
 
-4. Clone the project repository from the main branch using the following command:
+   ```
+     cd gift-certificate-system
+   ```
 
-```
-  git clone -b main https://github.com/elpeanuto/gift-certificate-system.git
-```
+4. Launch the Docker Compose environment by executing the following command:
 
-5. Enter the cloned repository directory:
-
-```
-  cd gift-certificate-system
-```
-
-6. Launch the Docker Compose environment by executing the following command:
-
-```
-  docker-compose up --build
-```
+   ```
+     docker-compose up --build
+   ```
 
 ### Step 2: Accessing the API
 
