@@ -99,13 +99,11 @@ If this initial access is successful, you have two options for further testing:
    If you don't have Postman installed, you can download it from the <a href="https://www.postman.com/downloads/">
    Postman website</a>.
 
-2. **Importing a Collection:** Click on the "Import" button located in the top-left corner of the Postman app.
-   In the "Link" field, paste the following URL:
-      ```
-      https://api.postman.com/collections/26682185-543cdc7d-2eb9-47fd-be31-5954c46f63b3?access_key=PMAT-01HCK29P3DAFDT1TBW5C41RM7C
-      ```
+2. **Download Collection:** Download JSON form <a href="https://drive.google.com/file/d/1jVT4RGunz2DWFuPEwf3j6fYrytAFz1co/view?usp=sharing">disk</a>.
 
-3. **Verification of Port Configuration:** Ensure that the port is correctly set. By default, the Spring application uses port 8081. If you need to modify API link, follow these steps:
+3. **Importing a Collection:** Sign in. Click on the "Import" button located in the top-left corner of the Postman app. Drag downloaded file.
+
+4. **Verification of Port Configuration:** Ensure that the port is correctly set. By default, the Spring application uses port 8081. If you need to modify API link, follow these steps:
    
    - Left-click on the collection.
 
@@ -113,12 +111,12 @@ If this initial access is successful, you have two options for further testing:
 
    - Modify the URL variable as necessary.
 
-4. **Running tests:**
+5. **Running tests:**
    Upon successfully importing the collection, you will find it listed among your collections on the left side of the Postman application. To execute the tests, perform the following:
    - Right-click on the collection.
    - Choose "Run collection." This will initiate all the available tests.
 
-5. **Verifying Test Results:**
+6. **Verifying Test Results:**
    Once the tests have been executed, Postman will present the results, including response data and any predefined test assertions.
 
 <b>Testing via React App:</b>
